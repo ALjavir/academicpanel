@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "397754739772",
+    "project_id": "academicpanel-b97da",
+    "storage_bucket": "academicpanel-b97da.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397754739772:android:82bfdc9ef5d4093e5da739",
+        "android_client_info": {
+          "package_name": "com.example.academicpanel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAO6QAvm9LoXiEoDyv0m_XGQPwbVhdv8K0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
