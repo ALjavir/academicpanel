@@ -38,6 +38,8 @@ dependencies:
   google_fonts: ^6.3.2
   get:
   flutter_svg: ^2.2.3
+  flutter_secure_storage:
+  firebase_auth:
 
 dev_dependencies:
   flutter_test:

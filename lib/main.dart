@@ -1,5 +1,5 @@
+import 'package:academicpanel/features/splash_screen/page/splashs_page_main.dart';
 import 'package:academicpanel/network/firebase/firebase_initialize.dart';
-import 'package:academicpanel/page/splashS_page/splashs_page_main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
