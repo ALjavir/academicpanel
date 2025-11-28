@@ -31,7 +31,7 @@ class Fontstyle {
   }
 
   static TextStyle auth(double fontSize, FontWeight fontweight, Color color) {
-    return GoogleFonts.rosarivo(
+    return GoogleFonts.inter(
       textStyle: TextStyle(
         fontSize: fontSize,
         color: color,
