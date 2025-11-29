@@ -19,9 +19,13 @@ class SplashsController extends GetxController {
     // read department and uid from secure storage
     final storedDept = await storage.read(key: 'department');
     final storedUid = await storage.read(key: 'uid');
+    final storedrole = await storage.read(key: 'role');
 
     // if no auth user -> go to signup
-    if (user == null || storedDept == null || storedUid == null) {
+    if (user == null ||
+        storedDept == null ||
+        storedUid == null ||
+        storedrole == null) {
       isLoading.value = false;
       routesController.signup();
       return;
