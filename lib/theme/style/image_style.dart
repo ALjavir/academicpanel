@@ -7,4 +7,8 @@ class ImageStyle {
   static String error() {
     return 'lib/assets/icon/error.png';
   }
+
+  static String loading() {
+    return 'lib/assets/icon/loading.json';
+  }
 }

@@ -2,6 +2,7 @@ import 'package:academicpanel/controller/splashs/splashs_controller.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
+import 'package:academicpanel/utility/loading/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -38,11 +39,17 @@ class _SplashsPageMainState extends State<SplashsPageMain> {
           child: Column(
             spacing: 0,
             mainAxisAlignment: MainAxisAlignment.center,
-
             children: [
-              SvgPicture.asset(ImageStyle.logo()),
+              Expanded(
+                flex: 1,
+                child: SvgPicture.asset(
+                  ImageStyle.logo(),
+                  height: MediaQuery.of(context).size.height * 0.45,
+                ),
+              ),
+              Expanded(flex: 0, child: SizedBox()),
               Text('Presidency University', style: Fontstyle.splashS(32)),
-              isLoading ? CircularProgressIndicator() : const SizedBox(),
+              isLoading ? Loading(hight: 90) : const SizedBox(height: 10),
             ],
           ),
         );

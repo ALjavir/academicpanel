@@ -4,6 +4,7 @@ import 'package:academicpanel/features/auth/widget/custom_button.dart';
 import 'package:academicpanel/features/auth/widget/custom_dropdown_button.dart';
 import 'package:academicpanel/features/auth/widget/custom_textfield.dart';
 import 'package:academicpanel/model/auth/signup_model.dart';
+import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
 
 import 'package:flutter/material.dart';
@@ -200,19 +201,22 @@ class _SignupPageMainState extends State<SignupPageMain> {
               ),
               CustomButton(
                 text: 'Create your account',
+
                 onPressed: () async {
-                  final emailExists = signupController.emailExists(
-                    textContEmail.text,
-                  );
+                  // final emailExists = signupController.emailExists(
+                  //   textContEmail.text,
+                  // );
                   try {
-                    print("Inside the try catch mode");
-                    if (await emailExists == true) {
-                      errorSnackbar(
-                        title: 'Email exist!!!',
-                        subtitle:
-                            'The Email alrady exist, use new one or sign in with this one',
-                      );
-                    } else if (textConFirstName.text.isEmpty ||
+                    //   print("Inside the try catch mode");
+                    //   if (await emailExists == true) {
+                    //     errorSnackbar(
+                    //       title: 'Email exist!!!',
+                    //       subtitle:
+                    //           'The Email alrady exist, use new one or sign in with this one',
+                    //     );
+                    //   }
+
+                    if (textConFirstName.text.isEmpty ||
                         textConLastName.text.isEmpty ||
                         textContEmail.text.isEmpty ||
                         textContPass.text.isEmpty ||
@@ -238,7 +242,7 @@ class _SignupPageMainState extends State<SignupPageMain> {
                       await signupController.mainFunction(
                         user,
                         isStudent!,
-                        context,
+                        // context,
                       );
                     }
                   } catch (e) {
