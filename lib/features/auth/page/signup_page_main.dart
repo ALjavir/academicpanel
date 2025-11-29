@@ -1,8 +1,14 @@
-import 'package:academicpanel/features/auth/widget/global_widget/auth_headertext.dart';
-import 'package:academicpanel/features/auth/widget/global_widget/custom_button.dart';
-import 'package:academicpanel/features/auth/widget/global_widget/custom_dropdown_button.dart';
-import 'package:academicpanel/features/auth/widget/global_widget/custom_textfield.dart';
+import 'package:academicpanel/controller/auth/signup_controller.dart';
+import 'package:academicpanel/features/auth/widget/auth_headertext.dart';
+import 'package:academicpanel/features/auth/widget/custom_button.dart';
+import 'package:academicpanel/features/auth/widget/custom_dropdown_button.dart';
+import 'package:academicpanel/features/auth/widget/custom_textfield.dart';
+import 'package:academicpanel/model/auth/signup_model.dart';
+import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
+
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 
 class SignupPageMain extends StatefulWidget {
   const SignupPageMain({super.key});
@@ -12,6 +18,7 @@ class SignupPageMain extends StatefulWidget {
 }
 
 class _SignupPageMainState extends State<SignupPageMain> {
+  final signupController = Get.put(SignupController());
   String? firstnameErrorText;
   String? lastNameErrorText;
   String? emailErrorText;
@@ -194,7 +201,49 @@ class _SignupPageMainState extends State<SignupPageMain> {
               CustomButton(
                 text: 'Create your account',
                 onPressed: () async {
-                  return print("object");
+                  final emailExists = signupController.emailExists(
+                    textContEmail.text,
+                  );
+                  try {
+                    print("Inside the try catch mode");
+                    if (await emailExists == true) {
+                      errorSnackbar(
+                        title: 'Email exist!!!',
+                        subtitle:
+                            'The Email alrady exist, use new one or sign in with this one',
+                      );
+                    } else if (textConFirstName.text.isEmpty ||
+                        textConLastName.text.isEmpty ||
+                        textContEmail.text.isEmpty ||
+                        textContPass.text.isEmpty ||
+                        textContID.text.isEmpty ||
+                        textContPhone.text.isEmpty ||
+                        textContAddress.text.isEmpty) {
+                      errorSnackbar(
+                        title: 'Sorry!!!',
+                        subtitle: 'Fill up all the field',
+                      );
+                    } else {
+                      final user = SignupModel(
+                        firstName: textConFirstName.text.trim(),
+                        lastName: textConLastName.text.trim(),
+                        email: textContEmail.text.trim(),
+                        password: textContPass.text.trim(),
+                        department: selectedDepartment!,
+                        address: textContAddress.text.trim(),
+                        phone: int.tryParse(textContPhone.text.trim()) ?? 0,
+                        uid: '',
+                        id: int.tryParse(textContID.text.trim()) ?? 0,
+                      );
+                      await signupController.mainFunction(
+                        user,
+                        isStudent!,
+                        context,
+                      );
+                    }
+                  } catch (e) {
+                    errorSnackbar(title: 'Sorry', e: e);
+                  }
                 },
               ),
             ],
