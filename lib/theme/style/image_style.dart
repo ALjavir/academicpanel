@@ -11,4 +11,8 @@ class ImageStyle {
   static String loading() {
     return 'lib/assets/icon/loading.json';
   }
+
+  static String no_internet() {
+    return 'lib/assets/icon/no_internet.png';
+  }
 }

@@ -1,4 +1,8 @@
+import 'package:academicpanel/controller/user/user_controller.dart';
+import 'package:academicpanel/model/auth/user_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
+import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -7,40 +11,80 @@ class SplashsController extends GetxController {
   final storage = const FlutterSecureStorage();
   final FirebaseAuth auth = FirebaseAuth.instance;
   final routesController = Get.put(RoutesController());
+  final FirebaseFirestore fireStore = FirebaseFirestore.instance;
+  final userController = Get.find<UserController>();
 
   RxBool isLoading = true.obs;
 
   Future<void> mainFunction() async {
-    // short splash delay (optional)
-    //await Future.delayed(const Duration(milliseconds: 450));
-
     final user = auth.currentUser;
 
-    // read department and uid from secure storage
-    final storedDept = await storage.read(key: 'department');
-    final storedUid = await storage.read(key: 'uid');
-    final storedrole = await storage.read(key: 'role');
+    // Read secure storage in parallel
+    final results = await Future.wait([
+      storage.read(key: 'uid'),
+      storage.read(key: 'role'),
+      storage.read(key: 'department'),
+    ]);
+    final storedDept = results[2];
+    final storedUid = results[0];
+    final storedRole = results[1];
+    print('---$storedUid--------------$storedRole------------$storedDept');
 
-    // if no auth user -> go to signup
-    if (user == null ||
-        storedDept == null ||
-        storedUid == null ||
-        storedrole == null) {
+    // Determine subcollection name once
+    final storedRoleId = storedRole == 'students' ? 'student_id' : 'faculty_id';
+
+    // Not signed in or missing local context → go to signup
+    if (storedDept == null || storedUid == null || storedRole == null) {
       isLoading.value = false;
       routesController.signup();
+      print('Inside null----------------------------');
       return;
     }
 
-    // uid mismatch -> clear and go to signup
-    if (storedUid != user.uid) {
+    // uid mismatch → clear and go to signup
+    if (storedUid != user!.uid) {
       await _clearLocalAndSignOut();
       isLoading.value = false;
+      print('Inside storedUid != user.uid----------------------------');
       routesController.signup();
       return;
     }
 
-    routesController.home();
-    // everything ok -> go to home
+    // Build the document path
+    final userDocRef = fireStore
+        .collection(storedRole) // e.g. 'students' or 'faculty'
+        .doc(storedDept) // e.g. 'cse' / 'eee'
+        .collection(storedRoleId) // e.g. 'student_id' or 'faculty_id'
+        .doc(storedUid); // the uid
+
+    try {
+      final snap = await userDocRef.get(); // <- no args
+      if (!snap.exists) {
+        // profile doc missing → treat as not onboarded
+        isLoading.value = false;
+        print('Inside snap.exists----------------------------');
+        routesController.signup();
+        return;
+      }
+
+      final data = snap.data() as Map<String, dynamic>;
+      final userModel = UserModel.fromJson(data);
+      userController.user.value = userModel;
+
+      // TODO: if you want, validate fields on userModel here
+
+      // Everything OK → go home
+      isLoading.value = false;
+      routesController.home();
+      return;
+    } catch (e) {
+      isLoading.value = false;
+      errorSnackbar(title: 'Error', e: e);
+      print('Inside $e----------------------------');
+      // Optional: route to a safe page
+      routesController.signup();
+      return;
+    }
   }
 
   Future<void> _clearLocalAndSignOut() async {

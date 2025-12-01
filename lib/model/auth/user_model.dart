@@ -1,4 +1,4 @@
-class SignupModel {
+class UserModel {
   String? uid;
   final int id;
   final String firstName;
@@ -8,9 +8,11 @@ class SignupModel {
   final String address;
   final String password;
   final String email;
+  List<Map<String, String>>? courses;
 
-  SignupModel({
+  UserModel({
     this.uid,
+    this.courses,
     required this.id,
     required this.firstName,
     required this.lastName,
@@ -25,6 +27,7 @@ class SignupModel {
   Map<String, dynamic> toJson() => {
     'uid': uid,
     'id': id,
+    'courses': courses,
     'first_name': firstName,
     'last_name': lastName,
     'department': department,
@@ -34,8 +37,9 @@ class SignupModel {
   };
 
   // Convert Firestore JSON → model
-  factory SignupModel.fromJson(Map<String, dynamic> data) => SignupModel(
+  factory UserModel.fromJson(Map<String, dynamic> data) => UserModel(
     uid: data['uid'],
+    courses: data['courses'],
     email: data['email'] ?? '',
     firstName: data['first_name'] ?? '',
     lastName: data['last_name'] ?? '',
@@ -49,8 +53,9 @@ class SignupModel {
   );
 
   // Copy existing model with edited values
-  SignupModel copyWith({
+  UserModel copyWith({
     String? uid,
+    List<Map<String, String>>? courses,
     int? id,
     String? firstName,
     String? lastName,
@@ -60,8 +65,9 @@ class SignupModel {
     String? email,
     String? password,
   }) {
-    return SignupModel(
+    return UserModel(
       uid: uid ?? this.uid,
+      courses: courses ?? this.courses,
       id: id ?? this.id,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,

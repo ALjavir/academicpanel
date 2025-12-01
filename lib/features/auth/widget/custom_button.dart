@@ -1,8 +1,6 @@
-import 'package:academicpanel/controller/auth/signup_controller.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CustomButton extends StatefulWidget {
   final Future<void> Function() onPressed;

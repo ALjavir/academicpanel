@@ -1,10 +1,7 @@
 class SigninModel {
+  String? uid;
   final String email;
   final String password;
-  final String department;
-  SigninModel({
-    required this.email,
-    required this.password,
-    required this.department,
-  });
+
+  SigninModel({this.uid, required this.email, required this.password});
 }

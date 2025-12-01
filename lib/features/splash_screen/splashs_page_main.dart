@@ -1,4 +1,5 @@
 import 'package:academicpanel/controller/splashs/splashs_controller.dart';
+import 'package:academicpanel/network/check_connection/check_connection.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
@@ -18,6 +19,7 @@ class SplashsPageMain extends StatefulWidget {
 
 class _SplashsPageMainState extends State<SplashsPageMain> {
   final splashController = Get.put(SplashsController());
+  final checkConnection = Get.put(CheckConnection());
 
   @override
   void initState() {
@@ -26,7 +28,11 @@ class _SplashsPageMainState extends State<SplashsPageMain> {
   }
 
   Future<void> _initUserStatus() async {
+    await checkConnection.checkConnection();
     await splashController.mainFunction();
+    // if (isConnected) {
+    //  await splashController.mainFunction();
+    // }
   }
 
   @override

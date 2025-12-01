@@ -1,10 +1,15 @@
-import 'package:academicpanel/features/auth/page/signin_page/signin_page_main.dart';
+import 'package:academicpanel/features/auth/page/signin_page_main.dart';
 import 'package:academicpanel/features/auth/page/signup_page_main.dart';
 import 'package:academicpanel/features/home/page/home_page_main.dart';
+import 'package:academicpanel/features/splash_screen/splashs_page_main.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
 class RoutesController {
+  void splasS() {
+    Get.to(() => SplashsPageMain());
+  }
+
   void signin() {
     Get.to(() => SigninPageMain());
   }
