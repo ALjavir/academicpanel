@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';

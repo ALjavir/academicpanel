@@ -4,7 +4,6 @@ import 'package:academicpanel/utility/error_widget/error_snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get/state_manager.dart';
 
 class SigninController extends GetxController {
@@ -93,9 +92,11 @@ class SigninController extends GetxController {
             subtitle: e.message ?? 'Authentication failed.',
           );
       }
+      isLoading.value = false;
       return null;
     } catch (e) {
       errorSnackbar(title: 'Error', subtitle: e.toString());
+      isLoading.value = false;
       return null;
     }
   }
@@ -139,6 +140,7 @@ class SigninController extends GetxController {
 
       // IMPORTANT: If not found, DO NOT return. Continue the loop to check the next department.
     }
+    isLoading.value = false;
 
     // ❌ FAILURE: If the loop finishes without finding the user in any department.
     return 'no department';

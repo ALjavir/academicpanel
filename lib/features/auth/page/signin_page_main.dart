@@ -7,9 +7,11 @@ import 'package:academicpanel/model/auth/signin_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/network/check_connection/check_connection.dart';
 import 'package:academicpanel/utility/error_widget/error_snackbar.dart';
+import 'package:academicpanel/utility/loading/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 class SigninPageMain extends StatefulWidget {
@@ -104,37 +106,39 @@ class _SigninPageMainState extends State<SigninPageMain> {
                 ],
               ),
               Obx(() {
-                return CustomButton(
-                  text: 'Sign-In',
+                return signinController.isLoading.isTrue
+                    ? Loading(hight: 70)
+                    : CustomButton(
+                        text: 'Sign-In',
 
-                  onPressed: () async {
-                    try {
-                      await checkConnection.checkConnection();
+                        onPressed: () async {
+                          try {
+                            await checkConnection.checkConnection();
 
-                      if (textContEmail.text.isEmpty ||
-                          textContPass.text.isEmpty) {
-                        errorSnackbar(
-                          title: 'Sorry!!!',
-                          subtitle: 'Fill up all the field',
-                        );
-                      } else {
-                        final user = SigninModel(
-                          email: textContEmail.text.trim(),
-                          password: textContPass.text.trim(),
+                            if (textContEmail.text.isEmpty ||
+                                textContPass.text.isEmpty) {
+                              errorSnackbar(
+                                title: 'Sorry!!!',
+                                subtitle: 'Fill up all the field',
+                              );
+                            } else {
+                              final user = SigninModel(
+                                email: textContEmail.text.trim(),
+                                password: textContPass.text.trim(),
 
-                          uid: '',
-                        );
-                        signinController.mainFunction(
-                          user,
-                          isStudent!,
-                          routesController,
-                        );
-                      }
-                    } catch (e) {
-                      errorSnackbar(title: 'Sorry', e: e);
-                    }
-                  },
-                );
+                                uid: '',
+                              );
+                              signinController.mainFunction(
+                                user,
+                                isStudent!,
+                                routesController,
+                              );
+                            }
+                          } catch (e) {
+                            errorSnackbar(title: 'Sorry', e: e);
+                          }
+                        },
+                      );
               }),
             ],
           ),

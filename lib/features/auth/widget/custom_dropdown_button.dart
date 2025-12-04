@@ -18,7 +18,7 @@ class CustomDropdownbutton extends StatefulWidget {
 }
 
 class _MydropdownbuttonState extends State<CustomDropdownbutton> {
-  final List<String> items = ['DEPT_CSE', 'DEPT_EEE', 'DEPT_BBA', 'DEPT_ENG'];
+  final List<String> items = ['CSE', 'EEE', 'BBA', 'ENG'];
 
   String? selectedValu;
 
@@ -49,23 +49,6 @@ class _MydropdownbuttonState extends State<CustomDropdownbutton> {
               ),
 
               items: items.map((item) {
-                switch (item) {
-                  case 'DEPT_CSE':
-                    item = 'CSE';
-                    break;
-                  case 'DEPT_EEE':
-                    item = 'EEE';
-                    break;
-                  case 'DEPT_BBA':
-                    item = 'BBA';
-                    break;
-                  case 'DEPT_ENG':
-                    item = 'ENG';
-                    break;
-                  default:
-                    item = 'invalid';
-                    break;
-                }
                 return DropdownMenuItem<String>(
                   value: item,
                   child: Text(
