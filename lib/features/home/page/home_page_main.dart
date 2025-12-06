@@ -1,6 +1,9 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
+import 'package:academicpanel/theme/animation/animation_theme.dart';
 import 'package:academicpanel/navigation/appbar/custom_appbar.dart';
+import 'package:academicpanel/theme/shadow_container/shadow_container.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -20,25 +23,29 @@ class _HomePageMainState extends State<HomePageMain> {
   Widget build(BuildContext context) {
     final user = userController.user.value;
     return Scaffold(
-      backgroundColor: ColorStyle.light,
+      //backgroundColor: ColorStyle.light,
 
       //appBar: CustomAppbar(),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
-        child: Column(
-          children: [
-            Text(user!.uid!),
-            Text(user.id.toString()),
-            Text(user.firstName),
-            Text(user.lastName),
-            Text(user.email),
-            Text(user.password),
-            Text(user.department),
-            Text(user.phone.toString()),
-            //  Text(storage.write(key: 'key', value: 'value'as String)
+      body: AnimationTheme(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+          child: Column(
+            children: [
+              ShadowContainer(child: Text("data")),
+              CachedNetworkImage(imageUrl: user!.image!),
+              Text(user.uid!),
+              Text(user.id.toString()),
+              Text(user.firstName),
+              Text(user.lastName),
+              Text(user.email),
+              Text(user.password),
+              Text(user.department),
+              Text(user.phone.toString()),
+              //  Text(storage.write(key: 'key', value: 'value'as String)
 
-            //Text(user.courses!.entries as String),
-          ],
+              //Text(user.courses!.entries as String),
+            ],
+          ),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:academicpanel/controller/auth/signup_controller.dart';
 import 'package:academicpanel/features/auth/widget/auth_headertext.dart';
+import 'package:academicpanel/features/auth/widget/auth_image.dart';
 import 'package:academicpanel/features/auth/widget/custom_button.dart';
 import 'package:academicpanel/features/auth/widget/custom_dropdown_button.dart';
 import 'package:academicpanel/features/auth/widget/custom_textfield.dart';
@@ -210,6 +211,7 @@ class _SignupPageMainState extends State<SignupPageMain> {
                         selectedDepartment = value;
                       },
                     ),
+                    AuthImage(),
                   ],
                 ),
               ),
@@ -217,86 +219,93 @@ class _SignupPageMainState extends State<SignupPageMain> {
               Obx(() {
                 return signupController.isLoading.isTrue
                     ? Loading(hight: 70)
-                    : CustomButton(
-                        text: 'Create your account',
+                    : Column(
+                        children: [
+                          CustomButton(
+                            text: 'Create your account',
 
-                        onPressed: () async {
-                          await checkConnection.checkConnection();
-                          try {
-                            if (textConFirstName.text.isEmpty ||
-                                textConLastName.text.isEmpty ||
-                                textContEmail.text.isEmpty ||
-                                textContPass.text.isEmpty ||
-                                textContID.text.isEmpty ||
-                                textContPhone.text.isEmpty ||
-                                textContAddress.text.isEmpty ||
-                                selectedDepartment.toString().isEmpty) {
-                              errorSnackbar(
-                                title: 'Sorry!!!',
-                                subtitle: 'Fill up all the field',
-                              );
-                            } else if (selectedDepartment.toString() ==
-                                'invalid') {
-                              errorSnackbar(
-                                title: 'Sorry!!!',
-                                subtitle:
-                                    'No department name $selectedDepartment}',
-                              );
-                            } else {
-                              final user = UserModel(
-                                firstName: textConFirstName.text.trim(),
-                                lastName: textConLastName.text.trim(),
-                                email: textContEmail.text.trim(),
-                                password: textContPass.text.trim(),
-                                department: selectedDepartment!,
-                                address: textContAddress.text.trim(),
-                                phone:
-                                    int.tryParse(textContPhone.text.trim()) ??
-                                    0,
-                                uid: '',
-                                id: int.tryParse(textContID.text.trim()) ?? 0,
-                              );
-                              await signupController.mainFunction(
-                                user,
-                                isStudent!,
-                                routesController,
-                                // context,
-                              );
-                            }
-                          } catch (e) {
-                            errorSnackbar(title: 'Sorry', e: e);
-                          }
-                        },
+                            onPressed: () async {
+                              await checkConnection.checkConnection();
+                              try {
+                                if (textConFirstName.text.isEmpty ||
+                                    textConLastName.text.isEmpty ||
+                                    textContEmail.text.isEmpty ||
+                                    textContPass.text.isEmpty ||
+                                    textContID.text.isEmpty ||
+                                    textContPhone.text.isEmpty ||
+                                    textContAddress.text.isEmpty ||
+                                    selectedDepartment.toString().isEmpty) {
+                                  errorSnackbar(
+                                    title: 'Sorry!!!',
+                                    subtitle:
+                                        'Fill up all the field with or without image',
+                                  );
+                                } else if (selectedDepartment.toString() ==
+                                    'invalid') {
+                                  errorSnackbar(
+                                    title: 'Sorry!!!',
+                                    subtitle:
+                                        'No department name $selectedDepartment}',
+                                  );
+                                } else {
+                                  final user = UserModel(
+                                    firstName: textConFirstName.text.trim(),
+                                    lastName: textConLastName.text.trim(),
+                                    email: textContEmail.text.trim(),
+                                    password: textContPass.text.trim(),
+                                    department: selectedDepartment!,
+                                    address: textContAddress.text.trim(),
+                                    phone:
+                                        int.tryParse(
+                                          textContPhone.text.trim(),
+                                        ) ??
+                                        0,
+                                    uid: '',
+                                    id: textContID.text.trim(),
+                                  );
+                                  await signupController.mainFunction(
+                                    user,
+                                    isStudent!,
+                                    routesController,
+                                    // context,
+                                  );
+                                }
+                              } catch (e) {
+                                errorSnackbar(title: 'Sorry', e: e);
+                              }
+                            },
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Already have a account?',
+                                style: Fontstyle.auth(
+                                  14,
+                                  FontWeight.normal,
+                                  ColorStyle.lightBlue,
+                                ),
+                              ),
+
+                              TextButton(
+                                onPressed: () {
+                                  routesController.signin();
+                                },
+                                child: Text(
+                                  "Sign-In",
+
+                                  style: Fontstyle.auth(
+                                    16,
+                                    FontWeight.bold,
+                                    ColorStyle.red,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       );
               }),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Already have a account?',
-                    style: Fontstyle.auth(
-                      14,
-                      FontWeight.normal,
-                      ColorStyle.lightBlue,
-                    ),
-                  ),
-
-                  TextButton(
-                    onPressed: () {
-                      routesController.signin();
-                    },
-                    child: Text(
-                      "Sign-In",
-
-                      style: Fontstyle.auth(
-                        16,
-                        FontWeight.bold,
-                        ColorStyle.red,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 class UserModel {
   String? uid;
-  final int id;
+  String? image;
+  final String id;
   final String firstName;
   final String lastName;
   final String department;
@@ -12,6 +13,7 @@ class UserModel {
 
   UserModel({
     this.uid,
+    this.image,
     this.courses,
     required this.id,
     required this.firstName,
@@ -27,6 +29,7 @@ class UserModel {
   Map<String, dynamic> toJson() => {
     'uid': uid,
     'id': id,
+    'image': image,
     'courses': courses,
     'first_name': firstName,
     'last_name': lastName,
@@ -39,7 +42,15 @@ class UserModel {
   // Convert Firestore JSON → model
   factory UserModel.fromJson(Map<String, dynamic> data) => UserModel(
     uid: data['uid'],
-    courses: data['courses'],
+    image: data['image'],
+    //image: _convertToDirectLink(data['image'].toString()),
+    courses: data['courses'] != null
+        ? List<Map<String, String>>.from(
+            (data['courses'] as List).map(
+              (course) => Map<String, String>.from(course),
+            ),
+          )
+        : null,
     email: data['email'] ?? '',
     firstName: data['first_name'] ?? '',
     lastName: data['last_name'] ?? '',
@@ -49,14 +60,15 @@ class UserModel {
     phone: data['phone'] is int
         ? data['phone']
         : int.tryParse('${data['phone']}') ?? 0,
-    id: data['id'] is int ? data['id'] : int.tryParse('${data['id']}') ?? 0,
+    id: data['id'] ?? '',
   );
 
   // Copy existing model with edited values
   UserModel copyWith({
     String? uid,
+    String? image,
     List<Map<String, String>>? courses,
-    int? id,
+    String? id,
     String? firstName,
     String? lastName,
     String? department,
@@ -67,6 +79,7 @@ class UserModel {
   }) {
     return UserModel(
       uid: uid ?? this.uid,
+      image: image ?? this.image,
       courses: courses ?? this.courses,
       id: id ?? this.id,
       firstName: firstName ?? this.firstName,
@@ -77,5 +90,22 @@ class UserModel {
       email: email ?? this.email,
       password: password ?? this.password,
     );
+  }
+
+  static String _convertToDirectLink(String link) {
+    final regex = RegExp(r'd/([^/]+)/'); // Matches "d/<fileId>/"
+    final altRegex = RegExp(r'id=([^&]+)'); // Matches "id=<fileId>"
+
+    if (regex.hasMatch(link)) {
+      final match = regex.firstMatch(link);
+      final fileId = match?.group(1);
+      return 'https://drive.google.com/uc?export=view&id=$fileId';
+    } else if (altRegex.hasMatch(link)) {
+      final match = altRegex.firstMatch(link);
+      final fileId = match?.group(1);
+      return 'https://drive.google.com/uc?export=view&id=$fileId';
+    } else {
+      return link;
+    }
   }
 }

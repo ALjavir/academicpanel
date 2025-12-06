@@ -35,6 +35,9 @@ class SplashsController extends GetxController {
 
     // Not signed in or missing local context → go to signup
     if (storedDept == null || storedUid == null || storedRole == null) {
+      await storage.delete(key: 'uid');
+      await storage.delete(key: 'department');
+      await storage.delete(key: 'role');
       isLoading.value = false;
       routesController.signup();
       print('Inside null----------------------------');

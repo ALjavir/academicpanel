@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:academicpanel/model/auth/user_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
@@ -9,10 +11,14 @@ import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/utility/error_widget/error_snackbar.dart';
 import 'package:academicpanel/utility/loading/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SignupController extends GetxController {
   RxBool isLoading = false.obs;
@@ -20,6 +26,7 @@ class SignupController extends GetxController {
   //final routesController = Get.put(RoutesController());
   final FirebaseAuth fireAuth = FirebaseAuth.instance;
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
+  var selectedImage = Rxn<File>();
 
   //----------------set a Timer to see email verification status----------------
   Timer? _timer;
@@ -87,6 +94,7 @@ class SignupController extends GetxController {
     //user verified
     if (isVerified) {
       // STEP 4:- save the data-------------------------------------------------
+
       final saved = await saveDataAtomic(signupmodel, isStudent, cred);
 
       if (saved) {
@@ -217,6 +225,25 @@ class SignupController extends GetxController {
 
     final uid = cred.user!.uid;
 
+    try {
+      // Upload image if selected
+      if (selectedImage.value != null) {
+        String? validUrl = await uploadImageToDrive(selectedImage.value!, uid);
+
+        if (validUrl != null) {
+          signupmodel = signupmodel.copyWith(image: validUrl);
+          print("Image uploaded successfully: $validUrl");
+        }
+
+        print(selectedImage.value);
+      }
+    } catch (e) {
+      errorSnackbar(title: "Image Upload Error", e: e);
+      print(e);
+      // Proceed without image
+    }
+
+    print(signupmodel.image);
     //save data in 3 places(fire-store, local, fire-auth)-----------------------
     final userDocRef = fireStore
         .collection(role)
@@ -278,6 +305,100 @@ class SignupController extends GetxController {
       print("Auth user rolled back successfully");
     } catch (e) {
       print("Failed to delete user during rollback: $e");
+    }
+  }
+
+  Future<void> pickImage() async {
+    final ImagePicker picker = ImagePicker();
+
+    try {
+      // 1. Pick the image
+      final XFile? pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+      );
+
+      // CRITICAL FIX: Stop if user cancelled (pressed back)
+      if (pickedFile == null) {
+        return;
+      }
+
+      // 2. Prepare paths
+      final tempDir = await getTemporaryDirectory();
+      final targetPath =
+          "${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+
+      // 3. Compress
+      var result = await FlutterImageCompress.compressAndGetFile(
+        pickedFile.path, // Use path directly from XFile
+        targetPath,
+        quality: 70,
+        minWidth: 800,
+        minHeight: 800,
+      );
+
+      // 4. Update State (Check if result is valid)
+      if (result != null) {
+        selectedImage.value = File(result.path);
+        print("Image selected and compressed: ${result.path}");
+      } else {
+        // Fallback: If compression fails for some reason, use the original
+        selectedImage.value = File(pickedFile.path);
+      }
+    } catch (e) {
+      errorSnackbar(title: 'Image Picker Error', e: e);
+    }
+  }
+
+  Future<String?> uploadImageToDrive(File imageFile, String userID) async {
+    // Check this URL one last time!
+    const String scriptUrl =
+        "https://script.google.com/macros/s/AKfycbwtmlORdUNNGB07aclHqIRoalkS2JAxHIxsqCA3jMsky2b7OJOlKbG_u6IY3c6tQlyL/exec";
+
+    List<int> imageBytes = await imageFile.readAsBytes();
+    String base64Image = base64Encode(imageBytes);
+    String fileName = "$userID.jpg";
+
+    try {
+      var response = await http.post(
+        Uri.parse(scriptUrl),
+        body: jsonEncode({"image": base64Image, "filename": fileName}),
+      );
+
+      // --- CASE 1: Perfect Success (200) ---
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        return jsonResponse['url'];
+      }
+      // --- CASE 2: Redirect (302) - The Common Fix ---
+      else if (response.statusCode == 302) {
+        String? newUrl = response.headers['location'];
+
+        if (newUrl != null) {
+          print("Redirecting to: $newUrl");
+          // Follow the redirect manually using GET
+          var getResponse = await http.get(Uri.parse(newUrl));
+
+          if (getResponse.statusCode == 200) {
+            // Verify we got JSON, not an HTML login page
+            if (getResponse.body.trim().startsWith("{")) {
+              var jsonResponse = jsonDecode(getResponse.body);
+              return jsonResponse['url'];
+            } else {
+              print(
+                "Error: Got HTML instead of JSON. Check Script Permissions.",
+              );
+              return null;
+            }
+          }
+        }
+      }
+
+      // --- CASE 3: Failure ---
+      print("Server Error: ${response.statusCode}");
+      return null;
+    } catch (e) {
+      print("Error uploading: $e");
+      return null;
     }
   }
 }
