@@ -1,4 +1,7 @@
+import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/home/home_model.dart';
+import 'package:get/get.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:intl/intl.dart';
 import 'package:academicpanel/model/auth/user_model.dart';
 
@@ -6,12 +9,12 @@ import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
 import 'package:get/state_manager.dart';
 
 class HomeController extends GetxController {
-  Future<HomeTopHeaderModel> fetchHomePageHeader(UserModel userModel) async {
-    final lastName = userModel.lastName;
-    final String id = userModel.id;
+  final userController = Get.find<UserController>();
+  Future<HomeTopHeaderModel?> fetchHomePageHeader() async {
+    final userModel = userController.user.value;
     try {
       // Map department codes to full names
-      String department = userModel.department.toLowerCase().trim();
+      String department = userModel!.department.toLowerCase().trim();
       switch (department) {
         case 'cse':
           department = 'Computer Science and Engineering';
@@ -36,9 +39,9 @@ class HomeController extends GetxController {
       String semester = getSemesterStyle(now);
 
       return HomeTopHeaderModel(
-        lastName: lastName,
+        lastName: userModel.lastName,
         department: department,
-        id: id,
+        id: userModel.id,
         dateTime: formattedDate,
         currentSmester: semester,
       );

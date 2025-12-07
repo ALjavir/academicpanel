@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:flutter/material.dart';
 
@@ -13,29 +15,13 @@ class AnimationTheme extends StatefulWidget {
 class _AnimationThemeState extends State<AnimationTheme>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<Alignment> _topAlignmentAnimation;
-  late Animation<Alignment> _bottomAlignmentAnimation;
-
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 15), // Adjust speed of the "swap" here
-    )..repeat(reverse: true); // This creates the continuous loop/cycle
-
-    // MOVEMENT LOGIC:
-    // The "Start" of the gradient (Blue) moves from Top-Left -> Bottom-Right
-    _topAlignmentAnimation = Tween<Alignment>(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInCirc));
-
-    // The "End" of the gradient (Red) moves from Bottom-Right -> Top-Left
-    _bottomAlignmentAnimation = Tween<Alignment>(
-      begin: Alignment.bottomRight,
-      end: Alignment.topLeft,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCirc));
+      duration: const Duration(seconds: 10), // Speed of the loop
+    )..repeat(); // NO REVERSE. Just repeat 0 -> 1 continuously.
   }
 
   @override
@@ -52,16 +38,43 @@ class _AnimationThemeState extends State<AnimationTheme>
         AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
+            final double angle = _controller.value * 2 * math.pi;
+
+            // --- THE CIRCLE MATH ---
+            // We create a circle using Sin and Cos.
+            // Radius = 1.0 means it touches the edges of the screen.
+            // Radius > 1.0 means the color center is slightly off-screen (softer look).
+            const double radius = 1.5;
+
+            // Point 1 (Blue) orbits the center
+            final Alignment startAlign = Alignment(
+              math.cos(angle) * radius,
+              math.sin(angle) * radius,
+            );
+
+            // Point 2 (Red) is exactly opposite (PI radians away)
+            // This ensures they are always chasing each other across the center
+            final Alignment endAlign = Alignment(
+              math.cos(angle + math.pi) * radius,
+              math.sin(angle + math.pi) * radius,
+            );
             return Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: const [
-                    AnimationColorStyle.softBlue,
-                    AnimationColorStyle.softRed,
+                    Color(0xFFcad0ff),
+                    Color(0xFFe3e3e3),
+                    // Color(0xFF03001e),
+                    // Color(0xFF7303c0),
+                    // Color(0xFFec38bc),
+                    // Color(0xFFfdeff9),
+                    // AnimationColorStyle.softBlue,
+                    // AnimationColorStyle.glassWhite,
+                    // AnimationColorStyle.softRed,
                   ],
                   // As these values swap, the colors physically travel across the screen
-                  begin: _topAlignmentAnimation.value,
-                  end: _bottomAlignmentAnimation.value,
+                  begin: startAlign,
+                  end: endAlign,
                 ),
               ),
             );

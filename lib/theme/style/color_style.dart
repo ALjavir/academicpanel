@@ -8,7 +8,7 @@ class ColorStyle {
 }
 
 class AnimationColorStyle {
-  static const Color softBlue = Color.fromARGB(180, 143, 170, 201);
-  static const Color softRed = Color.fromARGB(180, 214, 138, 137);
-  static const Color glassWhite = Color.fromARGB(180, 255, 255, 255);
+  static const Color softBlue = Color.fromARGB(200, 143, 170, 201);
+  static const Color softRed = Color.fromARGB(200, 214, 138, 137);
+  static const Color glassWhite = Color.fromARGB(80, 255, 255, 255);
 }
