@@ -1,12 +1,9 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/home/home_model.dart';
 import 'package:get/get.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:intl/intl.dart';
-import 'package:academicpanel/model/auth/user_model.dart';
 
 import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
-import 'package:get/state_manager.dart';
 
 class HomeController extends GetxController {
   final userController = Get.find<UserController>();

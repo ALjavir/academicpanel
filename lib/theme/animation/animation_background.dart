@@ -1,18 +1,18 @@
 import 'dart:math' as math;
 
-import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 
-class AnimationTheme extends StatefulWidget {
+class AnimationBackground extends StatefulWidget {
   final Widget child;
 
-  const AnimationTheme({super.key, required this.child});
+  const AnimationBackground({super.key, required this.child});
 
   @override
-  State<AnimationTheme> createState() => _AnimationThemeState();
+  State<AnimationBackground> createState() => _AnimationBackgroundState();
 }
 
-class _AnimationThemeState extends State<AnimationTheme>
+class _AnimationBackgroundState extends State<AnimationBackground>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   @override
@@ -20,7 +20,7 @@ class _AnimationThemeState extends State<AnimationTheme>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 10), // Speed of the loop
+      duration: const Duration(seconds: 0), // Speed of the loop
     )..repeat(); // NO REVERSE. Just repeat 0 -> 1 continuously.
   }
 
@@ -44,7 +44,7 @@ class _AnimationThemeState extends State<AnimationTheme>
             // We create a circle using Sin and Cos.
             // Radius = 1.0 means it touches the edges of the screen.
             // Radius > 1.0 means the color center is slightly off-screen (softer look).
-            const double radius = 1.5;
+            const double radius = 3;
 
             // Point 1 (Blue) orbits the center
             final Alignment startAlign = Alignment(
@@ -62,15 +62,17 @@ class _AnimationThemeState extends State<AnimationTheme>
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: const [
-                    Color(0xFFcad0ff),
-                    Color(0xFFe3e3e3),
-                    // Color(0xFF03001e),
-                    // Color(0xFF7303c0),
-                    // Color(0xFFec38bc),
-                    // Color(0xFFfdeff9),
-                    // AnimationColorStyle.softBlue,
-                    // AnimationColorStyle.glassWhite,
-                    // AnimationColorStyle.softRed,
+                    // ColorStyle.light,
+                    // ColorStyle.light,
+                    // Colors.black12,
+                    // Colors.white12,
+                    Color(0xFF1e3f76),
+                    Colors.white,
+                    Color(0xFFa8302f),
+                    //  Color(0xFFf2f3e2),
+                    //   Color.fromARGB(10, 19, 70, 125),
+                    //ColorStyle.light,
+                    // Color.fromARGB(10, 159, 27, 25),
                   ],
                   // As these values swap, the colors physically travel across the screen
                   begin: startAlign,
@@ -83,7 +85,6 @@ class _AnimationThemeState extends State<AnimationTheme>
 
         // LAYER 2: The "Fake Glass" Overlay
         // Keeps the text readable and adds that "Frosted" feel without lag
-        Container(color: AnimationColorStyle.glassWhite),
 
         // LAYER 3: Content (Optimized)
         RepaintBoundary(child: widget.child),

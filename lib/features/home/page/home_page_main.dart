@@ -1,10 +1,7 @@
 import 'package:academicpanel/controller/home/home_controller.dart';
-import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/features/home/widget/home_top_header.dart';
-import 'package:academicpanel/model/home/home_model.dart';
-import 'package:academicpanel/theme/animation/animation_theme.dart';
-import 'package:academicpanel/theme/shadow_container/shadow_container.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:academicpanel/theme/animation/animation_background.dart';
+import 'package:academicpanel/utility/loading/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -37,16 +34,14 @@ class _HomePageMainState extends State<HomePageMain> {
   Widget build(BuildContext context) {
     return Scaffold(
       // Keep your animation wrapper
-      body: AnimationTheme(
+      body: AnimationBackground(
         // 3. Use FutureBuilder to handle the async data
         child: FutureBuilder(
           future: _headerFuture,
           builder: (context, snapshot) {
             // CASE A: Still Loading
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(color: Colors.white),
-              );
+              return const Center(child: Loading(hight: 100));
             }
 
             // CASE B: Error occurred
