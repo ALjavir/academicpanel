@@ -48,10 +48,12 @@ class _SignupPageMainState extends State<SignupPageMain> {
   TextEditingController textContAddress = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return AnimatedBackgroundV2(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(10, 100, 10, 10),
+    return Scaffold(
+      backgroundColor: ColorStyle.light,
+      body: SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(10, 80, 10, 10),
+        child: Container(
+          color: Colors.white,
           child: Center(
             child: Column(
               children: [

@@ -4,16 +4,12 @@ class ImageStyle {
     return 'lib/assets/logo/logo.svg';
   }
 
-  static String logol() {
-    return 'lib/assets/logo/logo.json';
-  }
-
   static String error() {
     return 'lib/assets/icon/error.png';
   }
 
   static String loading() {
-    return 'lib/assets/icon/loading.json';
+    return 'lib/assets/icon/loading_1.json';
   }
 
   static String no_internet() {
@@ -21,6 +17,6 @@ class ImageStyle {
   }
 
   static String backGroundImage() {
-    return 'lib/assets/logo/bg (7).jpg';
+    return 'lib/assets/logo/bg (11).jpg';
   }
 }

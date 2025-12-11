@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
 
 class AnimationBackground extends StatefulWidget {
   final Widget child;
@@ -20,7 +19,7 @@ class _AnimationBackgroundState extends State<AnimationBackground>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 0), // Speed of the loop
+      duration: const Duration(seconds: 10), // Speed of the loop
     )..repeat(); // NO REVERSE. Just repeat 0 -> 1 continuously.
   }
 
@@ -44,7 +43,7 @@ class _AnimationBackgroundState extends State<AnimationBackground>
             // We create a circle using Sin and Cos.
             // Radius = 1.0 means it touches the edges of the screen.
             // Radius > 1.0 means the color center is slightly off-screen (softer look).
-            const double radius = 3;
+            const double radius = 4;
 
             // Point 1 (Blue) orbits the center
             final Alignment startAlign = Alignment(

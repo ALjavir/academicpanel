@@ -10,13 +10,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class SplashsController extends GetxController {
   final storage = const FlutterSecureStorage();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final routesController = Get.put(RoutesController());
+  // final routesController = Get.put(RoutesController());
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   final userController = Get.find<UserController>();
 
   RxBool isLoading = true.obs;
 
-  Future<void> mainFunction() async {
+  Future<bool> mainFunction() async {
     final user = auth.currentUser;
 
     // Read secure storage in parallel
@@ -28,7 +28,7 @@ class SplashsController extends GetxController {
     final storedDept = results[2];
     final storedUid = results[0];
     final storedRole = results[1];
-    print('---$storedUid--------------$storedRole------------$storedDept');
+    // print('---$storedUid--------------$storedRole------------$storedDept');
 
     // Determine subcollection name once
     final storedRoleId = storedRole == 'students' ? 'student_id' : 'faculty_id';
@@ -39,18 +39,18 @@ class SplashsController extends GetxController {
       await storage.delete(key: 'department');
       await storage.delete(key: 'role');
       isLoading.value = false;
-      routesController.signup();
-      print('Inside null----------------------------');
-      return;
+      // routesController.signup();
+      // print('Inside null----------------------------');
+      return false;
     }
 
     // uid mismatch → clear and go to signup
     if (storedUid != user!.uid) {
       await _clearLocalAndSignOut();
       isLoading.value = false;
-      print('Inside storedUid != user.uid----------------------------');
-      routesController.signup();
-      return;
+      //  print('Inside storedUid != user.uid----------------------------');
+      //  routesController.signup();
+      return false;
     }
 
     // Build the document path
@@ -65,9 +65,9 @@ class SplashsController extends GetxController {
       if (!snap.exists) {
         // profile doc missing → treat as not onboarded
         isLoading.value = false;
-        print('Inside snap.exists----------------------------');
-        routesController.signup();
-        return;
+        // print('Inside snap.exists----------------------------');
+        // routesController.signup();
+        return false;
       }
 
       final data = snap.data() as Map<String, dynamic>;
@@ -78,15 +78,15 @@ class SplashsController extends GetxController {
 
       // Everything OK → go home
       isLoading.value = false;
-      routesController.home();
-      return;
+      // routesController.home();
+      return true;
     } catch (e) {
       isLoading.value = false;
       errorSnackbar(title: 'Error', e: e);
-      print('Inside $e----------------------------');
+      // print('Inside $e----------------------------');
       // Optional: route to a safe page
-      routesController.signup();
-      return;
+      // routesController.signup();
+      return false;
     }
   }
 
@@ -95,7 +95,7 @@ class SplashsController extends GetxController {
       await storage.delete(key: 'department');
       await storage.delete(key: 'uid');
       await auth.signOut();
-      print("_clearLocalAndSignOut");
+      // print("_clearLocalAndSignOut");
     } catch (_) {}
   }
 }

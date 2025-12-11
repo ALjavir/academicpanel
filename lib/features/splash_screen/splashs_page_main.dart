@@ -1,19 +1,21 @@
+import 'dart:ui';
+
 import 'package:academicpanel/controller/splashs/splashs_controller.dart';
+import 'package:academicpanel/features/auth/page/signup_page_main.dart';
+import 'package:academicpanel/features/home/page/home_page_main.dart';
+import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/network/check_connection/check_connection.dart';
 import 'package:academicpanel/theme/animation/animated_background_v2.dart';
 import 'package:academicpanel/theme/animation/animation_background.dart';
 import 'package:academicpanel/theme/animation/blurry_typewriter_text.dart';
+import 'package:academicpanel/theme/animation/diagonal_reveal.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/utility/loading/loading.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:lottie/lottie.dart';
+import 'package:get/get.dart';
 
 class SplashsPageMain extends StatefulWidget {
   const SplashsPageMain({super.key});
@@ -25,59 +27,81 @@ class SplashsPageMain extends StatefulWidget {
 class _SplashsPageMainState extends State<SplashsPageMain> {
   final splashController = Get.put(SplashsController());
   final checkConnection = Get.put(CheckConnection());
+  final routesController = Get.find<RoutesController>();
+
+  RxBool isLoading = false.obs;
 
   @override
   void initState() {
     super.initState();
-    _initUserStatus();
+    // Start the sequence as soon as the app launches
+    _startAppSequence();
   }
 
-  Future<void> _initUserStatus() async {
-    // await checkConnection.checkConnection();
-    // await splashController.mainFunction();
+  Future<void> _startAppSequence() async {
+    // 1. Start Animation Timer (Minimum 3 seconds)
+    final animationTimer = Future.delayed(const Duration(seconds: 3));
+
+    // 2. Start Data Check (Returns the result, doesn't navigate yet)
+    // We use a separate variable to store the result of the future
+    bool isUserValid = false;
+
+    final dataFetch = Future(() async {
+      await checkConnection.checkConnection();
+      // Store the result (true/false) in our variable
+      isUserValid = await splashController.mainFunction();
+    });
+
+    // 3. Wait for BOTH to finish
+    // This guarantees at least 3 seconds have passed
+    await Future.wait([animationTimer, dataFetch]);
+
+    // 4. NOW Navigate based on the result
+    if (isUserValid) {
+      routesController.home();
+    } else {
+      routesController.signup();
+    }
+
+    mounted ? isLoading = splashController.isLoading : true;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorStyle.glassWhite,
+      backgroundColor: ColorStyle.light,
+      // backgroundColor: Colors.transparent,
       body: Obx(() {
-        final isLoading = splashController.isLoading.value;
+        //  final isLoading = isLoading.value;
         return Center(
           child: Column(
             spacing: 0,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AnimatedOpacity(
-                opacity: 1.0,
-                duration: Duration(seconds: 1),
-                child: Expanded(
-                  flex: 1,
-                  child: SvgPicture.asset(
-                    ImageStyle.logo(),
+              Expanded(
+                flex: 1,
+                child: DiagonalReveal(
+                  // <--- WRAP IT HERE
+                  duration: const Duration(seconds: 3), // Adjust speed
+                  child: ThreeDLogo(
+                    assetName: ImageStyle.logo(),
                     height: MediaQuery.of(context).size.height * 0.45,
                   ),
                 ),
               ),
-              LottieBuilder.asset(
-                repeat: false,
-                ImageStyle.logol(),
-                frameRate: FrameRate.composition,
-              ),
+
               Expanded(flex: 0, child: SizedBox()),
+              isLoading.value ? Loading(hight: 90) : const SizedBox(height: 90),
 
               // Inside your Column or Stack
               BlurryTypewriterText(
                 text: 'Presidency University',
                 style: Fontstyle.splashS(32), // Your existing style
                 // Customization
-                duration: const Duration(
-                  milliseconds: 3000,
-                ), // Slower = more cinematic
-                blurStrength: 0.5, // Higher = more "misty" start
+                duration: const Duration(seconds: 3), // Slower = more cinematic
+                blurStrength: 0.1, // Higher = more "misty" start
               ),
-
-              isLoading ? Loading(hight: 90) : const SizedBox(height: 10),
+              SizedBox(height: 20),
             ],
           ),
         );

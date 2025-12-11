@@ -51,7 +51,8 @@ dependencies:
   path_provider:
   cached_network_image: ^3.4.1
   flutter_blurhash: ^0.9.1
-  drawing_animation: ^1.0.1
+  #page_transition: ^2.2.1
+
 
 dev_dependencies:
   flutter_test:
