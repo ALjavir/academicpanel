@@ -12,8 +12,8 @@ class BlurryTypewriterText extends StatefulWidget {
     super.key,
     required this.text,
     required this.style,
-    this.duration = const Duration(milliseconds: 2000),
-    this.blurStrength = 10.0,
+    this.duration = const Duration(milliseconds: 3000),
+    this.blurStrength = 5.0,
   });
 
   @override
@@ -43,7 +43,7 @@ class _BlurryTypewriterTextState extends State<BlurryTypewriterText>
       // Each letter starts slightly later than the previous one
       final double start = i * step;
       final double end =
-          start + 0.5; // Each letter takes 50% of timeline to fully animate
+          start + 0.2; // Each letter takes 50% of timeline to fully animate
 
       // Create the Interval for this specific letter
       final interval = CurvedAnimation(

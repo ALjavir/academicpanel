@@ -1,6 +1,5 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/auth/user_model.dart';
-import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

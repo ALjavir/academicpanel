@@ -8,22 +8,34 @@ import 'package:get/get_navigation/src/routes/transitions_type.dart';
 
 class RoutesController {
   void splasS() {
-    Get.to(() => SplashsPageMain());
+    Get.to(
+      () => SplashsPageMain(),
+      transition: Transition.cupertino,
+      duration: const Duration(seconds: 1),
+    );
   }
 
   void signin() {
-    Get.to(() => SigninPageMain());
+    Get.to(
+      () => SigninPageMain(),
+      transition: Transition.cupertino,
+      duration: const Duration(seconds: 1),
+    );
   }
 
   void signup() {
     Get.to(
       () => SignupPageMain(),
       transition: Transition.cupertino,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 1),
     );
   }
 
   void home() {
-    Get.to(() => HomePageMain());
+    Get.to(
+      () => HomePageMain(),
+      transition: Transition.cupertino,
+      duration: const Duration(seconds: 1),
+    );
   }
 }

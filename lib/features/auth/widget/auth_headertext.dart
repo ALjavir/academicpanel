@@ -28,15 +28,9 @@ class _AuthHeadertextState extends State<AuthHeadertext> {
           style: Fontstyle.auth(32, FontWeight.bold, ColorStyle.blue).copyWith(
             shadows: [
               BoxShadow(
-                color: Colors.black12,
+                color: const Color.fromARGB(30, 0, 0, 0),
                 offset: const Offset(3, 3), // Horizontal, Vertical offset
-                blurRadius: 5.0, // Softness
-              ),
-              // Optional: Add a second shadow for "Glow"
-              BoxShadow(
-                color: Colors.white10,
-                offset: const Offset(-2, -2), // Opposite direction
-                blurRadius: 5.0,
+                blurRadius: 3, // Softness
               ),
             ],
           ),

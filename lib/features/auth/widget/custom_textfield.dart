@@ -36,8 +36,13 @@ class _TextFieldState extends State<CustomTextfield> {
     nameFocusNode.addListener(() {
       if (!nameFocusNode.hasFocus) {
         widget.validateFields();
-        //print("This is printtttttting");
       }
+      // else {
+      //   print(
+      //     "-----------------------------------------------------------------This is printtttttting",
+      //   );
+      //   // Field has gained focus
+      // }
     });
   }
 
@@ -46,17 +51,15 @@ class _TextFieldState extends State<CustomTextfield> {
     return Container(
       // 1. The Container creates the "Physical" 3D shape
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(
-          14,
-        ), // Must match your TextField border radius
+        color: ColorStyle.light,
+        borderRadius: BorderRadius.circular(14),
+
         boxShadow: [
-          // The "Lifted" Shadow
           BoxShadow(
-            color: Colors.black12, // Soft dark shadow
-            // Push shadow down-right
-            blurRadius: 1.6, // Softness
-            spreadRadius: 0.8,
+            color: const Color.fromARGB(10, 0, 0, 0), // Soft dark shadow
+            blurRadius: 3,
+            offset: Offset(3, 3), // Softness
+            spreadRadius: 1.5,
           ),
         ],
       ),
@@ -67,15 +70,20 @@ class _TextFieldState extends State<CustomTextfield> {
         focusNode: nameFocusNode,
         style: Fontstyle.auth(18, FontWeight.w500, ColorStyle.blue),
         maxLines: widget.maxline,
+
         decoration: InputDecoration(
           errorText: widget.errorText,
-          errorStyle: const TextStyle(color: Colors.red, fontSize: 18),
+          errorStyle: Fontstyle.errorSnackBar(
+            16,
+            const Color.fromARGB(150, 244, 67, 54),
+            FontWeight.w500,
+          ),
           labelText: widget.lebalText,
           labelStyle: Fontstyle.auth(18, FontWeight.normal, ColorStyle.blue),
           floatingLabelStyle: Fontstyle.auth(
             18,
             FontWeight.normal,
-            ColorStyle.lightBlue,
+            ColorStyle.blue,
           ),
           hintText: widget.hintText,
           hintStyle: Fontstyle.auth(
@@ -91,7 +99,10 @@ class _TextFieldState extends State<CustomTextfield> {
           // Normal border
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Colors.transparent, width: 1),
+            borderSide: const BorderSide(
+              color: Color.fromARGB(20, 0, 0, 0),
+              width: 1,
+            ),
           ),
 
           // Focused border (stay rounded)
@@ -103,20 +114,21 @@ class _TextFieldState extends State<CustomTextfield> {
           // Error border
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Colors.red, width: 2),
+            borderSide: const BorderSide(color: Colors.red, width: 1),
           ),
 
           // Focused + Error border
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Colors.red, width: 2),
+
+            borderSide: const BorderSide(color: Colors.red, width: 1),
           ),
 
           contentPadding: const EdgeInsets.fromLTRB(
             12,
             16,
             12,
-            16,
+            18,
           ), // Adjusted padding slightly for better look
         ),
       ),

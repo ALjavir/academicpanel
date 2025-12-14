@@ -1,6 +1,4 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
-import 'package:academicpanel/features/auth/page/signup_page_main.dart';
-import 'package:academicpanel/features/home/page/home_page_main.dart';
 import 'package:academicpanel/features/splash_screen/splashs_page_main.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/network/firebase/firebase_initialize.dart';
@@ -9,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:get/get_navigation/src/routes/get_route.dart';
-import 'package:get/get_navigation/src/routes/transitions_type.dart';
 
 Future<void> main() async {
   await firebaseInitialize();
@@ -32,22 +28,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       home: const SplashsPageMain(),
-      // getPages: [
-      //   GetPage(
-      //     name: '/signup',
-      //     page: () => const SignupPageMain(),
-      //     // Force the transition here. It's much harder for Flutter to ignore this.
-      //     transition: Transition.zoom,
-      //     transitionDuration: const Duration(
-      //       seconds: 1,
-      //     ), // 1s is enough to see it
-      //   ),
-      //   GetPage(
-      //     name: '/home',
-      //     page: () => const HomePageMain(),
-      //     transition: Transition.fadeIn,
-      //   ),
-      // ],
     );
   }
 }

@@ -6,6 +6,8 @@ import 'package:academicpanel/model/auth/signin_model.dart';
 
 import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/network/check_connection/check_connection.dart';
+import 'package:academicpanel/theme/animation/diagonal_reveal.dart';
+import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/utility/error_widget/error_snackbar.dart';
 import 'package:academicpanel/utility/loading/loading.dart';
 import 'package:flutter/material.dart';
@@ -36,111 +38,116 @@ class _SigninPageMainState extends State<SigninPageMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorStyle.light,
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(10, 150, 10, 10),
-        child: Center(
-          child: Column(
-            spacing: 80,
-            children: [
-              AuthHeadertext(
-                title: 'Welcome back',
-                subtitle:
-                    "sign in to continue your journey in our academic community",
-              ),
-              Column(
-                spacing: 20,
-                children: [
-                  CustomTextfield(
-                    textController: textContEmail,
+        child: DiagonalReveal(
+          duration: Duration(seconds: 2),
+          child: Center(
+            child: Column(
+              spacing: 80,
+              children: [
+                AuthHeadertext(
+                  title: 'Welcome back',
+                  subtitle:
+                      "sign in to continue your journey in our academic community",
+                ),
+                Column(
+                  spacing: 20,
+                  children: [
+                    CustomTextfield(
+                      textController: textContEmail,
 
-                    hintText: 'Enter your university email',
-                    validateFields: () {
-                      setState(() {
-                        String email = textContEmail.text.trim().toLowerCase();
+                      hintText: 'Enter your university email',
+                      validateFields: () {
+                        setState(() {
+                          String email = textContEmail.text
+                              .trim()
+                              .toLowerCase();
 
-                        final studentPattern = RegExp(
-                          r'^(\d{9})@student\.presidency\.edu\.bd$',
-                        );
-                        final staffPattern = RegExp(
-                          r'^([a-zA-Z0-9._-]+)@pu\.edu\.bd$',
-                        );
+                          final studentPattern = RegExp(
+                            r'^(\d{9})@student\.presidency\.edu\.bd$',
+                          );
+                          final staffPattern = RegExp(
+                            r'^([a-zA-Z0-9._-]+)@pu\.edu\.bd$',
+                          );
 
-                        if (studentPattern.hasMatch(email)) {
-                          // Extract prefix
+                          if (studentPattern.hasMatch(email)) {
+                            // Extract prefix
 
-                          emailErrorText = null;
+                            emailErrorText = null;
 
-                          isStudent = true;
-                        } else if (staffPattern.hasMatch(email)) {
-                          emailErrorText = null;
+                            isStudent = true;
+                          } else if (staffPattern.hasMatch(email)) {
+                            emailErrorText = null;
 
-                          isStudent = false;
-                        } else {
-                          emailErrorText = "Invalid email format";
-                        }
-                      });
-                    },
-                    errorText: emailErrorText,
-                    maxline: 1,
-
-                    lebalText: 'Email',
-                  ),
-                  CustomTextfield(
-                    textController: textContPass,
-                    hintText: 'Enter a password',
-                    errorText: passErrorText,
-                    validateFields: () {
-                      setState(() {
-                        if (textContPass.text.trim().length < 5) {
-                          passErrorText =
-                              '*Password length must be grater then 8 needed';
-                        } else {
-                          passErrorText = null;
-                        }
-                      });
-                    },
-                    maxline: 1,
-                    lebalText: 'Password',
-                  ),
-                ],
-              ),
-              Obx(() {
-                return signinController.isLoading.isTrue
-                    ? Loading(hight: 70)
-                    : CustomButton(
-                        text: 'Sign-In',
-
-                        onPressed: () async {
-                          try {
-                            await checkConnection.checkConnection();
-
-                            if (textContEmail.text.isEmpty ||
-                                textContPass.text.isEmpty) {
-                              errorSnackbar(
-                                title: 'Sorry!!!',
-                                subtitle: 'Fill up all the field',
-                              );
-                            } else {
-                              final user = SigninModel(
-                                email: textContEmail.text.trim(),
-                                password: textContPass.text.trim(),
-
-                                uid: '',
-                              );
-                              signinController.mainFunction(
-                                user,
-                                isStudent!,
-                                routesController,
-                              );
-                            }
-                          } catch (e) {
-                            errorSnackbar(title: 'Sorry', e: e);
+                            isStudent = false;
+                          } else {
+                            emailErrorText = "Invalid email format";
                           }
-                        },
-                      );
-              }),
-            ],
+                        });
+                      },
+                      errorText: emailErrorText,
+                      maxline: 1,
+
+                      lebalText: 'Email',
+                    ),
+                    CustomTextfield(
+                      textController: textContPass,
+                      hintText: 'Enter a password',
+                      errorText: passErrorText,
+                      validateFields: () {
+                        setState(() {
+                          if (textContPass.text.trim().length < 5) {
+                            passErrorText =
+                                '*Password length must be grater then 8 needed';
+                          } else {
+                            passErrorText = null;
+                          }
+                        });
+                      },
+                      maxline: 1,
+                      lebalText: 'Password',
+                    ),
+                  ],
+                ),
+                Obx(() {
+                  return signinController.isLoading.isTrue
+                      ? Loading(hight: 70)
+                      : CustomButton(
+                          text: 'Sign-In',
+
+                          onPressed: () async {
+                            try {
+                              await checkConnection.checkConnection();
+
+                              if (textContEmail.text.isEmpty ||
+                                  textContPass.text.isEmpty) {
+                                errorSnackbar(
+                                  title: 'Sorry!!!',
+                                  subtitle: 'Fill up all the field',
+                                );
+                              } else {
+                                final user = SigninModel(
+                                  email: textContEmail.text.trim(),
+                                  password: textContPass.text.trim(),
+
+                                  uid: '',
+                                );
+                                signinController.mainFunction(
+                                  user,
+                                  isStudent!,
+                                  routesController,
+                                );
+                              }
+                            } catch (e) {
+                              errorSnackbar(title: 'Sorry', e: e);
+                            }
+                          },
+                        );
+                }),
+              ],
+            ),
           ),
         ),
       ),

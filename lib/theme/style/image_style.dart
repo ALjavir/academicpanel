@@ -16,6 +16,10 @@ class ImageStyle {
     return 'lib/assets/icon/no_internet.png';
   }
 
+  static String addImage() {
+    return 'lib/assets/icon/add_image.png';
+  }
+
   static String backGroundImage() {
     return 'lib/assets/logo/bg (11).jpg';
   }

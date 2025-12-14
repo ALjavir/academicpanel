@@ -38,6 +38,7 @@ class _MydropdownbuttonState extends State<CustomDropdownbutton> {
           child: DropdownButtonHideUnderline(
             child: DropdownButton2<String>(
               isExpanded: true,
+
               value: selectedValu,
               hint: Text(
                 'Select department',
@@ -70,22 +71,39 @@ class _MydropdownbuttonState extends State<CustomDropdownbutton> {
                 height: 48,
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.black12, width: 1),
+                  color: ColorStyle.light,
+                  borderRadius: BorderRadius.circular(14),
+
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(
+                        15,
+                        0,
+                        0,
+                        0,
+                      ), // Soft dark shadow
+                      blurRadius: 3,
+                      offset: Offset(3, 3), // Softness
+                      spreadRadius: 1.5,
+                    ),
+                  ],
                 ),
               ),
 
               // Popup menu styling
               dropdownStyleData: DropdownStyleData(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: ColorStyle.light,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                // optional: max height if you have many items
-                // maxHeight: 300,
               ),
-
+              iconStyleData: IconStyleData(
+                icon: Icon(
+                  Icons.arrow_drop_down,
+                  color: ColorStyle.blue,
+                  size: 30,
+                ),
+              ),
               // Each item’s padding/height
               menuItemStyleData: const MenuItemStyleData(
                 height: 44,

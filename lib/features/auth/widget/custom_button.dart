@@ -15,28 +15,37 @@ class CustomButton extends StatefulWidget {
 class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: () async {
+    return InkWell(
+      onTap: () async {
         await widget.onPressed();
       },
-      style: ElevatedButton.styleFrom(
-        elevation: 0,
-        backgroundColor: ColorStyle.blue,
-        foregroundColor: ColorStyle.lightBlue,
-        padding: EdgeInsets.all(10),
-        //fixedSize: Size(250, 50),
-        shape: RoundedRectangleBorder(
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.07,
+        width: MediaQuery.of(context).size.width * 0.6,
+        decoration: BoxDecoration(
+          color: ColorStyle.blue,
           borderRadius: BorderRadius.circular(10),
-          side: BorderSide(width: 1, color: Colors.white),
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(30, 0, 0, 0), // Soft dark shadow
+              blurRadius: 3,
+              offset: Offset(3, 3), // Softness
+              spreadRadius: 1.5,
+            ),
+          ],
+        ),
+
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              widget.text,
+              style: Fontstyle.auth(20, FontWeight.w600, Colors.white),
+            ),
+            Icon(Icons.arrow_forward_outlined, color: Colors.white),
+          ],
         ),
       ),
-      label: Text(
-        widget.text,
-        style: Fontstyle.auth(20, FontWeight.w500, Colors.white),
-      ),
-
-      icon: Icon(Icons.arrow_forward_outlined, color: Colors.white),
-      iconAlignment: IconAlignment.end,
     );
   }
 }

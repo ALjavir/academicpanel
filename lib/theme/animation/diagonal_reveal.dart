@@ -10,7 +10,7 @@ class DiagonalReveal extends StatefulWidget {
   const DiagonalReveal({
     super.key,
     required this.child,
-    this.duration = const Duration(seconds: 2),
+    this.duration = const Duration(seconds: 3),
   });
 
   @override
@@ -24,8 +24,15 @@ class _DiagonalRevealState extends State<DiagonalReveal>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: widget.duration)
-      ..forward(); // Start animation immediately
+    _controller = AnimationController(vsync: this, duration: widget.duration);
+
+    // START DELAY: Wait 500ms for the page transition to finish settling
+    // before starting the wiper animation. This creates a smoother feel.
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (mounted) {
+        _controller.forward();
+      }
+    });
   }
 
   @override
