@@ -47,7 +47,7 @@ void errorSnackbar({required String title, String? subtitle, Object? e}) {
             contentText,
             style: Fontstyle.errorSnackBar(
               22,
-              ColorStyle.blue,
+              ColorStyle.Textblue,
               FontWeight.normal,
             ),
           ),

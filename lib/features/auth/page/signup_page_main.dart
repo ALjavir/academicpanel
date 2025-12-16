@@ -4,7 +4,7 @@ import 'package:academicpanel/features/auth/widget/auth_image.dart';
 import 'package:academicpanel/features/auth/widget/custom_button.dart';
 import 'package:academicpanel/features/auth/widget/custom_dropdown_button.dart';
 import 'package:academicpanel/features/auth/widget/custom_textfield.dart';
-import 'package:academicpanel/model/auth/user_model.dart';
+import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/network/check_connection/check_connection.dart';
 
@@ -283,7 +283,7 @@ class _SignupPageMainState extends State<SignupPageMain> {
                             children: [
                               Text(
                                 'Already have a account?',
-                                style: Fontstyle.auth(
+                                style: Fontstyle.defult(
                                   14,
                                   FontWeight.normal,
                                   ColorStyle.lightBlue,
@@ -297,28 +297,14 @@ class _SignupPageMainState extends State<SignupPageMain> {
                                 child: Text(
                                   "Sign-In",
 
-                                  style:
-                                      Fontstyle.auth(
-                                        18,
-                                        FontWeight.bold,
-                                        ColorStyle.red,
-                                      ).copyWith(
-                                        shadows: [
-                                          BoxShadow(
-                                            color: const Color.fromARGB(
-                                              30,
-                                              0,
-                                              0,
-                                              0,
-                                            ),
-                                            offset: const Offset(
-                                              3,
-                                              3,
-                                            ), // Horizontal, Vertical offset
-                                            blurRadius: 3, // Softness
-                                          ),
-                                        ],
-                                      ),
+                                  style: Fontstyle.defult3d(
+                                    18,
+                                    FontWeight.bold,
+                                    ColorStyle.red,
+                                    const Color.fromARGB(30, 159, 27, 25),
+                                    const Offset(3, 3),
+                                    3,
+                                  ),
                                 ),
                               ),
                             ],

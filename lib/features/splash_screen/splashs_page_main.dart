@@ -3,6 +3,7 @@ import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/network/check_connection/check_connection.dart';
 import 'package:academicpanel/theme/animation/blurry_typewriter_text.dart';
 import 'package:academicpanel/theme/animation/diagonal_reveal.dart';
+import 'package:academicpanel/theme/animation/threed_logo.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
@@ -48,14 +49,12 @@ class _SplashsPageMainState extends State<SplashsPageMain> {
     // 3. Wait for BOTH to finish
     // This guarantees at least 3 seconds have passed
     await Future.wait([animationTimer, dataFetch]);
-
+    isLoading = splashController.isLoading;
     if (isUserValid) {
       routesController.home();
     } else {
       routesController.signup();
     }
-
-    mounted ? isLoading = splashController.isLoading : true;
   }
 
   @override

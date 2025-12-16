@@ -78,13 +78,21 @@ class CheckConnection extends GetxService {
                 children: [
                   Text(
                     'No internet',
-                    style: Fontstyle.auth(22, FontWeight.w500, ColorStyle.red),
+                    style: Fontstyle.defult(
+                      22,
+                      FontWeight.w500,
+                      ColorStyle.red,
+                    ),
                   ),
-                  Divider(height: 1, color: ColorStyle.blue),
+                  Divider(height: 1, color: ColorStyle.Textblue),
                   const SizedBox(height: 10),
                   Text(
                     "You are not connected to the internet!!!",
-                    style: Fontstyle.auth(14, FontWeight.w600, ColorStyle.blue),
+                    style: Fontstyle.defult(
+                      14,
+                      FontWeight.w600,
+                      ColorStyle.Textblue,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   // Display mock image asset
@@ -116,7 +124,7 @@ class CheckConnection extends GetxService {
                       ),
                       label: Text(
                         "Try again",
-                        style: Fontstyle.auth(
+                        style: Fontstyle.defult(
                           14,
                           FontWeight.bold,
                           Colors.white,

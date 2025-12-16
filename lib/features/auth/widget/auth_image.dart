@@ -22,7 +22,7 @@ class AuthImage extends StatelessWidget {
       children: [
         Text(
           'Image:',
-          style: Fontstyle.auth(18, FontWeight.normal, ColorStyle.blue),
+          style: Fontstyle.defult(18, FontWeight.normal, ColorStyle.Textblue),
         ),
         SizedBox(height: 10),
         Obx(() {
@@ -42,14 +42,14 @@ class AuthImage extends StatelessWidget {
                   boxShadow: [
                     BoxShadow(
                       color: const Color.fromARGB(
-                        15,
+                        12,
                         0,
                         0,
                         0,
                       ), // Soft dark shadow
-                      blurRadius: 3,
-                      offset: Offset(3, 3), // Softness
-                      spreadRadius: 1.5,
+                      blurRadius: 6,
+                      offset: Offset(6, 6), // Softness
+                      spreadRadius: 3,
                     ),
                   ],
                   borderRadius: BorderRadius.circular(10),

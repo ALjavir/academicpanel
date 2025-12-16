@@ -9,7 +9,7 @@ class UserModel {
   final String address;
   final String password;
   final String email;
-  List<Map<String, String>>? courses;
+  Map<String, String>? courses;
 
   UserModel({
     this.uid,
@@ -45,12 +45,9 @@ class UserModel {
     image: data['image'],
     //image: _convertToDirectLink(data['image'].toString()),
     courses: data['courses'] != null
-        ? List<Map<String, String>>.from(
-            (data['courses'] as List).map(
-              (course) => Map<String, String>.from(course),
-            ),
-          )
+        ? Map<String, String>.from(data['courses'])
         : null,
+
     email: data['email'] ?? '',
     firstName: data['first_name'] ?? '',
     lastName: data['last_name'] ?? '',
@@ -67,7 +64,8 @@ class UserModel {
   UserModel copyWith({
     String? uid,
     String? image,
-    List<Map<String, String>>? courses,
+    Map<String, String>? courses,
+
     String? id,
     String? firstName,
     String? lastName,
@@ -92,20 +90,20 @@ class UserModel {
     );
   }
 
-  static String _convertToDirectLink(String link) {
-    final regex = RegExp(r'd/([^/]+)/'); // Matches "d/<fileId>/"
-    final altRegex = RegExp(r'id=([^&]+)'); // Matches "id=<fileId>"
+  // static String _convertToDirectLink(String link) {
+  //   final regex = RegExp(r'd/([^/]+)/'); // Matches "d/<fileId>/"
+  //   final altRegex = RegExp(r'id=([^&]+)'); // Matches "id=<fileId>"
 
-    if (regex.hasMatch(link)) {
-      final match = regex.firstMatch(link);
-      final fileId = match?.group(1);
-      return 'https://drive.google.com/uc?export=view&id=$fileId';
-    } else if (altRegex.hasMatch(link)) {
-      final match = altRegex.firstMatch(link);
-      final fileId = match?.group(1);
-      return 'https://drive.google.com/uc?export=view&id=$fileId';
-    } else {
-      return link;
-    }
-  }
+  //   if (regex.hasMatch(link)) {
+  //     final match = regex.firstMatch(link);
+  //     final fileId = match?.group(1);
+  //     return 'https://drive.google.com/uc?export=view&id=$fileId';
+  //   } else if (altRegex.hasMatch(link)) {
+  //     final match = altRegex.firstMatch(link);
+  //     final fileId = match?.group(1);
+  //     return 'https://drive.google.com/uc?export=view&id=$fileId';
+  //   } else {
+  //     return link;
+  //   }
+  // }
 }

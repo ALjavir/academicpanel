@@ -29,7 +29,7 @@ class _MydropdownbuttonState extends State<CustomDropdownbutton> {
       children: [
         Text(
           "Department:",
-          style: Fontstyle.auth(18, FontWeight.normal, ColorStyle.blue),
+          style: Fontstyle.defult(18, FontWeight.normal, ColorStyle.Textblue),
         ),
         const SizedBox(width: 12),
 
@@ -42,7 +42,7 @@ class _MydropdownbuttonState extends State<CustomDropdownbutton> {
               value: selectedValu,
               hint: Text(
                 'Select department',
-                style: Fontstyle.auth(
+                style: Fontstyle.defult(
                   18,
                   FontWeight.normal,
                   ColorStyle.lightBlue,
@@ -55,7 +55,11 @@ class _MydropdownbuttonState extends State<CustomDropdownbutton> {
                   child: Text(
                     item,
                     overflow: TextOverflow.ellipsis, // avoids text overflow
-                    style: Fontstyle.auth(18, FontWeight.w500, ColorStyle.blue),
+                    style: Fontstyle.defult(
+                      18,
+                      FontWeight.w500,
+                      ColorStyle.Textblue,
+                    ),
                   ),
                 );
               }).toList(),
@@ -77,14 +81,14 @@ class _MydropdownbuttonState extends State<CustomDropdownbutton> {
                   boxShadow: [
                     BoxShadow(
                       color: const Color.fromARGB(
-                        15,
+                        12,
                         0,
                         0,
                         0,
                       ), // Soft dark shadow
-                      blurRadius: 3,
-                      offset: Offset(3, 3), // Softness
-                      spreadRadius: 1.5,
+                      blurRadius: 6,
+                      offset: Offset(6, 6), // Softness
+                      spreadRadius: 3,
                     ),
                   ],
                 ),
@@ -100,7 +104,7 @@ class _MydropdownbuttonState extends State<CustomDropdownbutton> {
               iconStyleData: IconStyleData(
                 icon: Icon(
                   Icons.arrow_drop_down,
-                  color: ColorStyle.blue,
+                  color: ColorStyle.Textblue,
                   size: 30,
                 ),
               ),

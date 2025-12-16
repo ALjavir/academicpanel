@@ -23,14 +23,14 @@ class _CustomButtonState extends State<CustomButton> {
         height: MediaQuery.of(context).size.height * 0.07,
         width: MediaQuery.of(context).size.width * 0.6,
         decoration: BoxDecoration(
-          color: ColorStyle.blue,
+          color: ColorStyle.Textblue,
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
-              color: const Color.fromARGB(30, 0, 0, 0), // Soft dark shadow
-              blurRadius: 3,
-              offset: Offset(3, 3), // Softness
-              spreadRadius: 1.5,
+              color: const Color.fromARGB(12, 0, 0, 0), // Soft dark shadow
+              blurRadius: 4,
+              offset: Offset(4, 4), // Softness
+              spreadRadius: 2,
             ),
           ],
         ),
@@ -40,7 +40,7 @@ class _CustomButtonState extends State<CustomButton> {
           children: [
             Text(
               widget.text,
-              style: Fontstyle.auth(20, FontWeight.w600, Colors.white),
+              style: Fontstyle.defult(20, FontWeight.w600, Colors.white),
             ),
             Icon(Icons.arrow_forward_outlined, color: Colors.white),
           ],

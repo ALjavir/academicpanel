@@ -1,4 +1,4 @@
-import 'package:academicpanel/model/auth/user_model.dart';
+import 'package:academicpanel/model/user/user_model.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {

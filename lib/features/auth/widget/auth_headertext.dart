@@ -25,25 +25,30 @@ class _AuthHeadertextState extends State<AuthHeadertext> {
         Text(
           widget.title,
           textAlign: TextAlign.center,
-          style: Fontstyle.auth(32, FontWeight.bold, ColorStyle.blue).copyWith(
-            shadows: [
-              BoxShadow(
-                color: const Color.fromARGB(30, 0, 0, 0),
-                offset: const Offset(3, 3), // Horizontal, Vertical offset
-                blurRadius: 3, // Softness
-              ),
-            ],
+          style: Fontstyle.defult3d(
+            32,
+            FontWeight.bold,
+            ColorStyle.Textblue,
+            const Color.fromARGB(40, 19, 70, 125),
+            const Offset(3, 3),
+            3,
           ),
+          // style: Fontstyle.auth(32, FontWeight.bold, ColorStyle.Textblue)
+          //     .copyWith(
+          //       shadows: [
+          //         BoxShadow(
+          //           color: const Color.fromARGB(40, 19, 70, 125),
+          //           offset: const Offset(3, 3), // Horizontal, Vertical offset
+          //           blurRadius: 3, // Softness
+          //         ),
+          //       ],
+          //     ),
         ),
 
-        // TextSpan(
-        //   text: '${widget.title}\n',
-        //   style: Fontstyle.auth(32, FontWeight.bold, ColorStyle.blue),
-        // ),
         Text(
           textAlign: TextAlign.center,
           widget.subtitle,
-          style: Fontstyle.auth(14, FontWeight.w600, ColorStyle.lightBlue),
+          style: Fontstyle.defult(14, FontWeight.w600, ColorStyle.lightBlue),
         ),
       ],
     );

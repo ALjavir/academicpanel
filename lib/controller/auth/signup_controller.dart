@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:academicpanel/model/auth/user_model.dart';
+import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
@@ -144,21 +144,29 @@ class SignupController extends GetxController {
             children: [
               Text(
                 'Email Verification',
-                style: Fontstyle.auth(22, FontWeight.w500, ColorStyle.blue),
+                style: Fontstyle.defult(
+                  22,
+                  FontWeight.w500,
+                  ColorStyle.Textblue,
+                ),
               ),
               Divider(height: 1, color: ColorStyle.red),
               const SizedBox(height: 10),
               RichText(
                 text: TextSpan(
-                  style: Fontstyle.auth(14, FontWeight.normal, ColorStyle.blue),
+                  style: Fontstyle.defult(
+                    14,
+                    FontWeight.normal,
+                    ColorStyle.Textblue,
+                  ),
                   children: [
                     TextSpan(text: 'A verification link has been sent to '),
                     TextSpan(
                       text: user.email,
-                      style: Fontstyle.auth(
+                      style: Fontstyle.defult(
                         14,
                         FontWeight.w600,
-                        ColorStyle.blue,
+                        ColorStyle.Textblue,
                       ),
                     ),
                     TextSpan(text: '. Please check your inbox or spam folder.'),
@@ -170,7 +178,7 @@ class SignupController extends GetxController {
 
               Text(
                 '*This dialog will close automatically when verified.',
-                style: Fontstyle.auth(12, FontWeight.normal, ColorStyle.red),
+                style: Fontstyle.defult(12, FontWeight.normal, ColorStyle.red),
               ),
 
               const SizedBox(height: 10),
@@ -195,7 +203,7 @@ class SignupController extends GetxController {
                   ),
                   label: Text(
                     "Cancle",
-                    style: Fontstyle.auth(14, FontWeight.bold, Colors.white),
+                    style: Fontstyle.defult(14, FontWeight.bold, Colors.white),
                   ),
 
                   icon: Icon(Icons.arrow_forward_outlined, color: Colors.white),

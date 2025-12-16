@@ -56,19 +56,19 @@ class _TextFieldState extends State<CustomTextfield> {
 
         boxShadow: [
           BoxShadow(
-            color: const Color.fromARGB(10, 0, 0, 0), // Soft dark shadow
-            blurRadius: 3,
-            offset: Offset(3, 3), // Softness
-            spreadRadius: 1.5,
+            color: const Color.fromARGB(8, 0, 0, 0), // Soft dark shadow
+            blurRadius: 4,
+            offset: Offset(4, 4), // Softness
+            spreadRadius: 2,
           ),
         ],
       ),
       child: TextField(
         textAlign: TextAlign.justify,
         controller: widget.textController,
-        cursorColor: ColorStyle.blue,
+        cursorColor: ColorStyle.Textblue,
         focusNode: nameFocusNode,
-        style: Fontstyle.auth(18, FontWeight.w500, ColorStyle.blue),
+        style: Fontstyle.defult(18, FontWeight.w500, ColorStyle.Textblue),
         maxLines: widget.maxline,
 
         decoration: InputDecoration(
@@ -79,14 +79,18 @@ class _TextFieldState extends State<CustomTextfield> {
             FontWeight.w500,
           ),
           labelText: widget.lebalText,
-          labelStyle: Fontstyle.auth(18, FontWeight.normal, ColorStyle.blue),
-          floatingLabelStyle: Fontstyle.auth(
+          labelStyle: Fontstyle.defult(
             18,
             FontWeight.normal,
-            ColorStyle.blue,
+            ColorStyle.Textblue,
+          ),
+          floatingLabelStyle: Fontstyle.defult(
+            18,
+            FontWeight.normal,
+            ColorStyle.Textblue,
           ),
           hintText: widget.hintText,
-          hintStyle: Fontstyle.auth(
+          hintStyle: Fontstyle.defult(
             16,
             FontWeight.normal,
             ColorStyle.lightBlue,
@@ -100,7 +104,7 @@ class _TextFieldState extends State<CustomTextfield> {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
             borderSide: const BorderSide(
-              color: Color.fromARGB(20, 0, 0, 0),
+              color: Color.fromARGB(16, 0, 0, 0),
               width: 1,
             ),
           ),

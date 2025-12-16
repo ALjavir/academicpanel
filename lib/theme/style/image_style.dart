@@ -12,8 +12,16 @@ class ImageStyle {
     return 'lib/assets/icon/loading_1.json';
   }
 
+  static String classTime() {
+    return 'lib/assets/icon/open-book.png';
+  }
+
   static String no_internet() {
     return 'lib/assets/icon/no_internet.png';
+  }
+
+  static String noImage() {
+    return 'lib/assets/icon/noImage.png';
   }
 
   static String addImage() {
