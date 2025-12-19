@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

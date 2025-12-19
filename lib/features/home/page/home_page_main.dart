@@ -1,6 +1,6 @@
 import 'package:academicpanel/controller/home/home_controller.dart';
 import 'package:academicpanel/features/home/widget/home_top_header2.dart';
-import 'package:academicpanel/features/home/widget/next_class.dart';
+import 'package:academicpanel/features/home/widget/today_classSchedule.dart';
 import 'package:academicpanel/model/home/home_model.dart';
 import 'package:academicpanel/theme/animation/diagonal_reveal.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
@@ -68,12 +68,13 @@ class _HomePageMainState extends State<HomePageMain> {
               child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: Column(
+                  spacing: 20,
                   children: [
                     // Pass the fetched data to your widget
                     HomeTopHeader2(
                       homeTopHeaderModel: data!.homeTopHeaderModel,
                     ),
-                    NextClass(todayClass: data.todayClass),
+                    TodayClassschedule(todayClass: data.todayClassSchedule),
                   ],
                 ),
               ),

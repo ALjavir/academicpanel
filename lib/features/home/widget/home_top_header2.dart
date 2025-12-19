@@ -1,5 +1,4 @@
 import 'package:academicpanel/model/home/home_model.dart';
-import 'package:academicpanel/theme/animation/diagonal_reveal.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';

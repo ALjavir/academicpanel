@@ -1,7 +1,10 @@
 class HomeModel {
   final HomeTopHeaderModel homeTopHeaderModel;
-  final TodayClass todayClass;
-  HomeModel({required this.homeTopHeaderModel, required this.todayClass});
+  final TodayClassSchedule todayClassSchedule;
+  HomeModel({
+    required this.homeTopHeaderModel,
+    required this.todayClassSchedule,
+  });
 }
 
 class HomeTopHeaderModel {
@@ -10,21 +13,23 @@ class HomeTopHeaderModel {
   HomeTopHeaderModel({required this.lastName, this.image});
 }
 
-class TodayClass {
-  final List<ClassTime>? classTime;
-  TodayClass({this.classTime});
+class TodayClassSchedule {
+  final List<ClassTimeInfo>? classTimeInfo;
+  TodayClassSchedule({this.classTimeInfo});
 }
 
-class ClassTime {
+class ClassTimeInfo {
   final String name;
   final String code;
-  final String time;
+  final String startTime;
+  final String endTime;
   final String room;
   final String instracter;
-  ClassTime({
+  ClassTimeInfo({
     required this.name,
     required this.code,
-    required this.time,
+    required this.startTime,
+    required this.endTime,
     required this.room,
     required this.instracter,
   });

@@ -12,7 +12,7 @@ class ImageStyle {
     return 'lib/assets/icon/loading_1.json';
   }
 
-  static String classTime() {
+  static String book() {
     return 'lib/assets/icon/open-book.png';
   }
 

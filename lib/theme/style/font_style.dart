@@ -1,7 +1,5 @@
-import 'dart:ui';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/painting/text_style.dart';
 
 class Fontstyle {
   static TextStyle splashS(double fontSize) {
