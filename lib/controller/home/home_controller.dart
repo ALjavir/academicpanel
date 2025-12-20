@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
+import 'package:intl/intl.dart';
 
 class HomeController extends GetxController {
   final userController = Get.find<UserController>();
@@ -21,7 +22,12 @@ class HomeController extends GetxController {
     } catch (e) {
       errorSnackbar(title: "Error", e: e);
       return HomeModel(
-        homeTopHeaderModel: HomeTopHeaderModel(lastName: '', image: ''),
+        homeTopHeaderModel: HomeTopHeaderModel(
+          lastName: '',
+          image: '',
+          date: '',
+          semester: '',
+        ),
 
         todayClassSchedule: TodayClassSchedule(),
       );
@@ -32,13 +38,41 @@ class HomeController extends GetxController {
     try {
       // QuerySnapshot snapshot = await FirebaseFirestore.instance.collection(userModel.department).get();
 
+      // 1. Get Date String: "Friday July 11"
+      String getFormattedDate() {
+        return DateFormat('EEEE MMMM d').format(DateTime.now());
+      }
+
+      // 2. Calculate Semester: "Summer-25"
+      String getCurrentSemester() {
+        final now = DateTime.now();
+        final yearShort = now.year % 100; // Get last 2 digits (2025 -> 25)
+        String season = "";
+        if (now.month >= 1 && now.month <= 4) {
+          season = "Spring";
+        } else if (now.month >= 5 && now.month <= 8) {
+          season = "Summer";
+        } else {
+          season = "Fall"; // Sept - Dec
+        }
+
+        return "$season - $yearShort";
+      }
+
       return HomeTopHeaderModel(
         lastName: userModel.lastName,
         image: userModel.image,
+        date: getFormattedDate(),
+        semester: getCurrentSemester(),
       );
     } catch (e) {
       errorSnackbar(title: "Error", e: e);
-      return HomeTopHeaderModel(lastName: '', image: '');
+      return HomeTopHeaderModel(
+        lastName: '',
+        image: '',
+        date: '',
+        semester: '',
+      );
     }
   }
 
@@ -54,11 +88,11 @@ class HomeController extends GetxController {
       // 3. FILTER: Remove classes where startTime has passed
       // Alternative: Only remove if the class is FINISHED
 
-      todayClassScheduleList.removeWhere((classItem) {
-        final parts = classItem.endTime.split(':'); // Use endTime here
-        final classEndMinutes = int.parse(parts[0]) * 60 + int.parse(parts[1]);
-        return classEndMinutes < currentMinutes;
-      });
+      // todayClassScheduleList.removeWhere((classItem) {
+      //   final parts = classItem.endTime.split(':'); // Use endTime here
+      //   final classEndMinutes = int.parse(parts[0]) * 60 + int.parse(parts[1]);
+      //   return classEndMinutes < currentMinutes;
+      // });
 
       // 4. SORT: Order remaining classes from Earliest to Latest
       // Since "14:00" is lexicographically larger than "09:00", String comparison works!

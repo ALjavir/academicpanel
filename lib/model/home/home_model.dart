@@ -10,7 +10,14 @@ class HomeModel {
 class HomeTopHeaderModel {
   final String lastName;
   final String? image;
-  HomeTopHeaderModel({required this.lastName, this.image});
+  final String date;
+  final String semester;
+  HomeTopHeaderModel({
+    required this.lastName,
+    this.image,
+    required this.date,
+    required this.semester,
+  });
 }
 
 class TodayClassSchedule {

@@ -4,6 +4,7 @@ import 'package:academicpanel/features/home/widget/today_classSchedule.dart';
 import 'package:academicpanel/model/home/home_model.dart';
 import 'package:academicpanel/theme/animation/diagonal_reveal.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
+import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/utility/loading/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -36,11 +37,11 @@ class _HomePageMainState extends State<HomePageMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 10,
-        leading: SizedBox.shrink(),
-        backgroundColor: ColorStyle.light,
-      ),
+      // appBar: AppBar(
+      //   toolbarHeight: 10,
+      //   leading: SizedBox.shrink(),
+      //   backgroundColor: ColorStyle.light,
+      // ),
       backgroundColor: ColorStyle.light,
       // Keep your animation wrapper
       body: DiagonalReveal(
@@ -65,18 +66,54 @@ class _HomePageMainState extends State<HomePageMain> {
 
             return SingleChildScrollView(
               // padding: const EdgeInsets.all(10),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  spacing: 20,
-                  children: [
-                    // Pass the fetched data to your widget
-                    HomeTopHeader2(
-                      homeTopHeaderModel: data!.homeTopHeaderModel,
+              child: Column(
+                spacing: 20,
+                children: [
+                  // Pass the fetched data to your widget
+                  HomeTopHeader2(homeTopHeaderModel: data!.homeTopHeaderModel),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 4,
+                    children: [
+                      Text(
+                        "Today's Highlights",
+                        style: Fontstyle.defult3d(
+                          22,
+                          FontWeight.bold,
+                          ColorStyle.Textblue,
+                          const Color.fromARGB(20, 19, 70, 125),
+                          const Offset(3, 3),
+                          4,
+                        ),
+                      ),
+                      Icon(
+                        Icons.auto_graph_outlined,
+                        color: ColorStyle.red,
+                        shadows: [
+                          BoxShadow(
+                            color: const Color.fromARGB(
+                              12,
+                              255,
+                              0,
+                              0,
+                            ), // Soft dark shadow
+                            blurRadius: 6,
+
+                            offset: Offset(0, 6), // Softness
+                            spreadRadius: 3,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: TodayClassschedule(
+                      todayClass: data.todayClassSchedule,
                     ),
-                    TodayClassschedule(todayClass: data.todayClassSchedule),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           },
