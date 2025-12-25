@@ -1,9 +1,14 @@
+import 'package:academicpanel/model/global/anouncement.dart';
+import 'package:academicpanel/model/global/classSchedule_model.dart';
+
 class HomeModel {
   final HomeTopHeaderModel homeTopHeaderModel;
-  final TodayClassSchedule todayClassSchedule;
+  final List<ClassscheduleModel> homeTodayClassSchedule;
+  final List<Anouncement> homeAnouncement;
   HomeModel({
     required this.homeTopHeaderModel,
-    required this.todayClassSchedule,
+    required this.homeTodayClassSchedule,
+    required this.homeAnouncement,
   });
 }
 
@@ -20,24 +25,7 @@ class HomeTopHeaderModel {
   });
 }
 
-class TodayClassSchedule {
-  final List<ClassTimeInfo>? classTimeInfo;
-  TodayClassSchedule({this.classTimeInfo});
-}
-
-class ClassTimeInfo {
-  final String name;
-  final String code;
-  final String startTime;
-  final String endTime;
-  final String room;
-  final String instracter;
-  ClassTimeInfo({
-    required this.name,
-    required this.code,
-    required this.startTime,
-    required this.endTime,
-    required this.room,
-    required this.instracter,
-  });
-}
+// class TodayClassScheduleHome {
+//   final  classTimeInfo;
+//   TodayClassScheduleHome({this.classTimeInfo});
+// }

@@ -1,4 +1,6 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
+import 'package:academicpanel/model/global/anouncement.dart';
+import 'package:academicpanel/model/global/classSchedule_model.dart';
 import 'package:academicpanel/model/home/home_model.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,14 +12,17 @@ import 'package:intl/intl.dart';
 
 class HomeController extends GetxController {
   final userController = Get.find<UserController>();
-  List<ClassTimeInfo> todayClassScheduleList = [];
+  List<ClassscheduleModel> todayClassScheduleListHome = [];
+  List<Anouncement> anouncementListHome = [];
 
   Future<HomeModel> mainHomeController() async {
     final userModel = userController.user.value;
     try {
       return HomeModel(
         homeTopHeaderModel: await fetchHomePageHeader(userModel!),
-        todayClassSchedule: await todayClassSchedule(userModel),
+
+        homeTodayClassSchedule: await todayClassSchedule(userModel),
+        homeAnouncement: [],
       );
     } catch (e) {
       errorSnackbar(title: "Error", e: e);
@@ -29,7 +34,8 @@ class HomeController extends GetxController {
           semester: '',
         ),
 
-        todayClassSchedule: TodayClassSchedule(),
+        homeTodayClassSchedule: todayClassScheduleListHome,
+        homeAnouncement: anouncementListHome,
       );
     }
   }
@@ -76,36 +82,42 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<TodayClassSchedule> todayClassSchedule(UserModel userModel) async {
+  Future<List<ClassscheduleModel>> todayClassSchedule(
+    UserModel userModel,
+  ) async {
     try {
-      if (todayClassScheduleList.isEmpty) {
+      if (todayClassScheduleListHome.isEmpty) {
         await fetchClassTimeInfo(userModel);
       }
       final now = TimeOfDay.now();
       final currentMinutes = now.hour * 60 + now.minute;
-      print("$currentMinutes --------------- ");
+      // print("$currentMinutes --------------- ");
 
       // 3. FILTER: Remove classes where startTime has passed
       // Alternative: Only remove if the class is FINISHED
 
-      // todayClassScheduleList.removeWhere((classItem) {
-      //   final parts = classItem.endTime.split(':'); // Use endTime here
-      //   final classEndMinutes = int.parse(parts[0]) * 60 + int.parse(parts[1]);
-      //   return classEndMinutes < currentMinutes;
-      // });
+      todayClassScheduleListHome.removeWhere((classItem) {
+        final parts = classItem.endTime.split(':'); // Use endTime here
+        final classEndMinutes = int.parse(parts[0]) * 60 + int.parse(parts[1]);
+        return classEndMinutes < currentMinutes;
+      });
 
       // 4. SORT: Order remaining classes from Earliest to Latest
       // Since "14:00" is lexicographically larger than "09:00", String comparison works!
-      todayClassScheduleList.sort((a, b) => a.startTime.compareTo(b.startTime));
+      todayClassScheduleListHome.sort(
+        (a, b) => a.startTime.compareTo(b.startTime),
+      );
 
-      return TodayClassSchedule(classTimeInfo: todayClassScheduleList);
+      return todayClassScheduleListHome;
     } catch (e) {
       errorSnackbar(title: "classSchedule error", e: e);
-      return TodayClassSchedule(classTimeInfo: []);
+      return [];
     }
   }
 
-  Future<TodayClassSchedule> fetchClassTimeInfo(UserModel userModel) async {
+  Future<List<ClassscheduleModel>> fetchClassTimeInfo(
+    UserModel userModel,
+  ) async {
     final db = FirebaseFirestore.instance;
 
     try {
@@ -175,8 +187,8 @@ class HomeController extends GetxController {
             final todaysDetails = scheduleMap[dayKey] as Map<String, dynamic>;
             //   print("$dayKey --------------- ");
 
-            todayClassScheduleList.add(
-              ClassTimeInfo(
+            todayClassScheduleListHome.add(
+              ClassscheduleModel(
                 name: infoSnapshot.get('name') ?? '',
                 code: infoSnapshot.get('code') ?? courseCode,
                 // --- HERE IS THE FIX ---
@@ -192,10 +204,10 @@ class HomeController extends GetxController {
         }
       }
 
-      return TodayClassSchedule(classTimeInfo: todayClassScheduleList);
+      return todayClassScheduleListHome;
     } catch (e) {
       errorSnackbar(title: "Error", e: e);
-      return TodayClassSchedule(classTimeInfo: []);
+      return todayClassScheduleListHome;
     }
   }
 }

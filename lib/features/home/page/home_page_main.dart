@@ -7,6 +7,7 @@ import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/utility/loading/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -37,11 +38,16 @@ class _HomePageMainState extends State<HomePageMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   toolbarHeight: 10,
-      //   leading: SizedBox.shrink(),
-      //   backgroundColor: ColorStyle.light,
-      // ),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: SizedBox.shrink(),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.dark,
+        ),
+      ),
       backgroundColor: ColorStyle.light,
       // Keep your animation wrapper
       body: DiagonalReveal(
@@ -107,10 +113,11 @@ class _HomePageMainState extends State<HomePageMain> {
                       ),
                     ],
                   ),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: TodayClassschedule(
-                      todayClass: data.todayClassSchedule,
+                      todayClass: data.homeTodayClassSchedule,
                     ),
                   ),
                 ],

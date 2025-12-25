@@ -2,8 +2,9 @@ import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/features/splash_screen/splashs_page_main.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/network/firebase/firebase_initialize.dart';
-import 'package:academicpanel/theme/style/color_style.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -12,6 +13,7 @@ Future<void> main() async {
   await firebaseInitialize();
   Get.put(UserController(), permanent: true);
   Get.put(RoutesController(), permanent: true);
+
   runApp(const MyApp());
 }
 
@@ -24,7 +26,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      color: ColorStyle.light,
       debugShowCheckedModeBanner: false,
 
       home: const SplashsPageMain(),

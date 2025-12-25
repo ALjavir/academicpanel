@@ -60,7 +60,7 @@ class AuthImage extends StatelessWidget {
                           fit: BoxFit.cover,
                         )
                       : DecorationImage(
-                          image: AssetImage(ImageStyle.addImage()),
+                          image: AssetImage(ImageStyle.signUpAddImageIcon()),
                           fit: BoxFit.cover,
                         ),
                 ),
