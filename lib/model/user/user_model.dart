@@ -5,8 +5,8 @@ class UserModel {
   final String firstName;
   final String lastName;
   final String department;
-  final int phone;
-  final String address;
+  final int? phone;
+  final String? address;
   final String password;
   final String email;
   Map<String, String>? courses;
@@ -19,8 +19,8 @@ class UserModel {
     required this.firstName,
     required this.lastName,
     required this.department,
-    required this.phone,
-    required this.address,
+    this.phone,
+    this.address,
     required this.password,
     required this.email,
   });
@@ -41,8 +41,8 @@ class UserModel {
 
   // Convert Firestore JSON → model
   factory UserModel.fromJson(Map<String, dynamic> data) => UserModel(
-    uid: data['uid'],
-    image: data['image'],
+    uid: data['uid'] ?? '',
+    image: data['image'] ?? '',
     //image: _convertToDirectLink(data['image'].toString()),
     courses: data['courses'] != null
         ? Map<String, String>.from(data['courses'])
@@ -65,7 +65,6 @@ class UserModel {
     String? uid,
     String? image,
     Map<String, String>? courses,
-
     String? id,
     String? firstName,
     String? lastName,

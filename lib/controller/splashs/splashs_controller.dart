@@ -23,20 +23,26 @@ class SplashsController extends GetxController {
       storage.read(key: 'uid'),
       storage.read(key: 'role'),
       storage.read(key: 'department'),
+      storage.read(key: 'id'),
     ]);
     final storedDept = results[2];
     final storedUid = results[0];
     final storedRole = results[1];
+    final storedId = results[3];
     // print('---$storedUid--------------$storedRole------------$storedDept');
 
     // Determine subcollection name once
     final storedRoleId = storedRole == 'students' ? 'student_id' : 'faculty_id';
 
     // Not signed in or missing local context → go to signup
-    if (storedDept == null || storedUid == null || storedRole == null) {
+    if (storedDept == null ||
+        storedUid == null ||
+        storedRole == null ||
+        storedId == null) {
       await storage.delete(key: 'uid');
       await storage.delete(key: 'department');
       await storage.delete(key: 'role');
+      await storage.delete(key: 'id');
       isLoading.value = false;
       // routesController.signup();
       // print('Inside null----------------------------');
@@ -57,7 +63,7 @@ class SplashsController extends GetxController {
         .collection(storedRole) // e.g. 'students' or 'faculty'
         .doc(storedDept) // e.g. 'cse' / 'eee'
         .collection(storedRoleId) // e.g. 'student_id' or 'faculty_id'
-        .doc(storedUid); // the uid
+        .doc(storedId); // the uid
 
     try {
       final snap = await userDocRef.get(); // <- no args
@@ -93,6 +99,7 @@ class SplashsController extends GetxController {
     try {
       await storage.delete(key: 'department');
       await storage.delete(key: 'uid');
+      await storage.delete(key: 'id');
       await auth.signOut();
       // print("_clearLocalAndSignOut");
     } catch (_) {}

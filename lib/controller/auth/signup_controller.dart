@@ -145,8 +145,8 @@ class SignupController extends GetxController {
               Text(
                 'Email Verification',
                 style: Fontstyle.defult(
-                  22,
-                  FontWeight.w500,
+                  20,
+                  FontWeight.w600,
                   ColorStyle.Textblue,
                 ),
               ),
@@ -230,13 +230,14 @@ class SignupController extends GetxController {
     String role = isStudent ? 'students' : 'faculty';
     String roleId = isStudent ? 'student_id' : 'faculty_id';
     String department = signupmodel.department;
-
+    String id = signupmodel.id;
     final uid = cred.user!.uid;
+    signupmodel.uid = uid;
 
     try {
       // Upload image if selected
       if (selectedImage.value != null) {
-        String? validUrl = await uploadImageToDrive(selectedImage.value!, uid);
+        String? validUrl = await uploadImageToDrive(selectedImage.value!, id);
 
         if (validUrl != null) {
           signupmodel = signupmodel.copyWith(image: validUrl);
@@ -257,18 +258,19 @@ class SignupController extends GetxController {
         .collection(role)
         .doc(department)
         .collection(roleId)
-        .doc(uid);
+        .doc(id);
 
     bool firestoreWritten = false;
     bool localSaved = false;
 
     try {
       // 1) Write Firestore-----------------------------------------------------
-      await userDocRef.set(signupmodel.copyWith(uid: uid).toJson());
+      await userDocRef.set(signupmodel.copyWith(id: id).toJson());
       firestoreWritten = true;
 
       // 2) Write Local Storage-------------------------------------------------
       await _secureStorage.write(key: 'uid', value: uid);
+      await _secureStorage.write(key: 'id', value: id);
       await _secureStorage.write(key: 'department', value: department);
       await _secureStorage.write(key: 'role', value: role);
       localSaved = true;
@@ -281,6 +283,7 @@ class SignupController extends GetxController {
       // 1. Delete Local Storage keys if they were written----------------------
       if (localSaved) {
         await _secureStorage.delete(key: 'uid');
+        await _secureStorage.delete(key: 'id');
         await _secureStorage.delete(key: 'department');
         await _secureStorage.delete(key: 'role');
       }
@@ -357,14 +360,14 @@ class SignupController extends GetxController {
     }
   }
 
-  Future<String?> uploadImageToDrive(File imageFile, String userID) async {
+  Future<String?> uploadImageToDrive(File imageFile, String id) async {
     // Check this URL one last time!
     const String scriptUrl =
         "https://script.google.com/macros/s/AKfycbwtmlORdUNNGB07aclHqIRoalkS2JAxHIxsqCA3jMsky2b7OJOlKbG_u6IY3c6tQlyL/exec";
 
     List<int> imageBytes = await imageFile.readAsBytes();
     String base64Image = base64Encode(imageBytes);
-    String fileName = "$userID.jpg";
+    String fileName = "$id.jpg";
 
     try {
       var response = await http.post(

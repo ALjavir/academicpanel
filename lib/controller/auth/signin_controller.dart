@@ -29,14 +29,14 @@ class SigninController extends GetxController {
       // 2) Decide role (or fetch from server—see note below)
       isLoading.value = true;
       final role = isStudent ? 'students' : 'faculty';
-
-      final department = await fetchDepartment(user.uid, isStudent);
+      final id = signinModel.id;
+      final department = await fetchDepartment(id, isStudent);
 
       // 4) Persist minimal session info (write in parallel)
       await Future.wait([
         _secureStorage.write(key: 'uid', value: user.uid),
+        _secureStorage.write(key: 'id', value: id),
         _secureStorage.write(key: 'role', value: role),
-
         _secureStorage.write(key: 'department', value: department),
       ]);
       isLoading.value = false;
@@ -101,7 +101,7 @@ class SigninController extends GetxController {
     }
   }
 
-  Future<String> fetchDepartment(String uid, bool isStudent) async {
+  Future<String> fetchDepartment(String id, bool isStudent) async {
     final role = isStudent ? 'students' : 'faculty';
     // Assuming your subcollection containing user documents is named 'student_id' or 'faculty_id'
     final roleId = isStudent ? 'student_id' : 'faculty_id';
@@ -127,22 +127,15 @@ class SigninController extends GetxController {
           .collection(
             roleId,
           ) // This is the collection of user documents (e.g., 'student_id')
-          .doc(uid)
+          .doc(id)
           .get();
 
-      print('---Checking $role department: $departmentName for user: $uid');
-
-      // Check if the user document exists in this specific department subcollection
+      print('---Checking $role department: $departmentName for user: $id');
       if (userDoc.exists) {
-        // 🎉 SUCCESS: Found the user in this department. Return the name and exit the function.
         return departmentName;
       }
-
-      // IMPORTANT: If not found, DO NOT return. Continue the loop to check the next department.
     }
     isLoading.value = false;
-
-    // ❌ FAILURE: If the loop finishes without finding the user in any department.
     return 'no department';
   }
 }

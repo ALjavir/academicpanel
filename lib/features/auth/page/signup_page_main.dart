@@ -235,13 +235,11 @@ class _SignupPageMainState extends State<SignupPageMain> {
                                     textContEmail.text.isEmpty ||
                                     textContPass.text.isEmpty ||
                                     textContID.text.isEmpty ||
-                                    textContPhone.text.isEmpty ||
-                                    textContAddress.text.isEmpty ||
                                     selectedDepartment.toString().isEmpty) {
                                   errorSnackbar(
                                     title: 'Sorry!!!',
                                     subtitle:
-                                        'Fill up all the field with or without image',
+                                        'Name, Email, Password and Department is required',
                                   );
                                 } else if (selectedDepartment.toString() ==
                                     'invalid') {

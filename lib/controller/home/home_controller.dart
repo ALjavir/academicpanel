@@ -86,7 +86,7 @@ class HomeController extends GetxController {
     UserModel userModel,
   ) async {
     try {
-      if (todayClassScheduleListHome.isEmpty) {
+      if (todayClassScheduleListHome.isEmpty && userModel.courses!.isNotEmpty) {
         await fetchClassTimeInfo(userModel);
       }
       final now = TimeOfDay.now();
@@ -191,9 +191,6 @@ class HomeController extends GetxController {
               ClassscheduleModel(
                 name: infoSnapshot.get('name') ?? '',
                 code: infoSnapshot.get('code') ?? courseCode,
-                // --- HERE IS THE FIX ---
-                // Access values by their KEY NAMES, not index [0]
-                // using .toString() ensures safety if 'room' is stored as a number (202 vs "202")
                 room: todaysDetails['room']?.toString() ?? 'TBA',
                 startTime: todaysDetails['startTime'] ?? '00:00',
                 endTime: todaysDetails['endTime'] ?? '00:00',

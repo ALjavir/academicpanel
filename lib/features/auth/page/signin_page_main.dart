@@ -34,6 +34,7 @@ class _SigninPageMainState extends State<SigninPageMain> {
   String? passErrorText;
   TextEditingController textContEmail = TextEditingController();
   TextEditingController textContPass = TextEditingController();
+  TextEditingController textContID = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -74,13 +75,19 @@ class _SigninPageMainState extends State<SigninPageMain> {
 
                           if (studentPattern.hasMatch(email)) {
                             // Extract prefix
+                            String id = studentPattern
+                                .firstMatch(email)!
+                                .group(1)!;
 
                             emailErrorText = null;
-
+                            textContID.text = id;
                             isStudent = true;
                           } else if (staffPattern.hasMatch(email)) {
+                            String id = staffPattern
+                                .firstMatch(email)!
+                                .group(1)!;
                             emailErrorText = null;
-
+                            textContID.text = id;
                             isStudent = false;
                           } else {
                             emailErrorText = "Invalid email format";
@@ -131,7 +138,7 @@ class _SigninPageMainState extends State<SigninPageMain> {
                                 final user = SigninModel(
                                   email: textContEmail.text.trim(),
                                   password: textContPass.text.trim(),
-
+                                  id: textContID.text.trim(),
                                   uid: '',
                                 );
                                 signinController.mainFunction(
