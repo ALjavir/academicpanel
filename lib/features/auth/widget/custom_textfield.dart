@@ -7,6 +7,8 @@ class CustomTextfield extends StatefulWidget {
   final String hintText;
   final String? errorText;
   final String lebalText;
+  final bool obscureText;
+  final Widget? suffixIconFun;
 
   final int maxline;
 
@@ -22,6 +24,8 @@ class CustomTextfield extends StatefulWidget {
     required this.maxline,
 
     required this.lebalText,
+    required this.obscureText,
+    this.suffixIconFun,
   });
 
   @override
@@ -70,8 +74,10 @@ class _TextFieldState extends State<CustomTextfield> {
         focusNode: nameFocusNode,
         style: Fontstyle.defult(18, FontWeight.w500, ColorStyle.Textblue),
         maxLines: widget.maxline,
+        obscureText: widget.obscureText,
 
         decoration: InputDecoration(
+          suffixIcon: widget.suffixIconFun,
           errorText: widget.errorText,
           errorStyle: Fontstyle.errorSnackBar(
             16,

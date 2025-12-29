@@ -1,14 +1,16 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/user/user_model.dart';
+import 'package:academicpanel/network/api/firebase/auth/auth_api.dart';
+import 'package:academicpanel/network/local_stroge/local_stoge.dart';
 import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SplashsController extends GetxController {
-  final storage = const FlutterSecureStorage();
+  final LocalStoge localStoge = LocalStoge();
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final SignupApi signupApi = SignupApi();
   // final routesController = Get.put(RoutesController());
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   final userController = Get.find<UserController>();
@@ -16,54 +18,33 @@ class SplashsController extends GetxController {
   RxBool isLoading = true.obs;
 
   Future<bool> mainFunction() async {
-    final user = auth.currentUser;
+    //final user = auth.currentUser;
 
     // Read secure storage in parallel
-    final results = await Future.wait([
-      storage.read(key: 'uid'),
-      storage.read(key: 'role'),
-      storage.read(key: 'department'),
-      storage.read(key: 'id'),
-    ]);
-    final storedDept = results[2];
-    final storedUid = results[0];
-    final storedRole = results[1];
-    final storedId = results[3];
+    final results = await localStoge.readDataLocal();
+    final storedDept = await results[1];
+    final storedRoleId = await results[0];
+    final storedId = await results[2];
     // print('---$storedUid--------------$storedRole------------$storedDept');
 
     // Determine subcollection name once
-    final storedRoleId = storedRole == 'students' ? 'student_id' : 'faculty_id';
 
     // Not signed in or missing local context → go to signup
-    if (storedDept == null ||
-        storedUid == null ||
-        storedRole == null ||
-        storedId == null) {
-      await storage.delete(key: 'uid');
-      await storage.delete(key: 'department');
-      await storage.delete(key: 'role');
-      await storage.delete(key: 'id');
+    if (storedDept == null || storedId == null || storedRoleId == null) {
+      localStoge.deletDataLocal();
+      await auth.signOut();
       isLoading.value = false;
       // routesController.signup();
       // print('Inside null----------------------------');
       return false;
     }
 
-    // uid mismatch → clear and go to signup
-    if (storedUid != user!.uid) {
-      await _clearLocalAndSignOut();
-      isLoading.value = false;
-      //  print('Inside storedUid != user.uid----------------------------');
-      //  routesController.signup();
-      return false;
-    }
-
     // Build the document path
-    final userDocRef = fireStore
-        .collection(storedRole) // e.g. 'students' or 'faculty'
-        .doc(storedDept) // e.g. 'cse' / 'eee'
-        .collection(storedRoleId) // e.g. 'student_id' or 'faculty_id'
-        .doc(storedId); // the uid
+    final userDocRef = await signupApi.saveTo(
+      storedDept,
+      storedRoleId,
+      storedId,
+    ); // the uid
 
     try {
       final snap = await userDocRef.get(); // <- no args
@@ -79,8 +60,6 @@ class SplashsController extends GetxController {
       final userModel = UserModel.fromJson(data);
       userController.user.value = userModel;
 
-      // TODO: if you want, validate fields on userModel here
-
       // Everything OK → go home
       isLoading.value = false;
       // routesController.home();
@@ -93,15 +72,5 @@ class SplashsController extends GetxController {
       // routesController.signup();
       return false;
     }
-  }
-
-  Future<void> _clearLocalAndSignOut() async {
-    try {
-      await storage.delete(key: 'department');
-      await storage.delete(key: 'uid');
-      await storage.delete(key: 'id');
-      await auth.signOut();
-      // print("_clearLocalAndSignOut");
-    } catch (_) {}
   }
 }

@@ -29,6 +29,7 @@ class _SigninPageMainState extends State<SigninPageMain> {
   final routesController = Get.put(RoutesController());
 
   bool? isStudent;
+  bool passwordVisible = true;
 
   String? emailErrorText;
   String? passErrorText;
@@ -98,8 +99,22 @@ class _SigninPageMainState extends State<SigninPageMain> {
                       maxline: 1,
 
                       lebalText: 'Email',
+                      obscureText: false,
                     ),
                     CustomTextfield(
+                      obscureText: passwordVisible,
+                      suffixIconFun: IconButton(
+                        icon: Icon(
+                          passwordVisible
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            passwordVisible = !passwordVisible;
+                          });
+                        },
+                      ),
                       textController: textContPass,
                       hintText: 'Enter a password',
                       errorText: passErrorText,

@@ -39,6 +39,7 @@ class _SignupPageMainState extends State<SignupPageMain> {
   String? phoneErrorText;
   String? addErrorText;
   String? selectedDepartment;
+  bool passwordVisible = true;
 
   TextEditingController textConFirstName = TextEditingController();
   TextEditingController textConLastName = TextEditingController();
@@ -72,6 +73,7 @@ class _SignupPageMainState extends State<SignupPageMain> {
                       children: [
                         Flexible(
                           child: CustomTextfield(
+                            obscureText: false,
                             textController:
                                 textConFirstName, // ← separate controller
                             hintText: 'Enter first name',
@@ -93,6 +95,7 @@ class _SignupPageMainState extends State<SignupPageMain> {
 
                         Flexible(
                           child: CustomTextfield(
+                            obscureText: false,
                             textController: textConLastName,
                             hintText: 'Enter last name',
                             validateFields: () {
@@ -114,6 +117,7 @@ class _SignupPageMainState extends State<SignupPageMain> {
                     ),
 
                     CustomTextfield(
+                      obscureText: false,
                       textController: textContEmail,
 
                       hintText: 'Enter your university email',
@@ -159,6 +163,19 @@ class _SignupPageMainState extends State<SignupPageMain> {
                       lebalText: 'Email',
                     ),
                     CustomTextfield(
+                      obscureText: passwordVisible,
+                      suffixIconFun: IconButton(
+                        icon: Icon(
+                          passwordVisible
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            passwordVisible = !passwordVisible;
+                          });
+                        },
+                      ),
                       textController: textContPass,
                       hintText: 'Enter a password',
                       errorText: passErrorText,
@@ -176,6 +193,7 @@ class _SignupPageMainState extends State<SignupPageMain> {
                       lebalText: 'Password',
                     ),
                     CustomTextfield(
+                      obscureText: false,
                       textController: textContPhone,
                       hintText: 'Enter your phone number',
                       errorText: phoneErrorText,
@@ -192,6 +210,7 @@ class _SignupPageMainState extends State<SignupPageMain> {
                       lebalText: 'Phone number',
                     ),
                     CustomTextfield(
+                      obscureText: false,
                       textController: textContAddress,
                       hintText: 'Enter your  Address',
                       errorText: addErrorText,

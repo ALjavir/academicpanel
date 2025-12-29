@@ -1,10 +1,12 @@
 import 'package:academicpanel/model/global/classSchedule_model.dart';
+import 'package:academicpanel/theme/animation/threed_containel.dart';
 
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
+import 'package:lottie/lottie.dart';
 
 class TodayClassschedule extends StatefulWidget {
   final List<ClassscheduleModel> todayClass;
@@ -34,42 +36,38 @@ class _TodayClassscheduleState extends State<TodayClassschedule> {
     }
 
     return widget.todayClass.isEmpty
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 10,
-            children: [
-              Image.asset(ImageStyle.no_class(), scale: 4),
-              Text(
-                "No Class Today",
-                style: Fontstyle.defult(
-                  18,
-                  FontWeight.bold,
-                  ColorStyle.Textblue,
+        ? ThreedContainel(
+            redious: 10,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 10,
+              children: [
+                LottieBuilder.asset(
+                  ImageStyle.upCommingClassaAimatedIcon(),
+                  frameRate: FrameRate.max,
                 ),
-              ),
-            ],
+                //   Image.asset(ImageStyle.no_class(), scale: 4),
+                Text(
+                  "No Class Today",
+                  style: Fontstyle.defult(
+                    18,
+                    FontWeight.bold,
+                    ColorStyle.Textblue,
+                  ),
+                ),
+              ],
+            ),
           )
-        : Container(
-            // 1. FIX: REMOVED 'height'. Let the content (IntrinsicHeight) decide the size.
-            // If you really want a max limit, use constraints:
-            constraints: BoxConstraints(
+        : ThreedContainel(
+            redious: 10,
+            boxConstraints: BoxConstraints(
               minHeight: 100, // Minimum height for 1 class
               // Max height 30% of screen if you want scrolling inside, otherwise remove max
               maxHeight: double.infinity,
             ),
 
             padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: ColorStyle.light,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color.fromARGB(12, 0, 0, 0),
-                  blurRadius: 6,
-                  spreadRadius: 3,
-                ),
-              ],
-            ),
+
             child: Column(
               mainAxisSize: MainAxisSize.min, // Hug content
               children: [
@@ -90,7 +88,7 @@ class _TodayClassscheduleState extends State<TodayClassschedule> {
                       ),
                     ),
                     Image.asset(
-                      ImageStyle.upCommingClassesIcon(),
+                      ImageStyle.upCommingClassesHeaderIcon(),
                       color: ColorStyle.red,
                       scale: 22,
                     ),

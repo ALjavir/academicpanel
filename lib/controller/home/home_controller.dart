@@ -85,8 +85,11 @@ class HomeController extends GetxController {
   Future<List<ClassscheduleModel>> todayClassSchedule(
     UserModel userModel,
   ) async {
+    if (userModel.courses!.isEmpty) {
+      return todayClassScheduleListHome;
+    }
     try {
-      if (todayClassScheduleListHome.isEmpty && userModel.courses!.isNotEmpty) {
+      if (todayClassScheduleListHome.isEmpty) {
         await fetchClassTimeInfo(userModel);
       }
       final now = TimeOfDay.now();

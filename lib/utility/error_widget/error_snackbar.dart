@@ -31,7 +31,11 @@ void errorSnackbar({required String title, String? subtitle, Object? e}) {
           Row(
             spacing: 10,
             children: [
-              Image.asset(ImageStyle.error(), scale: 14, color: ColorStyle.red),
+              Image.asset(
+                ImageStyle.errorIcon(),
+                scale: 14,
+                color: ColorStyle.red,
+              ),
               Text(
                 title,
                 style: Fontstyle.errorSnackBar(

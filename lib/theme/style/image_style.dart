@@ -4,16 +4,16 @@ class ImageStyle {
     return 'lib/assets/logo/logo.svg';
   }
 
-  static String error() {
+  static String errorIcon() {
     return 'lib/assets/icon/error.png';
   }
 
   static String loading() {
-    return 'lib/assets/icon/loading_1.json';
+    return 'lib/assets/animatedIcon/loading_1.json';
   }
 
-  static String upCommingClassesIcon() {
-    return 'lib/assets/icon/upCommingClasses.png';
+  static String upCommingClassesHeaderIcon() {
+    return 'lib/assets/icon/upCommingClassesHeaderIcon.png';
   }
 
   static String no_internet() {
@@ -24,8 +24,8 @@ class ImageStyle {
     return 'lib/assets/image/topHomePageBackGround.jpg';
   }
 
-  static String no_class() {
-    return 'lib/assets/image/noClass.png';
+  static String upCommingClassaAimatedIcon() {
+    return 'lib/assets/animatedIcon/upCommingClasses.json';
   }
 
   static String noProfileImageIcon() {

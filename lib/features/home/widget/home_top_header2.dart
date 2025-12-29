@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:academicpanel/model/home/home_model.dart';
+
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
@@ -19,8 +20,28 @@ class HomeTopHeader2 extends StatefulWidget {
 class _HomeTopHeader2State extends State<HomeTopHeader2> {
   @override
   Widget build(BuildContext context) {
+    bool hasImage =
+        widget.homeTopHeaderModel.image != null &&
+            widget.homeTopHeaderModel.image!.isNotEmpty
+        ? true
+        : false;
     return Container(
       padding: EdgeInsets.fromLTRB(10, 60, 10, 30),
+      foregroundDecoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black38,
+            blurStyle: BlurStyle.outer,
+            blurRadius: 6,
+            offset: Offset(0, -0.6),
+            spreadRadius: 1,
+          ),
+        ],
+      ),
       decoration: BoxDecoration(
         //  color: ColorStyle.Textblue,
         image: DecorationImage(
@@ -28,59 +49,67 @@ class _HomeTopHeader2State extends State<HomeTopHeader2> {
 
           image: AssetImage(ImageStyle.topHomePageBackGround()),
         ),
+
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(10),
           bottomRight: Radius.circular(10),
         ),
-
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6,
-            offset: Offset(0, 3),
-            spreadRadius: 3,
-          ),
-        ],
       ),
 
       child: ClipRRect(
-        borderRadius: BorderRadiusGeometry.circular(10),
+        borderRadius: BorderRadius.circular(10),
         child: BackdropFilter(
-          filter: new ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          blendMode: BlendMode.src,
-
-          child: Padding(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          blendMode: BlendMode.srcOver,
+          child: Container(
             padding: const EdgeInsets.all(10),
+
+            decoration: BoxDecoration(
+              border: Border.all(width: 1, color: Colors.white54),
+              borderRadius: BorderRadius.circular(10),
+              color: ColorStyle.glassWhite,
+            ),
+
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               spacing: 10,
               children: [
-                ClipOval(
-                  child: SizedBox.fromSize(
-                    size: const Size.fromRadius(
-                      32,
-                    ), // Matches your radius 50 (total 100px)
-                    child:
-                        (widget.homeTopHeaderModel.image != null &&
-                            widget.homeTopHeaderModel.image!.isNotEmpty)
-                        ? CachedNetworkImage(
-                            imageUrl: widget.homeTopHeaderModel.image!,
-                            fit: BoxFit
-                                .cover, // <--- CRITICAL: Makes image fill the circle
-                            progressIndicatorBuilder: (context, url, progress) {
-                              return const Center(child: Loading(hight: 40));
-                            },
-                            // Optional: What if the URL is not null but the image fails to load?
-                            errorWidget: (context, url, error) => Image.asset(
-                              ImageStyle.noProfileImageIcon(),
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : Image.asset(
-                            ImageStyle.noProfileImageIcon(), // <--- Your Asset Image Here
-                            fit: BoxFit.cover,
-                          ),
+                Container(
+                  height: 65,
+                  width: 65,
+
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
                   ),
+
+                  foregroundDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(width: 0.8, color: Colors.white70),
+                  ),
+
+                  child: hasImage
+                      ? CachedNetworkImage(
+                          imageUrl: widget.homeTopHeaderModel.image!,
+
+                          fit: BoxFit.cover,
+
+                          progressIndicatorBuilder: (context, url, progress) {
+                            return const Center(child: Loading(hight: 40));
+                          },
+                          errorWidget: (context, url, error) => Image.asset(
+                            ImageStyle.noProfileImageIcon(),
+                            fit: BoxFit.contain,
+                            scale: 20,
+                          ),
+                        )
+                      : Image.asset(
+                          ImageStyle.noProfileImageIcon(),
+                          fit: BoxFit.contain,
+                          scale: 20,
+                        ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

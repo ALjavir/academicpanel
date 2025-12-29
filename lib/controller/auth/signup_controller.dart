@@ -6,6 +6,9 @@ import 'dart:io';
 
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
+import 'package:academicpanel/network/api/appScript/appScript_api.dart';
+import 'package:academicpanel/network/api/firebase/auth/auth_api.dart';
+import 'package:academicpanel/network/local_stroge/local_stoge.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/utility/error_widget/error_snackbar.dart';
@@ -15,15 +18,14 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 class SignupController extends GetxController {
   RxBool isLoading = false.obs;
-  final _secureStorage = const FlutterSecureStorage();
-  //final routesController = Get.put(RoutesController());
+  final LocalStoge localStoge = LocalStoge();
+  final SignupApi signupApi = SignupApi();
   final FirebaseAuth fireAuth = FirebaseAuth.instance;
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   var selectedImage = Rxn<File>();
@@ -42,11 +44,16 @@ class SignupController extends GetxController {
     bool isStudent,
     RoutesController routesController,
   ) async {
+    String roleId = isStudent ? 'student_id' : 'faculty_id';
+    String department = signupmodel.department;
+    String id = signupmodel.id;
+
     isLoading.value =
         true; // show loading--------------------------------------
 
     // step 1:- To check the email exist priviously-----------------------------
     UserCredential cred;
+
     try {
       cred = await fireAuth.createUserWithEmailAndPassword(
         email: signupmodel.email,
@@ -74,41 +81,86 @@ class SignupController extends GetxController {
       return;
     }
 
-    // STEP 2:- Send Verification Email-----------------------------------------
+    bool findUser = await userExist(department, roleId, id);
     try {
-      await cred.user!.sendEmailVerification();
-    } catch (e) {
-      // If we can't send the email, we must rollback (delete user)
-      await _rollbackAuth(cred.user);
-      errorSnackbar(
-        title: 'Error',
-        subtitle: 'Failed to send verification email.',
-      );
-      isLoading.value = false;
-      return;
-    }
+      if (findUser) {
+        // STEP 2:- Send Verification Email-----------------------------------------
+        try {
+          await cred.user!.sendEmailVerification();
+        } catch (e) {
+          // If we can't send the email, we must rollback (delete user)
+          await _rollbackAuth(cred.user);
+          errorSnackbar(
+            title: 'Error',
+            subtitle: 'Failed to send verification email.',
+          );
+          isLoading.value = false;
+          return;
+        }
 
-    // STEP 3:- Show verification Dialog(and send verificatin link)-------------
-    bool isVerified = await _showVerificationDialog(cred.user!);
+        // STEP 3:- Show verification Dialog(and send verificatin link)-------------
+        bool isVerified = await _showVerificationDialog(cred.user!);
+        try {
+          if (isVerified) {
+            // STEP 4:- save the data-------------------------------------------------
 
-    //user verified
-    if (isVerified) {
-      // STEP 4:- save the data-------------------------------------------------
+            final saved = await saveDataAtomic(
+              signupmodel,
 
-      final saved = await saveDataAtomic(signupmodel, isStudent, cred);
+              cred,
+              department,
+              roleId,
+              id,
+            );
 
-      if (saved) {
-        Get.snackbar("Success", "Account created successfully!");
-        routesController.splasS();
+            if (saved) {
+              Get.snackbar("Success", "Account created successfully!");
+              routesController.splasS();
+            }
+          } else {
+            await _rollbackAuth(cred.user);
+            errorSnackbar(
+              title: "Error",
+              subtitle: '"Email verification failed or cancelled"',
+            );
+          }
+        } catch (e) {
+          await _rollbackAuth(cred.user);
+          errorSnackbar(title: "Varification faield", e: e);
+        }
+
+        isLoading.value = false;
       } else {
-        print("Save failed, user should be deleted by saveDataAtomic rollback");
+        await _rollbackAuth(cred.user);
       }
-    } else {
-      // User dismissed dialog without verifying or timed out
+    } catch (e) {
       await _rollbackAuth(cred.user);
-      print("Email verification failed or cancelled");
     }
+
     isLoading.value = false;
+  }
+
+  //---------------------------------------------------Find user in dataBase--------------------
+  Future<bool> userExist(String department, String roleID, String id) async {
+    try {
+      final userDocRef = await signupApi.saveTo(department, roleID, id);
+      final result = await userDocRef.get();
+
+      if (result.exists) {
+        return true;
+      } else {
+        errorSnackbar(
+          title: "Error",
+          subtitle: "$id does not exist in $department department",
+        );
+      }
+
+      return false;
+    } catch (e) {
+      errorSnackbar(title: "Error", e: e);
+
+      return false;
+    }
   }
 
   //--------------------------Show dialog---------------------------------------
@@ -223,14 +275,14 @@ class SignupController extends GetxController {
   //-----------------------------Atomic Save Data-------------------------------
   Future<bool> saveDataAtomic(
     UserModel signupmodel,
-    bool isStudent,
+
     UserCredential cred,
+    String department,
+    String roleId,
+    String id,
   ) async {
     //role, department, student_id set------------------------------------------
-    String role = isStudent ? 'students' : 'faculty';
-    String roleId = isStudent ? 'student_id' : 'faculty_id';
-    String department = signupmodel.department;
-    String id = signupmodel.id;
+
     final uid = cred.user!.uid;
     signupmodel.uid = uid;
 
@@ -254,11 +306,10 @@ class SignupController extends GetxController {
 
     print(signupmodel.image);
     //save data in 3 places(fire-store, local, fire-auth)-----------------------
-    final userDocRef = fireStore
-        .collection(role)
-        .doc(department)
-        .collection(roleId)
-        .doc(id);
+    // final userDocRef = fireStore.collection('profile').doc(department)
+    //     .collection(roleId)
+    //     .doc(id);
+    final userDocRef = await signupApi.saveTo(department, roleId, id);
 
     bool firestoreWritten = false;
     bool localSaved = false;
@@ -269,10 +320,8 @@ class SignupController extends GetxController {
       firestoreWritten = true;
 
       // 2) Write Local Storage-------------------------------------------------
-      await _secureStorage.write(key: 'uid', value: uid);
-      await _secureStorage.write(key: 'id', value: id);
-      await _secureStorage.write(key: 'department', value: department);
-      await _secureStorage.write(key: 'role', value: role);
+      localStoge.writeDataLocal(department, roleId, id);
+
       localSaved = true;
 
       return true;
@@ -282,10 +331,7 @@ class SignupController extends GetxController {
       //fail safe(if any of the place had problem while save the data)----------
       // 1. Delete Local Storage keys if they were written----------------------
       if (localSaved) {
-        await _secureStorage.delete(key: 'uid');
-        await _secureStorage.delete(key: 'id');
-        await _secureStorage.delete(key: 'department');
-        await _secureStorage.delete(key: 'role');
+        localStoge.deletDataLocal();
       }
 
       // 2. Delete Firestore Doc if it was written------------------------------
@@ -362,8 +408,7 @@ class SignupController extends GetxController {
 
   Future<String?> uploadImageToDrive(File imageFile, String id) async {
     // Check this URL one last time!
-    const String scriptUrl =
-        "https://script.google.com/macros/s/AKfycbwtmlORdUNNGB07aclHqIRoalkS2JAxHIxsqCA3jMsky2b7OJOlKbG_u6IY3c6tQlyL/exec";
+    String scriptUrl = AppscriptApi.path();
 
     List<int> imageBytes = await imageFile.readAsBytes();
     String base64Image = base64Encode(imageBytes);

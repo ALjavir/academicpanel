@@ -1,7 +1,7 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/features/splash_screen/splashs_page_main.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
-import 'package:academicpanel/network/firebase/firebase_initialize.dart';
+import 'package:academicpanel/network/api/firebase/firebase_initialize.dart';
 
 import 'package:flutter/material.dart';
 

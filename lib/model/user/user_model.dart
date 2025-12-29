@@ -10,6 +10,7 @@ class UserModel {
   final String password;
   final String email;
   Map<String, String>? courses;
+  final String? current_semester;
 
   UserModel({
     this.uid,
@@ -23,6 +24,7 @@ class UserModel {
     this.address,
     required this.password,
     required this.email,
+    this.current_semester,
   });
 
   // Convert model → Firestore JSON
@@ -30,7 +32,7 @@ class UserModel {
     'uid': uid,
     'id': id,
     'image': image,
-    'courses': courses,
+
     'first_name': firstName,
     'last_name': lastName,
     'department': department,
@@ -44,10 +46,8 @@ class UserModel {
     uid: data['uid'] ?? '',
     image: data['image'] ?? '',
     //image: _convertToDirectLink(data['image'].toString()),
-    courses: data['courses'] != null
-        ? Map<String, String>.from(data['courses'])
-        : null,
-
+    courses: Map<String, String>.from(data['courses'] ?? {}),
+    current_semester: data['current_semester'] ?? '',
     email: data['email'] ?? '',
     firstName: data['first_name'] ?? '',
     lastName: data['last_name'] ?? '',
@@ -64,7 +64,7 @@ class UserModel {
   UserModel copyWith({
     String? uid,
     String? image,
-    Map<String, String>? courses,
+
     String? id,
     String? firstName,
     String? lastName,
@@ -77,7 +77,7 @@ class UserModel {
     return UserModel(
       uid: uid ?? this.uid,
       image: image ?? this.image,
-      courses: courses ?? this.courses,
+
       id: id ?? this.id,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
