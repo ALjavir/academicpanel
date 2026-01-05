@@ -320,7 +320,7 @@ class SignupController extends GetxController {
       firestoreWritten = true;
 
       // 2) Write Local Storage-------------------------------------------------
-      localStoge.writeDataLocal(department, roleId, id);
+     await localStoge.writeDataLocal(department, roleId, id);
 
       localSaved = true;
 
@@ -331,7 +331,7 @@ class SignupController extends GetxController {
       //fail safe(if any of the place had problem while save the data)----------
       // 1. Delete Local Storage keys if they were written----------------------
       if (localSaved) {
-        localStoge.deletDataLocal();
+       await localStoge.deletDataLocal();
       }
 
       // 2. Delete Firestore Doc if it was written------------------------------

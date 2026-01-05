@@ -3,15 +3,15 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class LocalStoge {
   final _secureStorage = const FlutterSecureStorage();
   Future writeDataLocal(String department, String roleID, String id) async {
-    await _secureStorage.write(key: 'id', value: id);
-    await _secureStorage.write(key: 'department', value: department);
-    await _secureStorage.write(key: 'roleId', value: roleID);
+     _secureStorage.write(key: 'id', value: id);
+     _secureStorage.write(key: 'department', value: department);
+     _secureStorage.write(key: 'roleId', value: roleID);
   }
 
   Future deletDataLocal() async {
-    await _secureStorage.delete(key: 'id');
-    await _secureStorage.delete(key: 'department');
-    await _secureStorage.delete(key: 'roleId');
+     _secureStorage.delete(key: 'id');
+     _secureStorage.delete(key: 'department');
+     _secureStorage.delete(key: 'roleId');
   }
 
   Future<List<dynamic>> readDataLocal() async {
