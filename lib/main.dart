@@ -1,7 +1,7 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/features/splash_screen/splashs_page_main.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
-import 'package:academicpanel/network/api/firebase/firebase_initialize.dart';
+import 'package:academicpanel/network/api/firebase_initialize.dart';
 
 import 'package:flutter/material.dart';
 
@@ -20,9 +20,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
-  // Initialize RoutesController if needed, e.g. in main() or here:
-  // Get.put(RoutesController(), permanent: true);
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

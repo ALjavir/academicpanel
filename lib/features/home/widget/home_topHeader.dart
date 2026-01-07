@@ -9,15 +9,15 @@ import 'package:academicpanel/utility/loading/loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class HomeTopHeader2 extends StatefulWidget {
+class HomeTopHeader extends StatefulWidget {
   final HomeTopHeaderModel homeTopHeaderModel;
-  const HomeTopHeader2({super.key, required this.homeTopHeaderModel});
+  const HomeTopHeader({super.key, required this.homeTopHeaderModel});
 
   @override
-  State<HomeTopHeader2> createState() => _HomeTopHeader2State();
+  State<HomeTopHeader> createState() => _HomeTopHeaderState();
 }
 
-class _HomeTopHeader2State extends State<HomeTopHeader2> {
+class _HomeTopHeaderState extends State<HomeTopHeader> {
   @override
   Widget build(BuildContext context) {
     bool hasImage =

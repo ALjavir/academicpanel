@@ -4,13 +4,33 @@ class ClassscheduleModel {
   final String startTime;
   final String endTime;
   final String room;
-  final String instracter;
+  final String instructor;
   ClassscheduleModel({
     required this.name,
     required this.code,
     required this.startTime,
     required this.endTime,
     required this.room,
-    required this.instracter,
+    required this.instructor,
   });
+
+  factory ClassscheduleModel.fromJoinedData({
+    required Map<String, dynamic>? courseInfo, // From the Course Doc
+    required Map<String, dynamic>? sectionData, // From the Section Doc
+    required Map<String, dynamic>? daySchedule, // From the 'su'/'mo' map
+    required String defaultCode, // Fallback if code is missing
+  }) {
+    final info = courseInfo ?? {};
+    final sec = sectionData ?? {};
+    final schedule = daySchedule ?? {};
+
+    return ClassscheduleModel(
+      name: info['name'] ?? '',
+      code: info['code'] ?? defaultCode,
+      instructor: sec['instructor'] ?? sec['instracter'] ?? 'TBA',
+      room: schedule['room']?.toString() ?? 'TBA',
+      startTime: schedule['startTime'] ?? 'TBA',
+      endTime: schedule['endTime'] ?? 'TBA',
+    );
+  }
 }

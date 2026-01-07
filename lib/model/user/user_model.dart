@@ -9,13 +9,13 @@ class UserModel {
   final String? address;
   final String password;
   final String email;
-  Map<String, String>? courses;
+  Map<String, String>? current_course;
   final String? current_semester;
 
   UserModel({
     this.uid,
     this.image,
-    this.courses,
+    this.current_course,
     required this.id,
     required this.firstName,
     required this.lastName,
@@ -46,7 +46,7 @@ class UserModel {
     uid: data['uid'] ?? '',
     image: data['image'] ?? '',
     //image: _convertToDirectLink(data['image'].toString()),
-    courses: Map<String, String>.from(data['courses'] ?? {}),
+    current_course: Map<String, String>.from(data['current_course'] ?? {}),
     current_semester: data['current_semester'] ?? '',
     email: data['email'] ?? '',
     firstName: data['first_name'] ?? '',

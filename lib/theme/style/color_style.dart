@@ -6,4 +6,5 @@ class ColorStyle {
   static const Color Textblue = Color(0xFF13467D);
   static const Color lightBlue = Color.fromARGB(150, 19, 70, 125);
   static const Color red = Color(0xFF9F1B19);
+  static const Color darkRed = Color.fromARGB(40, 255, 0, 0);
 }

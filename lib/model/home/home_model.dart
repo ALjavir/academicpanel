@@ -1,13 +1,17 @@
+import 'package:academicpanel/model/global/Installment_model.dart';
 import 'package:academicpanel/model/global/anouncement.dart';
 import 'package:academicpanel/model/global/classSchedule_model.dart';
 
 class HomeModel {
   final HomeTopHeaderModel homeTopHeaderModel;
   final List<ClassscheduleModel> homeTodayClassSchedule;
+  final HomeAccountInfoModel homeAccountInfoModel;
+
   final List<Anouncement> homeAnouncement;
   HomeModel({
     required this.homeTopHeaderModel,
     required this.homeTodayClassSchedule,
+    required this.homeAccountInfoModel,
     required this.homeAnouncement,
   });
 }
@@ -25,7 +29,16 @@ class HomeTopHeaderModel {
   });
 }
 
-// class TodayClassScheduleHome {
-//   final  classTimeInfo;
-//   TodayClassScheduleHome({this.classTimeInfo});
-// }
+class HomeAccountInfoModel {
+  final int totalDue;
+  final int totalPaid;
+  final double paidPercentage;
+  final InstallmentModel? upcomingInstallment;
+
+  HomeAccountInfoModel({
+    required this.totalDue,
+    required this.totalPaid,
+    required this.paidPercentage,
+    this.upcomingInstallment,
+  });
+}

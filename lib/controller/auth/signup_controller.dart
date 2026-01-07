@@ -6,9 +6,9 @@ import 'dart:io';
 
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
-import 'package:academicpanel/network/api/appScript/appScript_api.dart';
-import 'package:academicpanel/network/api/firebase/auth/auth_api.dart';
-import 'package:academicpanel/network/local_stroge/local_stoge.dart';
+import 'package:academicpanel/network/api/appScript_api.dart';
+import 'package:academicpanel/network/save_data/firebase/auth_data.dart';
+import 'package:academicpanel/network/save_data/local_stroge/local_stoge.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/utility/error_widget/error_snackbar.dart';
@@ -25,7 +25,7 @@ import 'package:path_provider/path_provider.dart';
 class SignupController extends GetxController {
   RxBool isLoading = false.obs;
   final LocalStoge localStoge = LocalStoge();
-  final SignupApi signupApi = SignupApi();
+  final AuthData authData = AuthData();
   final FirebaseAuth fireAuth = FirebaseAuth.instance;
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   var selectedImage = Rxn<File>();
@@ -143,7 +143,7 @@ class SignupController extends GetxController {
   //---------------------------------------------------Find user in dataBase--------------------
   Future<bool> userExist(String department, String roleID, String id) async {
     try {
-      final userDocRef = await signupApi.saveTo(department, roleID, id);
+      final userDocRef = await authData.saveTo(department, roleID, id);
       final result = await userDocRef.get();
 
       if (result.exists) {
@@ -309,7 +309,7 @@ class SignupController extends GetxController {
     // final userDocRef = fireStore.collection('profile').doc(department)
     //     .collection(roleId)
     //     .doc(id);
-    final userDocRef = await signupApi.saveTo(department, roleId, id);
+    final userDocRef = authData.saveTo(department, roleId, id);
 
     bool firestoreWritten = false;
     bool localSaved = false;
@@ -320,7 +320,7 @@ class SignupController extends GetxController {
       firestoreWritten = true;
 
       // 2) Write Local Storage-------------------------------------------------
-     await localStoge.writeDataLocal(department, roleId, id);
+      await localStoge.writeDataLocal(department, roleId, id);
 
       localSaved = true;
 
@@ -331,7 +331,7 @@ class SignupController extends GetxController {
       //fail safe(if any of the place had problem while save the data)----------
       // 1. Delete Local Storage keys if they were written----------------------
       if (localSaved) {
-       await localStoge.deletDataLocal();
+        await localStoge.deletDataLocal();
       }
 
       // 2. Delete Firestore Doc if it was written------------------------------

@@ -1,6 +1,6 @@
 import 'package:academicpanel/controller/home/home_controller.dart';
-import 'package:academicpanel/features/home/widget/home_top_header2.dart';
-import 'package:academicpanel/features/home/widget/today_classSchedule.dart';
+import 'package:academicpanel/features/home/widget/home_topHeader.dart';
+import 'package:academicpanel/features/home/widget/home_classSchedule.dart';
 import 'package:academicpanel/model/home/home_model.dart';
 import 'package:academicpanel/theme/animation/diagonal_reveal.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
@@ -71,53 +71,50 @@ class _HomePageMainState extends State<HomePageMain> {
             // final classTime = snapshot.data;
 
             return SingleChildScrollView(
-              // padding: const EdgeInsets.all(10),
               child: Column(
-                spacing: 20,
+                spacing: 10,
                 children: [
-                  // Pass the fetched data to your widget
-                  HomeTopHeader2(homeTopHeaderModel: data!.homeTopHeaderModel),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 4,
-                    children: [
-                      Text(
-                        "Today's Highlights",
-                        style: Fontstyle.defult3d(
-                          22,
-                          FontWeight.bold,
-                          ColorStyle.Textblue,
-                          const Color.fromARGB(20, 19, 70, 125),
-                          const Offset(3, 3),
-                          4,
-                        ),
-                      ),
-                      Icon(
-                        Icons.auto_graph_outlined,
-                        color: ColorStyle.red,
-                        shadows: [
-                          BoxShadow(
-                            color: const Color.fromARGB(
-                              12,
-                              255,
-                              0,
-                              0,
-                            ), // Soft dark shadow
-                            blurRadius: 6,
-
-                            offset: Offset(0, 6), // Softness
-                            spreadRadius: 3,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  HomeTopHeader(homeTopHeaderModel: data!.homeTopHeaderModel),
 
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: TodayClassschedule(
-                      todayClass: data.homeTodayClassSchedule,
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      spacing: 20,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 4,
+                          children: [
+                            Text(
+                              "Today's Highlights",
+                              style: Fontstyle.defult3d(
+                                22,
+                                FontWeight.bold,
+                                ColorStyle.Textblue,
+                                const Color.fromARGB(20, 19, 70, 125),
+                                const Offset(3, 3),
+                                4,
+                              ),
+                            ),
+                            Icon(
+                              Icons.auto_graph_outlined,
+                              color: ColorStyle.red,
+                              shadows: [
+                                BoxShadow(
+                                  color: ColorStyle.darkRed,
+                                  blurRadius: 6,
+                                  offset: Offset(0, 4), // Softness
+                                  spreadRadius: 3,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        HomeClassschedule(
+                          todayClass: data.homeTodayClassSchedule,
+                        ),
+                      ],
                     ),
                   ),
                 ],

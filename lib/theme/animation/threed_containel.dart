@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ThreedContainel extends StatefulWidget {
+class ThreeDContainel extends StatefulWidget {
   final Widget child;
   final double? hight;
   final double? width;
@@ -8,7 +8,7 @@ class ThreedContainel extends StatefulWidget {
   final double redious;
   final BoxConstraints? boxConstraints;
 
-  const ThreedContainel({
+  const ThreeDContainel({
     super.key,
     required this.child,
     this.hight,
@@ -19,10 +19,10 @@ class ThreedContainel extends StatefulWidget {
   });
 
   @override
-  State<ThreedContainel> createState() => _ThreedContainelState();
+  State<ThreeDContainel> createState() => _ThreeDContainelState();
 }
 
-class _ThreedContainelState extends State<ThreedContainel> {
+class _ThreeDContainelState extends State<ThreeDContainel> {
   @override
   Widget build(BuildContext context) {
     return Container(
