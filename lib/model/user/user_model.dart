@@ -11,6 +11,7 @@ class UserModel {
   final String email;
   Map<String, String>? current_course;
   final String? current_semester;
+  final int? current_balance;
 
   UserModel({
     this.uid,
@@ -25,6 +26,7 @@ class UserModel {
     required this.password,
     required this.email,
     this.current_semester,
+    this.current_balance,
   });
 
   // Convert model → Firestore JSON
@@ -47,6 +49,7 @@ class UserModel {
     image: data['image'] ?? '',
     //image: _convertToDirectLink(data['image'].toString()),
     current_course: Map<String, String>.from(data['current_course'] ?? {}),
+    current_balance: data['current_balance'] ?? 0,
     current_semester: data['current_semester'] ?? '',
     email: data['email'] ?? '',
     firstName: data['first_name'] ?? '',
@@ -77,7 +80,6 @@ class UserModel {
     return UserModel(
       uid: uid ?? this.uid,
       image: image ?? this.image,
-
       id: id ?? this.id,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,

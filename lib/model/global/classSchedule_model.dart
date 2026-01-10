@@ -1,13 +1,13 @@
+import 'package:academicpanel/model/course/course_model.dart';
+
 class ClassscheduleModel {
-  final String name;
-  final String code;
+  final CourseModel course;
   final String startTime;
   final String endTime;
   final String room;
   final String instructor;
   ClassscheduleModel({
-    required this.name,
-    required this.code,
+    required this.course,
     required this.startTime,
     required this.endTime,
     required this.room,
@@ -25,12 +25,13 @@ class ClassscheduleModel {
     final schedule = daySchedule ?? {};
 
     return ClassscheduleModel(
-      name: info['name'] ?? '',
-      code: info['code'] ?? defaultCode,
+      // name: info['name'] ?? '',
+      // code: info['code'] ?? defaultCode,
       instructor: sec['instructor'] ?? sec['instracter'] ?? 'TBA',
       room: schedule['room']?.toString() ?? 'TBA',
       startTime: schedule['startTime'] ?? 'TBA',
       endTime: schedule['endTime'] ?? 'TBA',
+      course: CourseModel.fromMap(info),
     );
   }
 }

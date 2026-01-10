@@ -51,6 +51,7 @@ dependencies:
   path_provider:
   cached_network_image: ^3.4.1
   flutter_blurhash: ^0.9.1
+  percent_indicator: ^4.2.5
   #page_transition: ^2.2.1
 
 

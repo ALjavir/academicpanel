@@ -1,9 +1,13 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
+import 'package:academicpanel/model/Account/home_account_model.dart';
+import 'package:academicpanel/model/Account/row_account_model.dart';
 import 'package:academicpanel/model/global/anouncement.dart';
 import 'package:academicpanel/model/global/classSchedule_model.dart';
 import 'package:academicpanel/model/home/home_model.dart';
+import 'package:academicpanel/model/rowInput/rowInput_model.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/network/save_data/firebase/home_data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -38,10 +42,11 @@ class HomeController extends GetxController {
 
         homeTodayClassSchedule: todayClassScheduleListHome,
         homeAnouncement: anouncementListHome,
-        homeAccountInfoModel: HomeAccountInfoModel(
+        homeAccountInfoModel: HomeAccountModel(
           totalDue: 0,
           totalPaid: 0,
           paidPercentage: 0,
+          balance: 0,
         ),
       );
     }
@@ -59,7 +64,7 @@ class HomeController extends GetxController {
         return userModel.current_semester!
             .split('-')
             .map((e) => e.trim())
-            .join(' - ');
+            .join(' - ' + "20");
       }
 
       // 3. Return Model
@@ -185,16 +190,22 @@ class HomeController extends GetxController {
         // );
 
         // Process Data
+        // Part 3: Inside your loop
         if (infoSnapshot.exists && sectionSnapshot.exists) {
           final secData = sectionSnapshot.data()!;
           final scheduleMap = secData['schedule'] as Map<String, dynamic>?;
-          // print("Schedule Map for $courseCode, section $section: $scheduleMap");
 
           if (scheduleMap != null && scheduleMap.containsKey(dayKey)) {
+            final todaysDetails = scheduleMap[dayKey] as Map<String, dynamic>;
+
+            // 1. Prepare Course Data
+            final courseData = infoSnapshot.data() ?? {};
+
+            // 2. Create ClassscheduleModel
             return ClassscheduleModel.fromJoinedData(
-              courseInfo: infoSnapshot.data(),
+              courseInfo: courseData,
               sectionData: secData,
-              daySchedule: scheduleMap[dayKey],
+              daySchedule: todaysDetails,
               defaultCode: courseCode,
             );
           }
@@ -221,21 +232,116 @@ class HomeController extends GetxController {
   }
 
   // C: ----------------------------------------------------------------------------AccountInfo----------------------------------------------------------------------------------
-  Future<HomeAccountInfoModel> fetchAccountInfo(UserModel userModel) async {
+  Future<HomeAccountModel> fetchAccountInfo(UserModel userModel) async {
     try {
-      return HomeAccountInfoModel(
-        totalDue: 0,
-        totalPaid: 0,
-        paidPercentage: 0,
-        upcomingInstallment: null,
+      final department = userModel.department;
+      final semester = userModel.current_semester;
+
+      // 1. Reference to Parent (Semester Rules)
+      final accountDocRef = homeData.accountData(department, semester!);
+      print("Account Doc Ref: ${accountDocRef.path}");
+
+      // 2. Fetch Parent (Rules) and Child (Student Data)
+      final results = await Future.wait([
+        accountDocRef.get(),
+        accountDocRef.collection('student_id').doc(userModel.id).get(),
+      ]);
+
+      // 3. Process Data
+      final infoSnapshot = results[0];
+      final studentSnapshot = results[1];
+
+      if (!studentSnapshot.exists) {
+        return HomeAccountModel(
+          totalDue: 0,
+          totalPaid: 0,
+          paidPercentage: 0,
+          upcomingInstallment: null,
+          balance: studentSnapshot.data()?['balance'] ?? 0,
+        );
+      }
+
+      final infoData = infoSnapshot.exists ? infoSnapshot.data() : {};
+      final studentAccountRawData = StudentAccountRawData.fromMap(
+        studentSnapshot.data()!,
+      );
+
+      // --- MATH SECTION ---
+
+      final double dueWithWaver =
+          studentAccountRawData.due -
+          (studentAccountRawData.due * (studentAccountRawData.waver_ / 100));
+
+      final double netPaidForTuition =
+          studentAccountRawData.paid -
+          studentAccountRawData.totalFine +
+          (studentAccountRawData.balance);
+
+      // --- INSTALLMENT CHECK ---
+      InstallmentModel? urgentInstallment;
+
+      // Fetch installments from Parent Document
+      // ... inside your function ...
+
+      final installmentsMap = infoData?['installment'] as Map<String, dynamic>?;
+
+      if (installmentsMap != null) {
+        final now = DateTime.now();
+
+        for (var key in installmentsMap.keys) {
+          // 1. Create Model (Handles Timestamp conversion internally)
+          final instData = RoeInstallmentModel.fromMap(
+            installmentsMap[key] as Map<String, dynamic>,
+          );
+
+          if (instData.deadline != null) {
+            final diffDays = instData.deadline!.difference(now).inDays;
+
+            if (diffDays <= 14) {
+              final double targetAmount =
+                  dueWithWaver * (instData.amount_ / 100);
+
+              // 5. Do I owe money?
+              if (netPaidForTuition < targetAmount) {
+                // Calculate the gap (How much more I need to pay to reach 50%)
+                double dueNow = targetAmount - netPaidForTuition;
+
+                urgentInstallment = InstallmentModel(
+                  title: "$key",
+
+                  dueDate: DateFormat('d MMMM').format(instData.deadline!),
+                  fine: instData.fine.toDouble(),
+                  amount: dueNow.toDouble(),
+                );
+
+                break;
+              }
+            }
+          }
+        }
+      }
+
+      // --- RETURN SUMMARY ---
+      // Remaining = Total I must pay - What I actually paid (net)
+      double remaining = dueWithWaver - netPaidForTuition;
+
+      return HomeAccountModel(
+        totalDue: remaining < 0 ? 0 : remaining.toDouble(),
+
+        totalPaid: netPaidForTuition.toDouble(),
+
+        paidPercentage: (netPaidForTuition / dueWithWaver).clamp(0.0, 1.0),
+        upcomingInstallment: urgentInstallment,
+        balance: studentAccountRawData.balance.toDouble(),
       );
     } catch (e) {
-      errorSnackbar(title: "Error", e: e);
-      return HomeAccountInfoModel(
+      print("Error: $e");
+      return HomeAccountModel(
         totalDue: 0,
         totalPaid: 0,
         paidPercentage: 0,
         upcomingInstallment: null,
+        balance: 0,
       );
     }
   }

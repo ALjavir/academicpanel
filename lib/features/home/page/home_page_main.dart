@@ -1,4 +1,6 @@
 import 'package:academicpanel/controller/home/home_controller.dart';
+import 'package:academicpanel/features/home/widget/home_accountInfo.dart';
+import 'package:academicpanel/features/home/widget/home_cgpaInfo.dart';
 import 'package:academicpanel/features/home/widget/home_topHeader.dart';
 import 'package:academicpanel/features/home/widget/home_classSchedule.dart';
 import 'package:academicpanel/model/home/home_model.dart';
@@ -113,6 +115,17 @@ class _HomePageMainState extends State<HomePageMain> {
                         ),
                         HomeClassschedule(
                           todayClass: data.homeTodayClassSchedule,
+                        ),
+                        Row(
+                          spacing: 10,
+                          children: [
+                            Expanded(
+                              child: HomeAccountinfo(
+                                homeAccountInfoModel: data.homeAccountInfoModel,
+                              ),
+                            ),
+                            Expanded(child: HomeCgpainfo()),
+                          ],
                         ),
                       ],
                     ),

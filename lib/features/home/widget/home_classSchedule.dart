@@ -54,7 +54,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                 "Upcoming Class",
                 style: Fontstyle.defult(
                   22,
-                  FontWeight.bold,
+                  FontWeight.w600,
                   ColorStyle.Textblue,
                   //     const Color.fromARGB(20, 19, 70, 125),
                   //     const Offset(3, 3),
@@ -116,10 +116,10 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                         spacing: 12,
                         children: [
                           Text(
-                            "${widget.todayClass[0].name.capitalizeFirst!} - (${widget.todayClass[0].code})",
+                            "${widget.todayClass[0].course.name.capitalizeFirst!} - (${widget.todayClass[0].course.code})",
                             style: Fontstyle.defult(
-                              18,
-                              FontWeight.bold,
+                              16.5,
+                              FontWeight.w600,
                               ColorStyle.Textblue,
                             ),
                           ),
@@ -134,8 +134,8 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                               Text(
                                 "${formatTime12Hour(widget.todayClass[0].startTime)} - ${formatTime12Hour(widget.todayClass[0].endTime)}",
                                 style: Fontstyle.defult(
-                                  14,
-                                  FontWeight.w700,
+                                  14.5,
+                                  FontWeight.w600,
                                   ColorStyle.Textblue,
                                 ),
                               ),
@@ -152,7 +152,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                               Text(
                                 widget.todayClass[0].room,
                                 style: Fontstyle.defult(
-                                  14,
+                                  14.5,
                                   FontWeight.w600,
                                   ColorStyle.Textblue,
                                 ),
@@ -167,7 +167,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                               Text(
                                 widget.todayClass[0].instructor,
                                 style: Fontstyle.defult(
-                                  14,
+                                  14.5,
                                   FontWeight.w600,
                                   ColorStyle.Textblue,
                                 ),
@@ -227,7 +227,11 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            widget.todayClass[i].name,
+                                            widget
+                                                .todayClass[i]
+                                                .course
+                                                .name
+                                                .capitalizeFirst!,
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: Fontstyle.defult(
