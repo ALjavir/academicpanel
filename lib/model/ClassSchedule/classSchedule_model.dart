@@ -1,7 +1,7 @@
-import 'package:academicpanel/model/course/course_model.dart';
+import 'package:academicpanel/model/ClassSchedule/row_course_model.dart';
 
 class ClassscheduleModel {
-  final CourseModel course;
+  final RowCourseModel course;
   final String startTime;
   final String endTime;
   final String room;
@@ -31,7 +31,7 @@ class ClassscheduleModel {
       room: schedule['room']?.toString() ?? 'TBA',
       startTime: schedule['startTime'] ?? 'TBA',
       endTime: schedule['endTime'] ?? 'TBA',
-      course: CourseModel.fromMap(info),
+      course: RowCourseModel.fromMap(info),
     );
   }
 }

@@ -1,9 +1,10 @@
 import 'package:academicpanel/controller/home/home_controller.dart';
 import 'package:academicpanel/features/home/widget/home_accountInfo.dart';
+import 'package:academicpanel/features/home/widget/home_announcement.dart';
 import 'package:academicpanel/features/home/widget/home_cgpaInfo.dart';
 import 'package:academicpanel/features/home/widget/home_topHeader.dart';
 import 'package:academicpanel/features/home/widget/home_classSchedule.dart';
-import 'package:academicpanel/model/home/home_model.dart';
+import 'package:academicpanel/model/pages/home_model.dart';
 import 'package:academicpanel/theme/animation/diagonal_reveal.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
@@ -42,10 +43,11 @@ class _HomePageMainState extends State<HomePageMain> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         leading: SizedBox.shrink(),
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
+          statusBarColor: Colors.black26,
           statusBarIconBrightness: Brightness.light,
           statusBarBrightness: Brightness.dark,
         ),
@@ -124,8 +126,15 @@ class _HomePageMainState extends State<HomePageMain> {
                                 homeAccountInfoModel: data.homeAccountInfoModel,
                               ),
                             ),
-                            Expanded(child: HomeCgpainfo()),
+                            Expanded(
+                              child: HomeCgpainfo(
+                                rowCgpaModel: data.homeRowCgpaModel,
+                              ),
+                            ),
                           ],
+                        ),
+                        HomeAnnouncement(
+                          announcementModel: data.homeAnouncement,
                         ),
                       ],
                     ),

@@ -1,4 +1,4 @@
-import 'package:academicpanel/model/global/classSchedule_model.dart';
+import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/theme/animation/threed_containel.dart';
 
 import 'package:academicpanel/theme/style/color_style.dart';

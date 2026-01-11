@@ -1,6 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class HomeData {
+class FirebaseDatapath {
+  DocumentReference<Map<String, dynamic>> userData(
+    String department,
+    String roleID,
+    String id,
+  ) {
+    return FirebaseFirestore.instance
+        .collection('profile')
+        .doc(department)
+        .collection(roleID)
+        .doc(id);
+  }
+
   DocumentReference<Map<String, dynamic>> courseData(
     String department,
     String courseCode,
@@ -22,6 +34,15 @@ class HomeData {
         .collection('semester')
         .doc(semester);
   }
+
+  DocumentReference<Map<String, dynamic>> cgpaData(
+    String department,
+    String student_id,
+  ) {
+    return FirebaseFirestore.instance
+        .collection('result')
+        .doc(department)
+        .collection('student_id')
+        .doc(student_id);
+  }
 }
-//accounts/CSE/semester/Fall-25/student_id/222208038
-//accounts/CSE/semester/Fall-2025/student_id/222208038

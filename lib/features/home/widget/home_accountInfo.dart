@@ -66,7 +66,10 @@ class HomeAccountinfo extends StatelessWidget {
             Icon(Icons.whatshot, color: ColorStyle.red, size: 28),
           ],
         ),
-        Divider(color: ColorStyle.red),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Divider(color: ColorStyle.red),
+        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 5,

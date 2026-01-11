@@ -1,20 +1,163 @@
+import 'package:academicpanel/model/result/row_cgpa_model.dart';
 import 'package:academicpanel/theme/animation/threed_containel.dart';
+import 'package:academicpanel/theme/style/color_style.dart';
+import 'package:academicpanel/theme/style/font_style.dart';
+import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:flutter/material.dart';
 
-class HomeCgpainfo extends StatefulWidget {
-  const HomeCgpainfo({super.key});
+class HomeCgpainfo extends StatelessWidget {
+  final RowCgpaModel rowCgpaModel;
 
-  @override
-  State<HomeCgpainfo> createState() => _HomeCgpainfoState();
-}
+  const HomeCgpainfo({super.key, required this.rowCgpaModel});
 
-class _HomeCgpainfoState extends State<HomeCgpainfo> {
   @override
   Widget build(BuildContext context) {
+    final double diff = rowCgpaModel.current_cgpa - rowCgpaModel.pervious_cgpa;
+    final bool isPositive = diff >= 0;
+
+    print("DEBUG: CGPA Diff: $diff, Is Positive: $isPositive");
+
+    final double remaining =
+        rowCgpaModel.target_credit - rowCgpaModel.credit_completed;
+
     return ThreeDContainel(
       hight: MediaQuery.of(context).size.height * 0.25,
-      child: Text("data"),
       redious: 10,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(4, 8, 0, 4),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 6,
+              children: [
+                Image.asset(
+                  ImageStyle.growthIcon(),
+                  scale: 22,
+                  color: ColorStyle.red,
+                ),
+
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "${rowCgpaModel.current_cgpa}",
+                        style: Fontstyle.defult(
+                          20,
+                          FontWeight.w600,
+                          ColorStyle.Textblue,
+                        ),
+                      ),
+                      TextSpan(
+                        text: " CGPA",
+                        style: Fontstyle.defult(
+                          10,
+                          FontWeight.w600,
+                          ColorStyle.Textblue,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      WidgetSpan(
+                        child: Icon(
+                          isPositive
+                              ? Icons.arrow_upward_rounded
+                              : Icons.arrow_downward_rounded,
+                          color: ColorStyle.red,
+                          size: 16,
+                        ),
+                      ),
+                      TextSpan(
+                        text:
+                            " ${isPositive ? '+' : ''}${diff.toStringAsFixed(2)}",
+                        style: Fontstyle.defult(
+                          14,
+                          isPositive ? FontWeight.bold : FontWeight.w400,
+                          isPositive ? ColorStyle.Textblue : ColorStyle.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Divider(color: ColorStyle.red),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              spacing: 12,
+              children: [
+                _buildInfoRow(
+                  icon: ImageStyle.enrolledIcon(),
+                  label: "Enrolled",
+                  value: "${rowCgpaModel.credit_enrolled.toInt()}",
+                  color: ColorStyle.red,
+                  textColor: ColorStyle.Textblue,
+                ),
+
+                _buildInfoRow(
+                  icon: ImageStyle.remaingIcon(),
+                  label: "Remaining",
+                  value: "${remaining.toInt()}",
+                  color: ColorStyle.red,
+                  textColor: ColorStyle.Textblue,
+                ),
+                _buildInfoRow(
+                  icon: ImageStyle.complitedBookIcon(),
+                  label: "Completed",
+                  value: "${rowCgpaModel.credit_completed.toInt()}",
+                  color: ColorStyle.red,
+                  textColor: ColorStyle.Textblue,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Helper Widget for the rows (Completed, Taken, Remaining)
+  Widget _buildInfoRow({
+    required String icon,
+    required String label,
+    required String value,
+    required Color color,
+    required Color textColor,
+  }) {
+    return Row(
+      spacing: 10,
+      children: [
+        Image.asset(icon, scale: 24, color: color),
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: "$label: ",
+                style: Fontstyle.defult(
+                  14,
+                  FontWeight.w600,
+                  ColorStyle.Textblue,
+                ),
+              ),
+              TextSpan(
+                text: value,
+                style: Fontstyle.defult(14, FontWeight.w600, ColorStyle.red),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

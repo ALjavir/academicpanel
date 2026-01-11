@@ -1,4 +1,4 @@
-import 'package:academicpanel/model/auth/signin_model.dart';
+import 'package:academicpanel/model/Auth/signin_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/utility/error_widget/error_snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

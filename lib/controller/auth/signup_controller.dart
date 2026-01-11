@@ -7,7 +7,8 @@ import 'dart:io';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/network/api/appScript_api.dart';
-import 'package:academicpanel/network/save_data/firebase/auth_data.dart';
+import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
+
 import 'package:academicpanel/network/save_data/local_stroge/local_stoge.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
@@ -25,7 +26,7 @@ import 'package:path_provider/path_provider.dart';
 class SignupController extends GetxController {
   RxBool isLoading = false.obs;
   final LocalStoge localStoge = LocalStoge();
-  final AuthData authData = AuthData();
+  final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
   final FirebaseAuth fireAuth = FirebaseAuth.instance;
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   var selectedImage = Rxn<File>();
@@ -143,7 +144,11 @@ class SignupController extends GetxController {
   //---------------------------------------------------Find user in dataBase--------------------
   Future<bool> userExist(String department, String roleID, String id) async {
     try {
-      final userDocRef = await authData.saveTo(department, roleID, id);
+      final userDocRef = await firebaseDatapath.userData(
+        department,
+        roleID,
+        id,
+      );
       final result = await userDocRef.get();
 
       if (result.exists) {
@@ -309,7 +314,7 @@ class SignupController extends GetxController {
     // final userDocRef = fireStore.collection('profile').doc(department)
     //     .collection(roleId)
     //     .doc(id);
-    final userDocRef = authData.saveTo(department, roleId, id);
+    final userDocRef = firebaseDatapath.userData(department, roleId, id);
 
     bool firestoreWritten = false;
     bool localSaved = false;

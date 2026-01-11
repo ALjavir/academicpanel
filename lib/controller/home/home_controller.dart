@@ -1,13 +1,18 @@
+import 'dart:ffi';
+
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/Account/home_account_model.dart';
 import 'package:academicpanel/model/Account/row_account_model.dart';
+import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/model/global/anouncement.dart';
-import 'package:academicpanel/model/global/classSchedule_model.dart';
-import 'package:academicpanel/model/home/home_model.dart';
-import 'package:academicpanel/model/rowInput/rowInput_model.dart';
+import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
+import 'package:academicpanel/model/pages/home_model.dart';
+import 'package:academicpanel/model/result/row_cgpa_model.dart';
+
 import 'package:academicpanel/model/user/user_model.dart';
-import 'package:academicpanel/network/save_data/firebase/home_data.dart';
+import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +21,7 @@ import 'package:intl/intl.dart';
 
 class HomeController extends GetxController {
   final userController = Get.find<UserController>();
-  final HomeData homeData = HomeData();
+  final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
   List<ClassscheduleModel> todayClassScheduleListHome = [];
   List<Anouncement> anouncementListHome = [];
 
@@ -27,8 +32,13 @@ class HomeController extends GetxController {
       return HomeModel(
         homeTopHeaderModel: await fetchHomePageHeader(userModel!),
         homeTodayClassSchedule: await todayClassSchedule(userModel),
-        homeAnouncement: [],
+
         homeAccountInfoModel: await fetchAccountInfo(userModel),
+        homeRowCgpaModel: await fetchCGPAinfo(
+          userModel.id,
+          userModel.department,
+        ),
+        homeAnouncement: await fetchAllAnnouncements(userModel),
       );
     } catch (e) {
       errorSnackbar(title: "Error", e: e);
@@ -41,12 +51,19 @@ class HomeController extends GetxController {
         ),
 
         homeTodayClassSchedule: todayClassScheduleListHome,
-        homeAnouncement: anouncementListHome,
+        homeAnouncement: [],
         homeAccountInfoModel: HomeAccountModel(
           totalDue: 0,
           totalPaid: 0,
           paidPercentage: 0,
           balance: 0,
+        ),
+        homeRowCgpaModel: RowCgpaModel(
+          credit_completed: 0,
+          target_credit: 0,
+          credit_enrolled: 0,
+          pervious_cgpa: 0,
+          current_cgpa: 0,
         ),
       );
     }
@@ -174,7 +191,10 @@ class HomeController extends GetxController {
         //  print("Fetching for course: $courseCode, section: $section");
 
         // Get Reference (No await needed now)
-        final courseCollectionRef = homeData.courseData(department, courseCode);
+        final courseCollectionRef = firebaseDatapath.courseData(
+          department,
+          courseCode,
+        );
         // print("Course Ref: ${courseCollectionRef.path}");
 
         // Fetch Info and Section in parallel
@@ -238,8 +258,8 @@ class HomeController extends GetxController {
       final semester = userModel.current_semester;
 
       // 1. Reference to Parent (Semester Rules)
-      final accountDocRef = homeData.accountData(department, semester!);
-      print("Account Doc Ref: ${accountDocRef.path}");
+      final accountDocRef = firebaseDatapath.accountData(department, semester!);
+      // print("Account Doc Ref: ${accountDocRef.path}");
 
       // 2. Fetch Parent (Rules) and Child (Student Data)
       final results = await Future.wait([
@@ -262,18 +282,19 @@ class HomeController extends GetxController {
       }
 
       final infoData = infoSnapshot.exists ? infoSnapshot.data() : {};
-      final studentAccountRawData = StudentAccountRawData.fromMap(
+      final studentAccountRawData = RowAccountModel.fromMap(
         studentSnapshot.data()!,
       );
 
       // --- MATH SECTION ---
 
       final double dueWithWaver =
-          studentAccountRawData.due -
-          (studentAccountRawData.due * (studentAccountRawData.waver_ / 100));
+          studentAccountRawData.ac_statementTotal -
+          (studentAccountRawData.ac_statementTotal *
+              (studentAccountRawData.waver_ / 100));
 
       final double netPaidForTuition =
-          studentAccountRawData.paid -
+          studentAccountRawData.paidTotal -
           studentAccountRawData.totalFine +
           (studentAccountRawData.balance);
 
@@ -344,5 +365,119 @@ class HomeController extends GetxController {
         balance: 0,
       );
     }
+  }
+
+  // d: ----------------------------------------------------------------------------CGPA----------------------------------------------------------------------------------
+  Future<RowCgpaModel> fetchCGPAinfo(String id, String department) async {
+    try {
+      final cgpaDocRef = await firebaseDatapath.cgpaData(department, id).get();
+
+      final dataMap = cgpaDocRef.data();
+      if (dataMap != null) {
+        return RowCgpaModel.fromMap(dataMap);
+      } else {
+        return RowCgpaModel(
+          credit_completed: 0,
+          target_credit: 0,
+          credit_enrolled: 0,
+          pervious_cgpa: 0,
+          current_cgpa: 0,
+        );
+      }
+    } catch (e) {
+      return RowCgpaModel(
+        credit_completed: 0,
+        target_credit: 0,
+        credit_enrolled: 0,
+        pervious_cgpa: 0,
+        current_cgpa: 0,
+      );
+    }
+  }
+
+  // e
+
+  Future<List<AnnouncementModel>> fetchAllAnnouncements(
+    UserModel userModel,
+  ) async {
+    try {
+      final department = userModel.department;
+      final courses = userModel.current_course ?? {};
+
+      final courseFutures = courses.entries.map((entry) async {
+        String courseCode = entry.key;
+        String section = entry.value;
+
+        final courseCollectionRef = firebaseDatapath.courseData(
+          department,
+          courseCode,
+        );
+
+        // 1. Fetch Info (for Name) & Section (for Announcements) together
+        final results = await Future.wait([
+          courseCollectionRef.get(),
+          courseCollectionRef.collection('section').doc(section).get(),
+        ]);
+
+        final infoSnapshot = results[0];
+        final sectionSnapshot = results[1];
+
+        if (infoSnapshot.exists && sectionSnapshot.exists) {
+          final courseData = infoSnapshot.data() ?? {};
+          final secData = sectionSnapshot.data() ?? {};
+
+          // 2. Extract Course Name ONCE (optimization)
+          final String courseName = courseData['name'] ?? courseCode;
+
+          // 3. Get the list
+          final rawList = secData['announcement'] as List<dynamic>?;
+          // Check your DB key: 'announcement' or 'announcements'?
+          print("anouncemtnjojoj: $rawList");
+
+          if (rawList != null) {
+            return rawList.map((item) {
+              final map = item as Map<String, dynamic>;
+
+              // 4. Create Model with merged data
+              return AnnouncementModel(
+                message: map['message'] ?? '',
+                // Convert Timestamp safely
+                date: DateFormat('d MMMM ').format(
+                  (map['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
+                ),
+                name: courseName, // From Info Doc
+                code: courseCode, // From Map Key
+              );
+            }).toList();
+          }
+        }
+        return <AnnouncementModel>[];
+      });
+
+      final results = await Future.wait(courseFutures);
+
+      // Flatten and Sort
+      final allAnnouncements = results.expand((x) => x).toList();
+      allAnnouncements.sort((a, b) => b.date.compareTo(a.date));
+
+      return allAnnouncements;
+    } catch (e) {
+      print("Error: $e");
+      return [];
+    }
+  }
+
+  Future<Void> fetchClassscheduleNAnnouncement(
+    UserModel userModel,
+    bool getBoth,
+    bool getClassschedule,
+    bool getAnnouncement,
+  ) async {
+    try {
+      final department = userModel.department;
+      final semester = userModel.current_semester;
+
+      if (getBoth) {}
+    } catch (e) {}
   }
 }

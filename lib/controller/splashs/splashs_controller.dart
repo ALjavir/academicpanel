@@ -1,6 +1,6 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/user/user_model.dart';
-import 'package:academicpanel/network/save_data/firebase/auth_data.dart';
+import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
 import 'package:academicpanel/network/save_data/local_stroge/local_stoge.dart';
 import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 class SplashsController extends GetxController {
   final LocalStoge localStoge = LocalStoge();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final AuthData authData = AuthData();
+  final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
   // final routesController = Get.put(RoutesController());
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   final userController = Get.find<UserController>();
@@ -40,7 +40,7 @@ class SplashsController extends GetxController {
     }
 
     // Build the document path
-    final userDocRef = authData.saveTo(
+    final userDocRef = firebaseDatapath.userData(
       storedDept,
       storedRoleId,
       storedId,

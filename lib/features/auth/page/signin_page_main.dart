@@ -2,7 +2,7 @@ import 'package:academicpanel/controller/auth/signin_controller.dart';
 import 'package:academicpanel/features/auth/widget/auth_headertext.dart';
 import 'package:academicpanel/features/auth/widget/custom_button.dart';
 import 'package:academicpanel/features/auth/widget/custom_textfield.dart';
-import 'package:academicpanel/model/auth/signin_model.dart';
+import 'package:academicpanel/model/Auth/signin_model.dart';
 
 import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/network/check_connection/check_connection.dart';
