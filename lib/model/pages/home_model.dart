@@ -2,6 +2,7 @@ import 'package:academicpanel/model/Account/home_account_model.dart';
 import 'package:academicpanel/model/Announcement/announcement_model.dart';
 
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
+import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/result/row_cgpa_model.dart';
 
 class HomeModel {
@@ -10,12 +11,14 @@ class HomeModel {
   final HomeAccountModel homeAccountInfoModel;
   final RowCgpaModel homeRowCgpaModel;
   final List<AnnouncementModel> homeAnouncement;
+  final List<AssessmentModel> homeAssessment;
   HomeModel({
     required this.homeTopHeaderModel,
     required this.homeTodayClassSchedule,
     required this.homeAccountInfoModel,
     required this.homeRowCgpaModel,
     required this.homeAnouncement,
+    required this.homeAssessment,
   });
 }
 

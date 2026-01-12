@@ -1,6 +1,7 @@
 import 'package:academicpanel/controller/home/home_controller.dart';
 import 'package:academicpanel/features/home/widget/home_accountInfo.dart';
 import 'package:academicpanel/features/home/widget/home_announcement.dart';
+import 'package:academicpanel/features/home/widget/home_assessment.dart';
 import 'package:academicpanel/features/home/widget/home_cgpaInfo.dart';
 import 'package:academicpanel/features/home/widget/home_topHeader.dart';
 import 'package:academicpanel/features/home/widget/home_classSchedule.dart';
@@ -134,6 +135,7 @@ class _HomePageMainState extends State<HomePageMain> {
                           ],
                         ),
                         HomeAnnouncement(announcements: data.homeAnouncement),
+                        HomeAssessment(assessment: data.homeAssessment),
                       ],
                     ),
                   ),

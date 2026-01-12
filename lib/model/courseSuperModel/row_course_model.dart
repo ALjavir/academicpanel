@@ -10,8 +10,8 @@ class RowCourseModel {
   });
   factory RowCourseModel.fromMap(Map<String, dynamic> map) {
     return RowCourseModel(
-      code: map['code'] ?? '',
-      name: map['name'] ?? '',
+      code: map['code'] ?? 'TBA',
+      name: map['name'] ?? 'TBA',
       credit: map['credit'] ?? 0,
     );
   }

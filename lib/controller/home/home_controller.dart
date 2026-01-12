@@ -4,6 +4,7 @@ import 'package:academicpanel/model/Account/home_account_model.dart';
 import 'package:academicpanel/model/Account/row_account_model.dart';
 import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
+import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/pages/home_model.dart';
 import 'package:academicpanel/model/result/row_cgpa_model.dart';
 import 'package:academicpanel/model/user/user_model.dart';
@@ -19,7 +20,7 @@ class HomeController extends GetxController {
   final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
   List<ClassscheduleModel> todayClassScheduleListHome = [];
   List<AnnouncementModel> announcementtHome = [];
-  //final SectionsuperModel sectionsuperModel = SectionsuperModel();
+  List<AssessmentModel> assessmentHome = [];
 
   // ------------------------------------------------------------------------------MAIN HOME CONTROLLER----------------------------------------------------------------------
   Future<HomeModel> mainHomeController() async {
@@ -35,6 +36,7 @@ class HomeController extends GetxController {
           userModel.department,
         ),
         homeAnouncement: await fetchAllAnnouncements(userModel),
+        homeAssessment: await fetchAssment(userModel),
       );
     } catch (e) {
       errorSnackbar(title: "Error", e: e);
@@ -61,6 +63,7 @@ class HomeController extends GetxController {
           pervious_cgpa: 0,
           current_cgpa: 0,
         ),
+        homeAssessment: [],
       );
     }
   }
@@ -318,8 +321,29 @@ class HomeController extends GetxController {
           announcementtHome.add(item);
         }
       }
-
       return announcementtHome;
+    } catch (e) {
+      print("Error: $e");
+      return [];
+    }
+  }
+  // f: ----------------------------------------------------------------------------Assessment----------------------------------------------------------------------------------
+
+  Future<List<AssessmentModel>> fetchAssment(UserModel userModel) async {
+    try {
+      final fetchedData = await courseController.fetchSectionData(
+        userModel: userModel,
+        getAssessment: true,
+      );
+
+      if (fetchedData.assessment != null) {
+        final assessmentList = fetchedData.assessment!;
+        for (var item in assessmentList) {
+          if (assessmentHome.length >= 4) break;
+          assessmentHome.add(item);
+        }
+      }
+      return assessmentHome;
     } catch (e) {
       print("Error: $e");
       return [];

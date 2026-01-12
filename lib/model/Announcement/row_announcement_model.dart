@@ -5,9 +5,9 @@ class RowAnnouncementModel {
   final DateTime date;
 
   RowAnnouncementModel({required this.message, required this.date});
-  factory RowAnnouncementModel.fromMap(Map<String, dynamic> map, String code) {
+  factory RowAnnouncementModel.fromMap(Map<String, dynamic> map) {
     return RowAnnouncementModel(
-      message: map['message'] ?? '',
+      message: map['message'] ?? 'TBA',
 
       date: (map['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );

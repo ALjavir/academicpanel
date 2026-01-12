@@ -1,16 +1,14 @@
-import 'package:academicpanel/model/Announcement/announcement_model.dart';
+import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/theme/animation/threed_containel.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:flutter/material.dart';
 
-class HomeAnnouncement extends StatelessWidget {
-  final List<AnnouncementModel>? announcements;
+class HomeAssessment extends StatelessWidget {
+  final List<AssessmentModel> assessment;
+  const HomeAssessment({super.key, required this.assessment});
 
-  const HomeAnnouncement({super.key, required this.announcements});
-
-  // Helper function to convert DateTime to "2 hours ago"
   String _timeAgo(DateTime d) {
     final Duration diff = DateTime.now().difference(d);
     if (diff.inDays > 0) return "${diff.inDays}d ago";
@@ -33,12 +31,12 @@ class HomeAnnouncement extends StatelessWidget {
 
             children: [
               Image.asset(
-                ImageStyle.announcementIcon(),
+                ImageStyle.reminderIcon(),
                 color: ColorStyle.red,
                 scale: 19,
               ),
               Text(
-                "Announcement",
+                "Reminder",
                 style: Fontstyle.defult(
                   22,
                   FontWeight.w600,
@@ -48,12 +46,12 @@ class HomeAnnouncement extends StatelessWidget {
             ],
           ),
           Divider(color: ColorStyle.red),
-          if (announcements == null || announcements!.isEmpty)
+          if (assessment.isEmpty)
             Center(
               child: Padding(
                 padding: EdgeInsets.all(20.0),
                 child: Text(
-                  "No announcements yet!!!",
+                  "No reminder yet!!!",
                   style: Fontstyle.defult(18, FontWeight.w600, ColorStyle.red),
                 ),
               ),
@@ -64,10 +62,10 @@ class HomeAnnouncement extends StatelessWidget {
               shrinkWrap: true,
               physics:
                   const NeverScrollableScrollPhysics(), // Keeps it stable inside your Dashboard
-              itemCount: announcements!.length,
+              itemCount: assessment.length,
               itemBuilder: (context, index) {
-                final item = announcements![index];
-                final isLast = index == announcements!.length - 1;
+                final item = assessment[index];
+                final isLast = index == assessment.length - 1;
 
                 return IntrinsicHeight(
                   child: Row(
@@ -105,7 +103,7 @@ class HomeAnnouncement extends StatelessWidget {
                           children: [
                             // Title (Message)
                             Text(
-                              item.message,
+                              item.assessment,
                               maxLines: 2,
                               softWrap: true,
                               style: Fontstyle.defult(

@@ -24,6 +24,10 @@ class ImageStyle {
     return 'lib/assets/icon/announcement.png';
   }
 
+  static String reminderIcon() {
+    return 'lib/assets/icon/reminder.png';
+  }
+
   static String complitedBookIcon() {
     return 'lib/assets/icon/complet_book.png';
   }

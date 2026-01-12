@@ -1,13 +1,16 @@
 import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
 
-class AnnouncementModel {
-  final String message;
+class AssessmentModel {
+  final String assessment;
   final DateTime date;
+  final String link;
+  final String syllabus;
   final RowCourseModel rowCourseModel;
-  AnnouncementModel({
-    required this.message,
+  AssessmentModel({
+    required this.assessment,
     required this.date,
-    l,
     required this.rowCourseModel,
+    required this.link,
+    required this.syllabus,
   });
 }
