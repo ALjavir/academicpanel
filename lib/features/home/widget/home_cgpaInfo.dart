@@ -93,7 +93,7 @@ class HomeCgpainfo extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
             child: Column(
               spacing: 12,
               children: [

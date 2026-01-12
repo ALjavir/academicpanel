@@ -133,9 +133,7 @@ class _HomePageMainState extends State<HomePageMain> {
                             ),
                           ],
                         ),
-                        HomeAnnouncement(
-                          announcementModel: data.homeAnouncement,
-                        ),
+                        HomeAnnouncement(announcements: data.homeAnouncement),
                       ],
                     ),
                   ),

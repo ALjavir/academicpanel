@@ -1,29 +1,25 @@
-import 'dart:ffi';
-
+import 'package:academicpanel/controller/course/course_controller.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/Account/home_account_model.dart';
 import 'package:academicpanel/model/Account/row_account_model.dart';
 import 'package:academicpanel/model/Announcement/announcement_model.dart';
-import 'package:academicpanel/model/global/anouncement.dart';
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/pages/home_model.dart';
 import 'package:academicpanel/model/result/row_cgpa_model.dart';
-
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
 import 'package:intl/intl.dart';
 
 class HomeController extends GetxController {
   final userController = Get.find<UserController>();
+  final CourseController courseController = Get.put(CourseController());
   final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
   List<ClassscheduleModel> todayClassScheduleListHome = [];
-  List<Anouncement> anouncementListHome = [];
+  List<AnnouncementModel> announcementtHome = [];
+  //final SectionsuperModel sectionsuperModel = SectionsuperModel();
 
   // ------------------------------------------------------------------------------MAIN HOME CONTROLLER----------------------------------------------------------------------
   Future<HomeModel> mainHomeController() async {
@@ -112,8 +108,18 @@ class HomeController extends GetxController {
     }
     try {
       if (todayClassScheduleListHome.isEmpty) {
-        await fetchClassTimeInfo(userModel);
-        print("call fetchClassTimeInfo --------------- ");
+        final fetchedData = await courseController.fetchSectionData(
+          userModel: userModel,
+          // Don't forget this param if required
+          getClassSchedule: true,
+          getAnnouncement: false,
+        );
+
+        //print("UI Received: ${fetchedData.schedules}");
+
+        if (fetchedData.schedules != null) {
+          todayClassScheduleListHome = fetchedData.schedules!;
+        }
       }
       final now = TimeOfDay.now();
       // 1. Get current time in minutes (e.g., 13:30 = 810 minutes)
@@ -144,109 +150,6 @@ class HomeController extends GetxController {
       return todayClassScheduleListHome;
     } catch (e) {
       errorSnackbar(title: "classSchedule error", e: e);
-      return [];
-    }
-  }
-
-  //B.2: Fetch Class Time Info from Firestore-----------------------------------
-  Future<List<ClassscheduleModel>> fetchClassTimeInfo(
-    UserModel userModel,
-  ) async {
-    try {
-      final department = userModel.department;
-      final courses = userModel.current_course;
-
-      // 2. Get the correct day key
-      final now = DateTime.now();
-      String dayKey = '';
-      switch (now.weekday) {
-        case DateTime.sunday:
-          dayKey = 'su';
-          break;
-        case DateTime.monday:
-          dayKey = 'mo';
-          break;
-        case DateTime.tuesday:
-          dayKey = 'tu';
-          break;
-        case DateTime.wednesday:
-          dayKey = 'we';
-          break;
-        case DateTime.thursday:
-          dayKey = 'th';
-          break;
-        case DateTime.friday:
-          dayKey = 'fr';
-          break;
-        case DateTime.saturday:
-          dayKey = 'sa';
-
-          break;
-      }
-
-      final courseFutures = courses!.entries.map((entry) async {
-        String courseCode = entry.key;
-        String section = entry.value;
-
-        //  print("Fetching for course: $courseCode, section: $section");
-
-        // Get Reference (No await needed now)
-        final courseCollectionRef = firebaseDatapath.courseData(
-          department,
-          courseCode,
-        );
-        // print("Course Ref: ${courseCollectionRef.path}");
-
-        // Fetch Info and Section in parallel
-        final results = await Future.wait([
-          courseCollectionRef.get(),
-          courseCollectionRef.collection('section').doc(section).get(),
-        ]);
-
-        final infoSnapshot = results[0];
-        final sectionSnapshot = results[1];
-        // print(
-        //   "Fetched snapshots for ${infoSnapshot.exists}, section ${sectionSnapshot.exists}",
-        // );
-
-        // Process Data
-        // Part 3: Inside your loop
-        if (infoSnapshot.exists && sectionSnapshot.exists) {
-          final secData = sectionSnapshot.data()!;
-          final scheduleMap = secData['schedule'] as Map<String, dynamic>?;
-
-          if (scheduleMap != null && scheduleMap.containsKey(dayKey)) {
-            final todaysDetails = scheduleMap[dayKey] as Map<String, dynamic>;
-
-            // 1. Prepare Course Data
-            final courseData = infoSnapshot.data() ?? {};
-
-            // 2. Create ClassscheduleModel
-            return ClassscheduleModel.fromJoinedData(
-              courseInfo: courseData,
-              sectionData: secData,
-              daySchedule: todaysDetails,
-              defaultCode: courseCode,
-            );
-          }
-        }
-        return null;
-      });
-
-      // 4. WAIT for all courses to finish loading
-      final results = await Future.wait(courseFutures);
-
-      // 5. Filter out nulls and add to the main list
-      for (var result in results) {
-        if (result != null) {
-          todayClassScheduleListHome.add(result);
-        }
-      }
-
-      return todayClassScheduleListHome;
-    } catch (e) {
-      print("Error fetching schedule: $e");
-      errorSnackbar(title: "fetchClassTimeInfo error", e: e);
       return [];
     }
   }
@@ -395,89 +298,31 @@ class HomeController extends GetxController {
     }
   }
 
-  // e
+  // e: ----------------------------------------------------------------------------Announcemnt----------------------------------------------------------------------------------
 
   Future<List<AnnouncementModel>> fetchAllAnnouncements(
     UserModel userModel,
   ) async {
     try {
-      final department = userModel.department;
-      final courses = userModel.current_course ?? {};
+      final fetchedData = await courseController.fetchSectionData(
+        userModel: userModel,
+        // Don't forget this param if required
+        getClassSchedule: false,
+        getAnnouncement: true,
+      );
 
-      final courseFutures = courses.entries.map((entry) async {
-        String courseCode = entry.key;
-        String section = entry.value;
-
-        final courseCollectionRef = firebaseDatapath.courseData(
-          department,
-          courseCode,
-        );
-
-        // 1. Fetch Info (for Name) & Section (for Announcements) together
-        final results = await Future.wait([
-          courseCollectionRef.get(),
-          courseCollectionRef.collection('section').doc(section).get(),
-        ]);
-
-        final infoSnapshot = results[0];
-        final sectionSnapshot = results[1];
-
-        if (infoSnapshot.exists && sectionSnapshot.exists) {
-          final courseData = infoSnapshot.data() ?? {};
-          final secData = sectionSnapshot.data() ?? {};
-
-          // 2. Extract Course Name ONCE (optimization)
-          final String courseName = courseData['name'] ?? courseCode;
-
-          // 3. Get the list
-          final rawList = secData['announcement'] as List<dynamic>?;
-          // Check your DB key: 'announcement' or 'announcements'?
-          print("anouncemtnjojoj: $rawList");
-
-          if (rawList != null) {
-            return rawList.map((item) {
-              final map = item as Map<String, dynamic>;
-
-              // 4. Create Model with merged data
-              return AnnouncementModel(
-                message: map['message'] ?? '',
-                // Convert Timestamp safely
-                date: DateFormat('d MMMM ').format(
-                  (map['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
-                ),
-                name: courseName, // From Info Doc
-                code: courseCode, // From Map Key
-              );
-            }).toList();
-          }
+      if (fetchedData.announcements != null) {
+        final announcementList = fetchedData.announcements!;
+        for (var item in announcementList) {
+          if (announcementtHome.length >= 4) break;
+          announcementtHome.add(item);
         }
-        return <AnnouncementModel>[];
-      });
+      }
 
-      final results = await Future.wait(courseFutures);
-
-      // Flatten and Sort
-      final allAnnouncements = results.expand((x) => x).toList();
-      allAnnouncements.sort((a, b) => b.date.compareTo(a.date));
-
-      return allAnnouncements;
+      return announcementtHome;
     } catch (e) {
       print("Error: $e");
       return [];
     }
-  }
-
-  Future<Void> fetchClassscheduleNAnnouncement(
-    UserModel userModel,
-    bool getBoth,
-    bool getClassschedule,
-    bool getAnnouncement,
-  ) async {
-    try {
-      final department = userModel.department;
-      final semester = userModel.current_semester;
-
-      if (getBoth) {}
-    } catch (e) {}
   }
 }

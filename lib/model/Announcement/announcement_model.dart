@@ -1,6 +1,6 @@
 class AnnouncementModel {
   final String message;
-  final String date;
+  final DateTime date;
   final String name;
   final String code;
   AnnouncementModel({

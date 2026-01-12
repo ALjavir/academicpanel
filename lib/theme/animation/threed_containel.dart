@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 
 class ThreeDContainel extends StatefulWidget {
@@ -35,18 +37,27 @@ class _ThreeDContainelState extends State<ThreeDContainel> {
         borderRadius: BorderRadius.circular(widget.redious),
         color: Colors.transparent,
         boxShadow: [
+          // BoxShadow(
+          //   color: Colors.grey.withOpacity(0.1), // Much softer shadow
+          //   spreadRadius: 1,
+          //   blurRadius: 10, // Higher blur = softer look
+          //   offset: Offset(0, 4),
+          // ),
+          // BoxShadow(
+          //   color: const Color.fromARGB(8, 0, 0, 0), // Soft dark shadow
+          //   blurRadius: 4,
+          //   offset: Offset(4, 4), // Softness
+          //   spreadRadius: 2,
+          // ),
           BoxShadow(
-            color: Colors.black12,
+            color: Colors.grey.shade300,
             blurStyle: BlurStyle.outer,
-            blurRadius: 6,
-            // offset: Offset(2, 4), // Softness
-            spreadRadius: 1,
+            blurRadius: 10,
+            //offset: Offset(2, 4),
+            spreadRadius: 0,
           ),
         ],
-        // border: Border.all(
-        //   color: const Color.fromARGB(16, 0, 0, 0),
-        //   width: 1.5,
-        // ),
+        // border: Border.all(color: Color.fromARGB(16, 0, 0, 0), width: 1),
       ),
       child: widget.child,
     );

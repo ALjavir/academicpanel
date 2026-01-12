@@ -1,4 +1,4 @@
-import 'package:academicpanel/model/ClassSchedule/row_course_model.dart';
+import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
 
 class ClassscheduleModel {
   final RowCourseModel course;

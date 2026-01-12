@@ -267,7 +267,7 @@ class HomeAccountinfo extends StatelessWidget {
         SizedBox(width: 8),
         Text(
           label,
-          style: Fontstyle.defult(14, FontWeight.w500, Colors.black45),
+          style: Fontstyle.defult(14, FontWeight.w500, ColorStyle.lightBlue),
         ),
         Spacer(),
         RichText(

@@ -20,6 +20,10 @@ class ImageStyle {
     return 'lib/assets/icon/grow.png';
   }
 
+  static String announcementIcon() {
+    return 'lib/assets/icon/announcement.png';
+  }
+
   static String complitedBookIcon() {
     return 'lib/assets/icon/complet_book.png';
   }

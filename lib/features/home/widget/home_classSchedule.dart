@@ -48,39 +48,38 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
           // HEADER
           Row(
             spacing: 10,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+
             children: [
+              Image.asset(
+                ImageStyle.upCommingClassesHeaderIcon(),
+                color: ColorStyle.red,
+                scale: 19,
+              ),
               Text(
                 "Upcoming Class",
                 style: Fontstyle.defult(
                   22,
                   FontWeight.w600,
                   ColorStyle.Textblue,
-                  //     const Color.fromARGB(20, 19, 70, 125),
-                  //     const Offset(3, 3),
-                  //    4,
                 ),
-              ),
-              Image.asset(
-                ImageStyle.upCommingClassesHeaderIcon(),
-                color: ColorStyle.red,
-                scale: 22,
               ),
             ],
           ),
           Divider(color: ColorStyle.red),
-          const SizedBox(height: 5),
+
           if (widget.todayClass.isEmpty)
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 10,
+              // spacing: 10,
               children: [
                 ClipRect(
                   child: SizedBox(
-                    height: 150,
+                    height: 120,
                     width: double.maxFinite,
                     child: Transform.scale(
-                      scale: 1.8,
+                      scale: 2,
                       child: LottieBuilder.asset(
                         ImageStyle.upCommingClassaAimatedIcon(),
                         frameRate: FrameRate.max,
