@@ -2,35 +2,41 @@ import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
 
 class ClassscheduleModel {
   final RowCourseModel course;
+  final String day; // "su", "mo", etc.
   final String startTime;
   final String endTime;
   final String room;
   final String instructor;
+
   ClassscheduleModel({
     required this.course,
     required this.startTime,
     required this.endTime,
     required this.room,
     required this.instructor,
+    required this.day,
   });
 
   factory ClassscheduleModel.fromJoinedData({
-    required Map<String, dynamic>? courseInfo, // From the Course Doc
-    required Map<String, dynamic>? sectionData, // From the Section Doc
-    required Map<String, dynamic>? daySchedule, // From the 'su'/'mo' map
-    required String defaultCode, // Fallback if code is missing
+    required Map<String, dynamic>? courseInfo,
+    required Map<String, dynamic>? sectionData,
+    required Map<String, dynamic>? daySchedule,
+    required String defaultCode,
+    required String dayKey, // <--- 1. ADD THIS ARGUMENT
   }) {
     final info = courseInfo ?? {};
     final sec = sectionData ?? {};
     final schedule = daySchedule ?? {};
 
     return ClassscheduleModel(
-      // name: info['name'] ?? '',
-      // code: info['code'] ?? defaultCode,
+      // 2. Pass it to the model
+      day: dayKey,
       instructor: sec['instructor'] ?? sec['instracter'] ?? 'TBA',
       room: schedule['room']?.toString() ?? 'TBA',
       startTime: schedule['startTime'] ?? 'TBA',
       endTime: schedule['endTime'] ?? 'TBA',
+
+      // Make sure RowCourseModel handles empty 'name'/'code' safely internally
       course: RowCourseModel.fromMap(info),
     );
   }

@@ -1,23 +1,26 @@
 import 'package:academicpanel/controller/course/course_controller.dart';
+import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/Account/home_account_model.dart';
 import 'package:academicpanel/model/Account/row_account_model.dart';
 import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
+import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/model/pages/home_model.dart';
 import 'package:academicpanel/model/result/row_cgpa_model.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
+
 import 'package:intl/intl.dart';
 
 class HomeController extends GetxController {
   final userController = Get.find<UserController>();
   final CourseController courseController = Get.put(CourseController());
   final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
+  final loadAlldata = Get.find<LoadAlldata>();
   List<ClassscheduleModel> todayClassScheduleListHome = [];
   List<AnnouncementModel> announcementtHome = [];
   List<AssessmentModel> assessmentHome = [];
@@ -106,29 +109,40 @@ class HomeController extends GetxController {
     UserModel userModel,
   ) async {
     if (userModel.current_course!.isEmpty) {
-      // print("No courses enrolled --------------- ");
       return todayClassScheduleListHome;
     }
+
     try {
+      List<ClassscheduleModel> tempClassschedule = [];
+
       if (todayClassScheduleListHome.isEmpty) {
-        final fetchedData = await courseController.fetchSectionData(
-          userModel: userModel,
-          // Don't forget this param if required
-          getClassSchedule: true,
-          getAnnouncement: false,
-        );
+        SectionsuperModel classScheduleData;
 
-        //print("UI Received: ${fetchedData.schedules}");
+        if (loadAlldata.allDataSection!.schedules!.isEmpty) {
+          final fetchedData = await courseController.fetchSectionData(
+            userModel: userModel,
+            getClassSchedule: true,
+          );
+          classScheduleData = fetchedData;
+        } else {
+          classScheduleData = loadAlldata.allDataSection!;
+        }
 
-        if (fetchedData.schedules != null) {
-          todayClassScheduleListHome = fetchedData.schedules!;
+        if (classScheduleData.schedules != null) {
+          tempClassschedule = classScheduleData.schedules!;
         }
       }
-      final now = TimeOfDay.now();
-      // 1. Get current time in minutes (e.g., 13:30 = 810 minutes)
+
+      final now = DateTime.now();
+      final days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'];
+      String dayKey = days[now.weekday - 1];
+
+      for (var tempca in tempClassschedule) {
+        todayClassScheduleListHome.addIf(tempca.day == dayKey, tempca);
+      }
+
       final currentMinutes = (now.hour * 60) + now.minute;
 
-      // 2. Remove past classes
       todayClassScheduleListHome.removeWhere((classItem) {
         final parts = classItem.endTime.split(':');
         final endHour = int.parse(parts[0]);
@@ -137,7 +151,6 @@ class HomeController extends GetxController {
         return classEndMinutes < currentMinutes;
       });
 
-      // 3. Sort by startTime
       todayClassScheduleListHome.sort((a, b) {
         final partsA = a.startTime.split(':');
         final startMinutesA =
@@ -251,7 +264,6 @@ class HomeController extends GetxController {
       // --- RETURN SUMMARY ---
       // Remaining = Total I must pay - What I actually paid (net)
       double remaining = dueWithWaver - netPaidForTuition;
-
       return HomeAccountModel(
         totalDue: remaining < 0 ? 0 : remaining.toDouble(),
 
@@ -307,23 +319,29 @@ class HomeController extends GetxController {
     UserModel userModel,
   ) async {
     try {
-      final fetchedData = await courseController.fetchSectionData(
-        userModel: userModel,
-        // Don't forget this param if required
-        getClassSchedule: false,
-        getAnnouncement: true,
-      );
+      SectionsuperModel announcementData;
 
-      if (fetchedData.announcements != null) {
-        final announcementList = fetchedData.announcements!;
+      if (loadAlldata.allDataSection!.announcements!.isEmpty) {
+        final fetchedData = await courseController.fetchSectionData(
+          userModel: userModel,
+          getAnnouncement: true,
+        );
+        announcementData = fetchedData;
+      } else {
+        announcementData = loadAlldata.allDataSection!;
+      }
+
+      if (announcementData.announcements != null) {
+        final announcementList = announcementData.announcements!;
         for (var item in announcementList) {
           if (announcementtHome.length >= 4) break;
           announcementtHome.add(item);
         }
       }
+
       return announcementtHome;
     } catch (e) {
-      print("Error: $e");
+      errorSnackbar(title: "Error fetching Announcement", e: e);
       return [];
     }
   }
@@ -331,21 +349,29 @@ class HomeController extends GetxController {
 
   Future<List<AssessmentModel>> fetchAssment(UserModel userModel) async {
     try {
-      final fetchedData = await courseController.fetchSectionData(
-        userModel: userModel,
-        getAssessment: true,
-      );
+      SectionsuperModel assessmentData;
 
-      if (fetchedData.assessment != null) {
-        final assessmentList = fetchedData.assessment!;
-        for (var item in assessmentList) {
+      if (loadAlldata.allDataSection!.assessment!.isEmpty) {
+        final fetchedData = await courseController.fetchSectionData(
+          userModel: userModel,
+          getAssessment: true,
+        );
+        assessmentData = fetchedData;
+      } else {
+        assessmentData = loadAlldata.allDataSection!;
+      }
+
+      if (assessmentData.assessment != null) {
+        final assessmenttList = assessmentData.assessment!;
+        for (var item in assessmenttList) {
           if (assessmentHome.length >= 4) break;
           assessmentHome.add(item);
         }
       }
+
       return assessmentHome;
     } catch (e) {
-      print("Error: $e");
+      errorSnackbar(title: "Error fetching Assment", e: e);
       return [];
     }
   }

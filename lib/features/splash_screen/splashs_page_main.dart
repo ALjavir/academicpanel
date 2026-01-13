@@ -1,4 +1,5 @@
 import 'package:academicpanel/controller/splashs/splashs_controller.dart';
+import 'package:academicpanel/navigation/bottom_navBar/bottom_navBar.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/network/check_connection/check_connection.dart';
 import 'package:academicpanel/theme/animation/blurry_typewriter_text.dart';
@@ -51,7 +52,8 @@ class _SplashsPageMainState extends State<SplashsPageMain> {
     await Future.wait([animationTimer, dataFetch]);
     isLoading = splashController.isLoading;
     if (isUserValid) {
-      routesController.home();
+      routesController.bottomNavBar();
+      //routesController.home();
     } else {
       routesController.signup();
     }

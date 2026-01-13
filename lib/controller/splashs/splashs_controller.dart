@@ -1,3 +1,4 @@
+import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
@@ -11,9 +12,10 @@ class SplashsController extends GetxController {
   final LocalStoge localStoge = LocalStoge();
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
-  // final routesController = Get.put(RoutesController());
+
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   final userController = Get.find<UserController>();
+  final LoadAlldata loadAlldata = Get.put(LoadAlldata());
 
   RxBool isLoading = true.obs;
 
@@ -60,6 +62,8 @@ class SplashsController extends GetxController {
       final userModel = UserModel.fromJson(data);
       userController.user.value = userModel;
 
+      await loadAlldata.loadAllCourseData(userModel);
+
       // Everything OK → go home
       isLoading.value = false;
       // routesController.home();
@@ -68,8 +72,6 @@ class SplashsController extends GetxController {
       isLoading.value = false;
       errorSnackbar(title: 'Error', e: e);
       // print('Inside $e----------------------------');
-      // Optional: route to a safe page
-      // routesController.signup();
       return false;
     }
   }

@@ -1,4 +1,4 @@
-import 'package:academicpanel/controller/home/home_controller.dart';
+import 'package:academicpanel/controller/page/home_controller.dart';
 import 'package:academicpanel/features/home/widget/home_accountInfo.dart';
 import 'package:academicpanel/features/home/widget/home_announcement.dart';
 import 'package:academicpanel/features/home/widget/home_assessment.dart';
