@@ -1,18 +1,17 @@
-import 'package:academicpanel/controller/page/home_controller.dart';
+import 'package:academicpanel/controller/page/home_page_controller.dart';
 import 'package:academicpanel/features/home/widget/home_accountInfo.dart';
 import 'package:academicpanel/features/home/widget/home_announcement.dart';
 import 'package:academicpanel/features/home/widget/home_assessment.dart';
 import 'package:academicpanel/features/home/widget/home_cgpaInfo.dart';
 import 'package:academicpanel/features/home/widget/home_topHeader.dart';
 import 'package:academicpanel/features/home/widget/home_classSchedule.dart';
-import 'package:academicpanel/model/pages/home_model.dart';
+import 'package:academicpanel/model/pages/home_page_model.dart';
 import 'package:academicpanel/theme/animation/diagonal_reveal.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/utility/loading/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 
@@ -24,19 +23,13 @@ class HomePageMain extends StatefulWidget {
 }
 
 class _HomePageMainState extends State<HomePageMain> {
-  final homeController = Get.put(HomeController());
-  final storage = const FlutterSecureStorage();
-
-  // 1. Change this: Store the FUTURE, not the model itself
-  // Replace 'dynamic' with your actual model class name (e.g., HeaderModel)
-  late Future<HomeModel> homeFuture;
+  final homePageController = Get.put(HomePageController());
+  late Future<HomePageModel> homeFuture;
 
   @override
   void initState() {
     super.initState();
-    // 2. Start the fetch immediately, but DO NOT await it here.
-    // We just store the "promise" that data is coming.
-    homeFuture = homeController.mainHomeController();
+    homeFuture = homePageController.mainHomeController();
   }
 
   @override
@@ -56,6 +49,7 @@ class _HomePageMainState extends State<HomePageMain> {
       backgroundColor: ColorStyle.light,
       // Keep your animation wrapper
       body: DiagonalReveal(
+        duration: Duration(milliseconds: 300),
         // 3. Use FutureBuilder to handle the async data
         child: FutureBuilder(
           future: homeFuture,
@@ -139,6 +133,7 @@ class _HomePageMainState extends State<HomePageMain> {
                       ],
                     ),
                   ),
+                  SizedBox(height: 50),
                 ],
               ),
             );

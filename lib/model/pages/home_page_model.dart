@@ -5,14 +5,14 @@ import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/result/row_cgpa_model.dart';
 
-class HomeModel {
+class HomePageModel {
   final HomeTopHeaderModel homeTopHeaderModel;
   final List<ClassscheduleModel> homeTodayClassSchedule;
   final HomeAccountModel homeAccountInfoModel;
   final RowCgpaModel homeRowCgpaModel;
   final List<AnnouncementModel> homeAnouncement;
   final List<AssessmentModel> homeAssessment;
-  HomeModel({
+  HomePageModel({
     required this.homeTopHeaderModel,
     required this.homeTodayClassSchedule,
     required this.homeAccountInfoModel,

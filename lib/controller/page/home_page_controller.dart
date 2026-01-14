@@ -7,7 +7,7 @@ import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
-import 'package:academicpanel/model/pages/home_model.dart';
+import 'package:academicpanel/model/pages/home_page_model.dart';
 import 'package:academicpanel/model/result/row_cgpa_model.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
@@ -16,7 +16,7 @@ import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
 
 import 'package:intl/intl.dart';
 
-class HomeController extends GetxController {
+class HomePageController extends GetxController {
   final userController = Get.find<UserController>();
   final CourseController courseController = Get.put(CourseController());
   final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
@@ -26,10 +26,10 @@ class HomeController extends GetxController {
   List<AssessmentModel> assessmentHome = [];
 
   // ------------------------------------------------------------------------------MAIN HOME CONTROLLER----------------------------------------------------------------------
-  Future<HomeModel> mainHomeController() async {
+  Future<HomePageModel> mainHomeController() async {
     final userModel = userController.user.value;
     try {
-      return HomeModel(
+      return HomePageModel(
         homeTopHeaderModel: await fetchHomePageHeader(userModel!),
         homeTodayClassSchedule: await todayClassSchedule(userModel),
 
@@ -43,7 +43,7 @@ class HomeController extends GetxController {
       );
     } catch (e) {
       errorSnackbar(title: "Error", e: e);
-      return HomeModel(
+      return HomePageModel(
         homeTopHeaderModel: HomeTopHeaderModel(
           lastName: '',
           image: '',

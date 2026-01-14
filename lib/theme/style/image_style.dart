@@ -4,6 +4,26 @@ class ImageStyle {
     return 'lib/assets/logo/logo.svg';
   }
 
+  static String navHome() {
+    return 'lib/assets/icon/home.png';
+  }
+
+  static String navSchedule() {
+    return 'lib/assets/icon/calendar.png';
+  }
+
+  static String navAnnouncement() {
+    return 'lib/assets/icon/chat.png';
+  }
+
+  static String navAccount() {
+    return 'lib/assets/icon/account.png';
+  }
+
+  static String navResult() {
+    return 'lib/assets/icon/result.png';
+  }
+
   static String errorIcon() {
     return 'lib/assets/icon/error.png';
   }
@@ -46,6 +66,18 @@ class ImageStyle {
 
   static String topHomePageBackGround() {
     return 'lib/assets/image/topHomePageBackGround.jpg';
+  }
+
+  static String fall() {
+    return 'lib/assets/image/fall.jpg';
+  }
+
+  static String spring() {
+    return 'lib/assets/image/spring.jpg';
+  }
+
+  static String summer() {
+    return 'lib/assets/image/summer.jpg';
   }
 
   static String upCommingClassaAimatedIcon() {

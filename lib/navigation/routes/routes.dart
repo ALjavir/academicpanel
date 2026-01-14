@@ -1,6 +1,5 @@
 import 'package:academicpanel/features/auth/page/signin_page_main.dart';
 import 'package:academicpanel/features/auth/page/signup_page_main.dart';
-import 'package:academicpanel/features/home/page/home_page_main.dart';
 import 'package:academicpanel/features/splash_screen/splashs_page_main.dart';
 import 'package:academicpanel/navigation/bottom_navBar/bottom_navBar.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -32,19 +31,7 @@ class RoutesController {
     );
   }
 
-  void home() {
-    Get.to(
-      () => HomePageMain(),
-      transition: Transition.cupertino,
-      duration: const Duration(seconds: 1),
-    );
-  }
-
   void bottomNavBar() {
-    Get.offAll(
-      () => BottomNavbar(),
-      transition: Transition.cupertino,
-      duration: const Duration(seconds: 1),
-    );
+    Get.offAll(() => BottomNavbar());
   }
 }
