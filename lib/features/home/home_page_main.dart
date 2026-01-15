@@ -58,17 +58,10 @@ class _HomePageMainState extends State<HomePageMain> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: Loading(hight: 100));
             }
-
-            // CASE B: Error occurred
             if (snapshot.hasError) {
               return Center(child: Text("Error: ${snapshot.error}"));
             }
-
-            // CASE C: Data Ready!
-            // snapshot.data contains your model now
             final data = snapshot.data;
-            // final classTime = snapshot.data;
-
             return SingleChildScrollView(
               child: Column(
                 spacing: 10,

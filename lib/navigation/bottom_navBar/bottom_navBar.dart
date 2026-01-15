@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:academicpanel/features/home/home_page_main.dart';
 import 'package:academicpanel/features/schedule/schedule_page_main.dart';
+import 'package:academicpanel/features/schedule/testC.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,11 @@ class BottomNavbar extends StatefulWidget {
 class _BottomNavbarState extends State<BottomNavbar> {
   final RxInt _currentIndex = 0.obs;
 
-  final List<Widget> _pages = [HomePageMain(), SchedulePageMain()];
+  final List<Widget> _pages = [
+    HomePageMain(),
+    SchedulePageMain(),
+    AcademicCalendarPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {

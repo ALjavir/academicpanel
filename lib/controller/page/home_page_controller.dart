@@ -207,6 +207,10 @@ class HomePageController extends GetxController {
 
       // --- MATH SECTION ---
 
+      print(
+        "this is ac totat: ${studentAccountRawData.ac_statementTotal} and paid total ${studentAccountRawData.paidTotal}",
+      );
+
       final double dueWithWaver =
           studentAccountRawData.ac_statementTotal -
           (studentAccountRawData.ac_statementTotal *

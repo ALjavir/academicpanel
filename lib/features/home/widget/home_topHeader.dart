@@ -118,13 +118,10 @@ class _HomeTopHeaderState extends State<HomeTopHeader> {
                       textAlign: TextAlign.center,
                       'Hello, ${widget.homeTopHeaderModel.lastName}',
 
-                      style: Fontstyle.defult3d(
+                      style: Fontstyle.defult(
                         22,
                         FontWeight.bold,
                         ColorStyle.light,
-                        const Color.fromARGB(20, 19, 70, 125),
-                        const Offset(3, 3),
-                        4,
                       ),
                     ),
                     Row(
@@ -159,9 +156,6 @@ class _HomeTopHeaderState extends State<HomeTopHeader> {
                             14,
                             FontWeight.w600,
                             ColorStyle.light,
-                            // const Color.fromARGB(20, 19, 70, 125),
-                            // const Offset(3, 3),
-                            // 4,
                           ),
                         ),
                       ],

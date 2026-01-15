@@ -35,8 +35,8 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
     return ThreeDContainel(
       redious: 10,
       boxConstraints: BoxConstraints(
-        minHeight: 100, // Minimum height for 1 class
-        // Max height 30% of screen if you want scrolling inside, otherwise remove max
+        minHeight: 100,
+
         maxHeight: double.infinity,
       ),
 
