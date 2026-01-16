@@ -1,5 +1,5 @@
 import 'package:academicpanel/controller/page/schedule_page_contoller.dart';
-import 'package:academicpanel/features/schedule/widget/topheader/classCalander.dart';
+import 'package:academicpanel/features/schedule/widget/topheader/CalanderView.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,8 +31,15 @@ class _SchedulePageMainState extends State<SchedulePageMain> {
         ),
       ),
       backgroundColor: ColorStyle.light,
-      body: Column(
-        children: [Classcalander(schedulePageContoller: schedulePageContoller)],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            CalanderView(schedulePageContoller: schedulePageContoller),
+            // AcademicCalendarPage(
+            //   schedulePageContoller: schedulePageContoller,
+            // ),
+          ],
+        ),
       ),
     );
   }

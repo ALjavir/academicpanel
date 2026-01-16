@@ -38,6 +38,8 @@ void errorSnackbar({required String title, String? subtitle, Object? e}) {
               ),
               Text(
                 title,
+                maxLines: 2,
+                softWrap: true,
                 style: Fontstyle.errorSnackBar(
                   22,
                   ColorStyle.red,

@@ -28,8 +28,8 @@ class SignupPageMain extends StatefulWidget {
 }
 
 class _SignupPageMainState extends State<SignupPageMain> {
-  final routesController = Get.put(RoutesController());
-  final signupController = Get.put(SignupController());
+  final routesController = Get.find<RoutesController>();
+  final signupController = Get.find<SignupController>();
   final checkConnection = Get.put(CheckConnection());
   String? firstnameErrorText;
   String? lastNameErrorText;

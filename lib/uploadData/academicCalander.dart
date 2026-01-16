@@ -146,7 +146,7 @@ Future<void> uploadacademi() async {
   // 2. The Path: Collection 'course' -> Document 'CSE'
   // Based on your screenshot, the field is ON the 'CSE' document itself.
   DocumentReference docRef = FirebaseFirestore.instance
-      .collection('course')
+      .collection('department')
       .doc('CSE');
 
   try {

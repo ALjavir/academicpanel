@@ -3,7 +3,7 @@ import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/material.dart'; // Needed for Colors in Get.snackbar
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 // bool _mockExternalCheckFailure =

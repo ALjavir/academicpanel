@@ -1,8 +1,11 @@
 import 'package:academicpanel/controller/course/course_controller.dart';
+import 'package:academicpanel/controller/department/department_controller.dart';
 import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
+import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
 import 'package:academicpanel/model/pages/schedule_page_model.dart';
+import 'package:academicpanel/utility/error_widget/error_snackbar.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/state_manager.dart';
 
@@ -10,9 +13,11 @@ class SchedulePageContoller extends GetxController {
   final userController = Get.find<UserController>();
   final loadAlldata = Get.find<LoadAlldata>();
   final courseController = Get.find<CourseController>();
+  final departmentController = Get.find<DepartmentController>();
 
   final Rx<ClassSchedulePageSchedule> classSchedulePageSchedule =
       ClassSchedulePageSchedule(days: [], classSchedule: []).obs;
+  List<RowAcademiccalendarModel> academicCalendarData = [];
 
   @override
   void onInit() {
@@ -21,7 +26,6 @@ class SchedulePageContoller extends GetxController {
     final focusedDate = DateTime.now().obs;
     final days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'];
 
-    // Change this line:
     String dayKey = days[focusedDate.value.weekday - 1];
     fetchclassScheduleCalander(dayKey);
   }
@@ -73,8 +77,31 @@ class SchedulePageContoller extends GetxController {
       classSchedulePageSchedule.refresh();
       return model;
     } catch (e) {
-      print("Error: $e");
+      errorSnackbar(title: "class Schedule Data Fetching Error", e: e);
       return model;
+    }
+  }
+
+  Future<List<RowAcademiccalendarModel>> fetchAcademicCalendar() async {
+    try {
+      if (loadAlldata.allDataDepartment?.academiccalendarModel == null ||
+          loadAlldata.allDataDepartment!.academiccalendarModel!.isEmpty) {
+        print("Data is empty/null. Fetching from API...");
+
+        final fetchData = await departmentController.fetchDepartmentData(
+          getAcademicCalendar: true,
+        );
+        academicCalendarData = fetchData.academiccalendarModel ?? [];
+      } else {
+        print("Data found in Cache (loadAlldata). Using it.");
+        academicCalendarData =
+            loadAlldata.allDataDepartment!.academiccalendarModel!;
+      }
+      return academicCalendarData;
+    } catch (e) {
+      print("🔴 ERROR in fetchAcademicCalendar: $e");
+      errorSnackbar(title: "Academic Calendar data Fetching Error", e: e);
+      return []; // Return empty list on error
     }
   }
 }

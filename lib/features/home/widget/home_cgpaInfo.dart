@@ -15,7 +15,7 @@ class HomeCgpainfo extends StatelessWidget {
     final double diff = rowCgpaModel.current_cgpa - rowCgpaModel.pervious_cgpa;
     final bool isPositive = diff >= 0;
 
-    print("DEBUG: CGPA Diff: $diff, Is Positive: $isPositive");
+    //print("DEBUG: CGPA Diff: $diff, Is Positive: $isPositive");
 
     final double remaining =
         rowCgpaModel.target_credit - rowCgpaModel.credit_completed;
@@ -30,7 +30,7 @@ class HomeCgpainfo extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 6,
+              //spacing: 6,
               children: [
                 Image.asset(
                   ImageStyle.growthIcon(),
@@ -42,7 +42,7 @@ class HomeCgpainfo extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: "${rowCgpaModel.current_cgpa}",
+                        text: " ${rowCgpaModel.current_cgpa}",
                         style: Fontstyle.defult(
                           20,
                           FontWeight.w600,

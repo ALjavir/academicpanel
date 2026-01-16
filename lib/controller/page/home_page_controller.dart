@@ -18,7 +18,7 @@ import 'package:intl/intl.dart';
 
 class HomePageController extends GetxController {
   final userController = Get.find<UserController>();
-  final CourseController courseController = Get.put(CourseController());
+  final courseController = Get.find<CourseController>();
   final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
   final loadAlldata = Get.find<LoadAlldata>();
   List<ClassscheduleModel> todayClassScheduleListHome = [];

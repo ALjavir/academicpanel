@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:academicpanel/model/pages/home_page_model.dart';
+import 'package:academicpanel/theme/animation/threeD_containerHead.dart';
+import 'package:academicpanel/theme/animation/threed_containel.dart';
 
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
@@ -25,36 +27,9 @@ class _HomeTopHeaderState extends State<HomeTopHeader> {
             widget.homeTopHeaderModel.image!.isNotEmpty
         ? true
         : false;
-    return Container(
+    return ThreedContainerhead(
       padding: EdgeInsets.fromLTRB(10, 60, 10, 30),
-      foregroundDecoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(10),
-          bottomRight: Radius.circular(10),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black38,
-            blurStyle: BlurStyle.outer,
-            blurRadius: 6,
-            offset: Offset(0, -0.6),
-            spreadRadius: 1,
-          ),
-        ],
-      ),
-      decoration: BoxDecoration(
-        //  color: ColorStyle.Textblue,
-        image: DecorationImage(
-          fit: BoxFit.cover,
-
-          image: AssetImage(ImageStyle.topHomePageBackGround()),
-        ),
-
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(10),
-          bottomRight: Radius.circular(10),
-        ),
-      ),
+      imagePath: ImageStyle.topHomePageBackGround(),
 
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),

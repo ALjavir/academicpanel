@@ -51,9 +51,9 @@ dependencies:
   image_picker:
   path_provider:
   cached_network_image: ^3.4.1
-  flutter_blurhash: ^0.9.1
+
   percent_indicator: ^4.2.5
-  persistent_bottom_nav_bar: ^6.2.1
+
   
 
 

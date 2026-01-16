@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/state_manager.dart';
 
-class FirebaseDatapath {
+class FirebaseDatapath extends GetxController {
   DocumentReference<Map<String, dynamic>> userData(
     String department,
     String roleID,
@@ -44,5 +45,9 @@ class FirebaseDatapath {
         .doc(department)
         .collection('student_id')
         .doc(student_id);
+  }
+
+  DocumentReference<Map<String, dynamic>> departmentData(String department) {
+    return FirebaseFirestore.instance.collection('department').doc(department);
   }
 }

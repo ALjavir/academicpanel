@@ -25,8 +25,8 @@ class SigninPageMain extends StatefulWidget {
 
 class _SigninPageMainState extends State<SigninPageMain> {
   final signinController = Get.put(SigninController());
-  final checkConnection = Get.put(CheckConnection());
-  final routesController = Get.put(RoutesController());
+  final checkConnection = Get.find<CheckConnection>();
+  final routesController = Get.find<RoutesController>();
 
   bool? isStudent;
   bool passwordVisible = true;
