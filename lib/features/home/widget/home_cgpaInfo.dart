@@ -91,37 +91,106 @@ class HomeCgpainfo extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Divider(color: ColorStyle.red),
           ),
-
-          Padding(
+          ListView.builder(
             padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-            child: Column(
-              spacing: 12,
-              children: [
-                _buildInfoRow(
-                  icon: ImageStyle.enrolledIcon(),
-                  label: "Enrolled",
-                  value: "${rowCgpaModel.credit_enrolled.toInt()}",
-                  color: ColorStyle.red,
-                  textColor: ColorStyle.Textblue,
-                ),
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: 3,
+            itemBuilder: (context, index) {
+              final List<String> icon = [
+                ImageStyle.enrolledIcon(),
+                ImageStyle.remaingIcon(),
+                ImageStyle.complitedBookIcon(),
+              ];
+              final List<String> label = ["Enrolled", "Remaining", "Completed"];
+              final List<int> value = [
+                rowCgpaModel.credit_enrolled.toInt(),
+                remaining.toInt(),
+                rowCgpaModel.credit_completed.toInt(),
+              ];
 
-                _buildInfoRow(
-                  icon: ImageStyle.remaingIcon(),
-                  label: "Remaining",
-                  value: "${remaining.toInt()}",
-                  color: ColorStyle.red,
-                  textColor: ColorStyle.Textblue,
+              return IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 10,
+                  children: [
+                    Column(
+                      children: [
+                        Image.asset(
+                          icon[index],
+                          scale: 24,
+                          color: ColorStyle.red,
+                        ),
+                        if (index <= 1)
+                          Padding(
+                            padding: const EdgeInsets.all(2),
+                            child: Container(
+                              height: 18,
+                              width: 2,
+                              color: Colors.grey.shade300,
+                            ),
+                          ),
+                      ],
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "${label[index]}: ",
+                            style: Fontstyle.defult(
+                              14,
+                              FontWeight.w600,
+                              ColorStyle.Textblue,
+                            ),
+                          ),
+                          TextSpan(
+                            text: '${value[index]}',
+                            style: Fontstyle.defult(
+                              14,
+                              FontWeight.w600,
+                              ColorStyle.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                _buildInfoRow(
-                  icon: ImageStyle.complitedBookIcon(),
-                  label: "Completed",
-                  value: "${rowCgpaModel.credit_completed.toInt()}",
-                  color: ColorStyle.red,
-                  textColor: ColorStyle.Textblue,
-                ),
-              ],
-            ),
+              );
+            },
           ),
+          // Padding(
+          //   padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       _buildInfoRow(
+          //         icon: ImageStyle.enrolledIcon(),
+          //         label: "Enrolled",
+          //         value: "${rowCgpaModel.credit_enrolled.toInt()}",
+          //         color: ColorStyle.red,
+          //         textColor: ColorStyle.Textblue,
+          //       ),
+          //       Container(height: 5, width: 2, color: Colors.grey.shade300),
+
+          //       _buildInfoRow(
+          //         icon: ImageStyle.remaingIcon(),
+          //         label: "Remaining",
+          //         value: "${remaining.toInt()}",
+          //         color: ColorStyle.red,
+          //         textColor: ColorStyle.Textblue,
+          //       ),
+          //       Container(width: 2, color: Colors.grey.shade300),
+          //       _buildInfoRow(
+          //         icon: ImageStyle.complitedBookIcon(),
+          //         label: "Completed",
+          //         value: "${rowCgpaModel.credit_completed.toInt()}",
+          //         color: ColorStyle.red,
+          //         textColor: ColorStyle.Textblue,
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

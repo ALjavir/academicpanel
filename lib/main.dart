@@ -5,6 +5,7 @@ import 'package:academicpanel/features/splash_screen/splashs_page_main.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/network/api/firebase_initialize.dart';
 import 'package:academicpanel/network/check_connection/check_connection.dart';
+import 'package:academicpanel/uploadData/academicCalander.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';

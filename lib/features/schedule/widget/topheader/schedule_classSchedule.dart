@@ -67,6 +67,7 @@ class _ClassscheduleState extends State<Classschedule> {
                   ColorStyle.Textblue,
                 ),
               ),
+              const SizedBox(height: 10),
             ],
           );
         } else {
