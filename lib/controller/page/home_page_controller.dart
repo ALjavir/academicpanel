@@ -1,4 +1,8 @@
+import 'dart:core';
+
 import 'package:academicpanel/controller/course/course_controller.dart';
+import 'package:academicpanel/controller/department/department_controller.dart';
+import 'package:academicpanel/controller/helper/helper.dart';
 import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/Account/home_account_model.dart';
@@ -7,6 +11,8 @@ import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
+import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
+import 'package:academicpanel/model/departmentSuperModel/noClass_model.dart';
 import 'package:academicpanel/model/pages/home_page_model.dart';
 import 'package:academicpanel/model/result/row_cgpa_model.dart';
 import 'package:academicpanel/model/user/user_model.dart';
@@ -19,9 +25,12 @@ import 'package:intl/intl.dart';
 class HomePageController extends GetxController {
   final userController = Get.find<UserController>();
   final courseController = Get.find<CourseController>();
+  final departmentController = Get.find<DepartmentController>();
   final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
   final loadAlldata = Get.find<LoadAlldata>();
-  List<ClassscheduleModel> todayClassScheduleListHome = [];
+
+  HomeTodayClassSchedule todayClassScheduleListHome = HomeTodayClassSchedule();
+
   List<AnnouncementModel> announcementtHome = [];
   List<AssessmentModel> assessmentHome = [];
 
@@ -105,17 +114,43 @@ class HomePageController extends GetxController {
   }
 
   // B.1: ------------------------------------------------------------------------TODAY CLASS SCHEDULE----------------------------------------------------------------------
-  Future<List<ClassscheduleModel>> todayClassSchedule(
-    UserModel userModel,
-  ) async {
-    if (userModel.current_course!.isEmpty) {
+  Future<HomeTodayClassSchedule> todayClassSchedule(UserModel userModel) async {
+    if (userModel.current_course == null || userModel.current_course!.isEmpty) {
       return todayClassScheduleListHome;
     }
-
     try {
       List<ClassscheduleModel> tempClassschedule = [];
 
-      if (todayClassScheduleListHome.isEmpty) {
+      todayClassScheduleListHome.listClassScheduleModel ??= [];
+
+      if (todayClassScheduleListHome.listClassScheduleModel!.isEmpty) {
+        DepartmentModel noCLassData;
+
+        if (loadAlldata.allDataDepartment?.rowNoclassModel == null ||
+            loadAlldata.allDataDepartment!.rowNoclassModel!.isEmpty) {
+          final fetchedData = await departmentController.fetchDepartmentData(
+            getNoCalss: true,
+          );
+          noCLassData = fetchedData;
+
+          final now = DateTime.now();
+
+          if (noCLassData.rowNoclassModel != null) {
+            for (var i in noCLassData.rowNoclassModel!) {
+              // Holiday Check
+              if (Helper.isDateInRange(now, i.startDate!, i.endDate!)) {
+                todayClassScheduleListHome.noclassModel = NoclassModel(
+                  title: i.title!,
+                  startDate: i.startDate!,
+                  endDate: i.endDate!,
+                  type: i.type!,
+                );
+                todayClassScheduleListHome.listClassScheduleModel = [];
+                return todayClassScheduleListHome;
+              }
+            }
+          }
+        }
         SectionsuperModel classScheduleData;
 
         if (loadAlldata.allDataSection!.schedules!.isEmpty) {
@@ -138,12 +173,17 @@ class HomePageController extends GetxController {
       String dayKey = days[now.weekday - 1];
 
       for (var tempca in tempClassschedule) {
-        todayClassScheduleListHome.addIf(tempca.day == dayKey, tempca);
+        todayClassScheduleListHome.listClassScheduleModel?.addIf(
+          tempca.day == dayKey,
+          tempca,
+        );
       }
 
       final currentMinutes = (now.hour * 60) + now.minute;
 
-      todayClassScheduleListHome.removeWhere((classItem) {
+      todayClassScheduleListHome.listClassScheduleModel?.removeWhere((
+        classItem,
+      ) {
         final parts = classItem.endTime.split(':');
         final endHour = int.parse(parts[0]);
         final endMinute = int.parse(parts[1]);
@@ -151,22 +191,26 @@ class HomePageController extends GetxController {
         return classEndMinutes < currentMinutes;
       });
 
-      todayClassScheduleListHome.sort((a, b) {
-        final partsA = a.startTime.split(':');
-        final startMinutesA =
-            (int.parse(partsA[0]) * 60) + int.parse(partsA[1]);
+      todayClassScheduleListHome.listClassScheduleModel?.removeWhere((
+        classItem,
+      ) {
+        if (classItem.endTime.isEmpty) return false;
 
-        final partsB = b.startTime.split(':');
-        final startMinutesB =
-            (int.parse(partsB[0]) * 60) + int.parse(partsB[1]);
+        final parts = classItem.endTime.split(':');
+        if (parts.length != 2) return false;
 
-        return startMinutesA.compareTo(startMinutesB);
+        final endHour = int.parse(parts[0]);
+        final endMinute = int.parse(parts[1]);
+        final classEndMinutes = (endHour * 60) + endMinute;
+
+        return classEndMinutes < currentMinutes;
       });
 
       return todayClassScheduleListHome;
     } catch (e) {
+      print(e);
       errorSnackbar(title: "classSchedule error", e: e);
-      return [];
+      return todayClassScheduleListHome;
     }
   }
 
@@ -207,9 +251,9 @@ class HomePageController extends GetxController {
 
       // --- MATH SECTION ---
 
-      print(
-        "this is ac totat: ${studentAccountRawData.ac_statementTotal} and paid total ${studentAccountRawData.paidTotal}",
-      );
+      // print(
+      //   "this is ac totat: ${studentAccountRawData.ac_statementTotal} and paid total ${studentAccountRawData.paidTotal}",
+      // );
 
       final double dueWithWaver =
           studentAccountRawData.ac_statementTotal -
@@ -353,6 +397,8 @@ class HomePageController extends GetxController {
 
   Future<List<AssessmentModel>> fetchAssment(UserModel userModel) async {
     try {
+      assessmentHome.clear();
+
       SectionsuperModel assessmentData;
 
       if (loadAlldata.allDataSection!.assessment!.isEmpty) {
@@ -369,7 +415,10 @@ class HomePageController extends GetxController {
         final assessmenttList = assessmentData.assessment!;
         for (var item in assessmenttList) {
           if (assessmentHome.length >= 4) break;
-          assessmentHome.add(item);
+
+          if (item.date.isAfter(DateTime.now())) {
+            assessmentHome.add(item);
+          }
         }
       }
 

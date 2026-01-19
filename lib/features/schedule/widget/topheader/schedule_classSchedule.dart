@@ -8,15 +8,15 @@ import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get/state_manager.dart';
 import 'package:lottie/lottie.dart';
 
-class Classschedule extends StatefulWidget {
+class ScheduleClassschedule extends StatefulWidget {
   final SchedulePageContoller schedulePageContoller;
-  const Classschedule({super.key, required this.schedulePageContoller});
+  const ScheduleClassschedule({super.key, required this.schedulePageContoller});
 
   @override
-  State<Classschedule> createState() => _ClassscheduleState();
+  State<ScheduleClassschedule> createState() => _ScheduleClassscheduleState();
 }
 
-class _ClassscheduleState extends State<Classschedule> {
+class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
   @override
   Widget build(BuildContext context) {
     String formatTime12Hour(String time24) {
@@ -39,9 +39,37 @@ class _ClassscheduleState extends State<Classschedule> {
       child: Obx(() {
         final scheduleList =
             controller.classSchedulePageSchedule.value.classSchedule;
+        final noClass = controller.classSchedulePageSchedule.value.noClass;
 
         // 3. Now the condition is reactive!
-        if (scheduleList.isEmpty) {
+        if (noClass != null)
+          return SizedBox(
+            width: double.maxFinite,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                // spacing: 10,
+                children: [
+                  Image.asset(
+                    noClass.type.toLowerCase() == 'test'
+                        ? ImageStyle.exam()
+                        : ImageStyle.holidays(),
+                    scale: 5,
+                  ),
+                  Text(
+                    noClass.title,
+                    style: Fontstyle.defult(
+                      18,
+                      FontWeight.bold,
+                      ColorStyle.Textblue,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        else if (scheduleList.isEmpty) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

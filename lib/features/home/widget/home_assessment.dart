@@ -2,20 +2,13 @@ import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/theme/animation/threed_containel.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
+import 'package:academicpanel/theme/style/hybridDate_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:flutter/material.dart';
 
 class HomeAssessment extends StatelessWidget {
   final List<AssessmentModel> assessment;
   const HomeAssessment({super.key, required this.assessment});
-
-  String _timeAgo(DateTime d) {
-    final Duration diff = DateTime.now().difference(d);
-    if (diff.inDays > 0) return "${diff.inDays}d ago";
-    if (diff.inHours > 0) return "${diff.inHours}h ago";
-    if (diff.inMinutes > 0) return "${diff.inMinutes}m ago";
-    return "Just now";
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +131,7 @@ class HomeAssessment extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          _timeAgo(item.date),
+                          HybriddateStyle.getHybridDate(item.date),
                           style: Fontstyle.defult(
                             10,
                             FontWeight.w600,

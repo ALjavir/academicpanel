@@ -3,143 +3,80 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 Future<void> uploadacademi() async {
   // 1. The Data List (Clean List of Objects)
   final List<Map<String, dynamic>> rawData = [
+    // --- HOLIDAYS ---
     {
-      "title": "Spring 2026 Trimester Start",
-      "date": "07 Jan",
-      "day": "Wednesday",
-      "type": "start",
+      "title": "Shab-e-Meraj",
+      "startDate": DateTime.parse("2026-01-17T00:00:00+06:00"),
+      "endDate": DateTime.parse("2026-01-17T00:00:00+06:00"),
+      'type': 'Holiday',
     },
     {
-      "title": "Advising/Registration (Day & Evening)",
-      "date": "08-12 Jan",
-      "day": "Thu-Mon",
-      "type": "reg",
-    },
-    {
-      "title": "Advising/Registration (Weekend Friday)",
-      "date": "09-16 Jan",
-      "day": "Fri-Fri",
-      "type": "reg",
-    },
-    {
-      "title": "Classes Start (Weekend Friday)",
-      "date": "09 Jan",
-      "day": "Friday",
-      "type": "start",
-    },
-    {
-      "title": "Classes Start (Weekend Sat & Day/Evening)",
-      "date": "10 Jan",
-      "day": "Saturday",
-      "type": "start",
-    },
-    {
-      "title": "Holiday: Shab-e-Meraj",
-      "date": "17 Jan",
-      "day": "Saturday",
-      "type": "holiday",
-    },
-    {
-      "title": "Late Registration Starts",
-      "date": "19 Jan",
-      "day": "Monday",
-      "type": "deadline",
-    },
-    {
-      "title": "Holiday: Shab-e-Barat",
-      "date": "04 Feb",
-      "day": "Wednesday",
-      "type": "holiday",
-    },
-    {
-      "title": "1st Installment Payment (50%)",
-      "date": "15 Feb",
-      "day": "Sunday",
-      "type": "payment",
+      "title": "Shab-e-Barat",
+      "startDate": DateTime.parse("2026-02-04T00:00:00+06:00"),
+      "endDate": DateTime.parse("2026-02-04T00:00:00+06:00"),
+      'type': 'Holiday',
     },
     {
       "title": "Start of Holy Ramadan",
-      "date": "18 Feb",
-      "day": "Wednesday",
-      "type": "holiday",
+      "startDate": DateTime.parse("2026-02-18T00:00:00+06:00"),
+      "endDate": DateTime.parse("2026-02-18T00:00:00+06:00"),
+      'type': 'Holiday',
     },
     {
-      "title": "Holiday: Intl Mother Language Day",
-      "date": "21 Feb",
-      "day": "Saturday",
-      "type": "holiday",
+      "title": "Intl Mother Language Day",
+      "startDate": DateTime.parse("2026-02-21T00:00:00+06:00"),
+      "endDate": DateTime.parse("2026-02-21T00:00:00+06:00"),
+      'type': 'Holiday',
     },
     {
-      "title": "Midterm Exam Period",
-      "date": "27 Feb - 08 Mar",
-      "day": "Fri-Sun",
-      "type": "exam",
+      "title": "Shab-e-Qadar",
+      "startDate": DateTime.parse("2026-03-17T00:00:00+06:00"),
+      "endDate": DateTime.parse("2026-03-17T00:00:00+06:00"),
+      'type': 'Holiday',
     },
     {
-      "title": "2nd Installment Payment (30%)",
-      "date": "13 Mar",
-      "day": "Friday",
-      "type": "payment",
-    },
-    {
-      "title": "Holiday: Shab-e-Qadar",
-      "date": "17 Mar",
-      "day": "Tuesday",
-      "type": "holiday",
-    },
-    {
-      "title": "Holiday: Jummatul-Bida & Eid-ul-Fitr",
-      "date": "18-25 Mar",
-      "day": "Wed-Wed",
-      "type": "holiday",
+      "title": "Jummatul-Bida & Eid-ul-Fitr",
+      "startDate": DateTime.parse("2026-03-18T00:00:00+06:00"),
+      "endDate": DateTime.parse("2026-03-25T00:00:00+06:00"),
+      'type': 'Holiday',
     },
     {
       "title": "Holiday: Independence Day",
-      "date": "26 Mar",
-      "day": "Thursday",
-      "type": "holiday",
+      "startDate": DateTime.parse("2026-03-26T00:00:00+06:00"),
+      "endDate": DateTime.parse("2026-03-26T00:00:00+06:00"),
     },
     {
-      "title": "3rd Installment Payment (Remaining)",
-      "date": "08 Apr",
-      "day": "Wednesday",
-      "type": "payment",
+      "title": "Bangla New Year",
+      "startDate": DateTime.parse("2026-04-14T00:00:00+06:00"),
+      "endDate": DateTime.parse("2026-04-14T00:00:00+06:00"),
+      'type': 'Holiday',
     },
     {
-      "title": "Final Exam (Weekend)",
-      "date": "10-24 Apr",
-      "day": "Fri-Fri",
-      "type": "exam",
-    },
-    {
-      "title": "Holiday: Bangla New Year",
-      "date": "14 Apr",
-      "day": "Tuesday",
-      "type": "holiday",
-    },
-    {
-      "title": "Final Exam (Day & Evening)",
-      "date": "18-27 Apr",
-      "day": "Sat-Mon",
-      "type": "exam",
-    },
-    {
-      "title": "Holiday: May Day & Buddha Purnima",
-      "date": "01 May",
-      "day": "Friday",
-      "type": "holiday",
+      "title": "May Day & Buddha Purnima",
+      "startDate": DateTime.parse("2026-05-01T00:00:00+06:00"),
+      "endDate": DateTime.parse("2026-05-01T00:00:00+06:00"),
+      'type': 'Holiday',
     },
     {
       "title": "Semester Break",
-      "date": "02-03 May",
-      "day": "Sat-Sun",
-      "type": "holiday",
+      "startDate": DateTime.parse("2026-05-02T00:00:00+06:00"),
+      "endDate": DateTime.parse("2026-05-03T00:00:00+06:00"),
+      'type': 'Holiday',
     },
+
+    // --- EXAMS ---
     {
-      "title": "Summer 2026 Trimester Start",
-      "date": "04 May",
-      "day": "Monday",
-      "type": "start",
+      "title": "Mid", // Originally: "Midterm Exam Period"
+      "startDate": DateTime.parse("2026-02-27T00:00:00+06:00"),
+      "endDate": DateTime.parse("2026-03-08T00:00:00+06:00"),
+      'type': 'Test',
+    },
+
+    {
+      "title": "Final", // Originally: "Final Exam (Day & Evening)"
+      "startDate": DateTime.parse("2026-04-18T00:00:00+06:00"),
+      "endDate": DateTime.parse("2026-04-27T00:00:00+06:00"),
+      'type': 'Test',
     },
   ];
 
@@ -152,7 +89,7 @@ Future<void> uploadacademi() async {
   try {
     // 3. Update the Field directly
     // This REPLACES the list. Perfect for a new semester reset.
-    await docRef.update({'academic_calendar': rawData});
+    await docRef.update({'no_class': rawData});
 
     print("✅ Successfully updated 'academic_calendar' in /course/CSE");
   } catch (e) {

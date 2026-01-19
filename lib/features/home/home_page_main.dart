@@ -126,7 +126,7 @@ class _HomePageMainState extends State<HomePageMain> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 50),
+                  SizedBox(height: 80),
                 ],
               ),
             );

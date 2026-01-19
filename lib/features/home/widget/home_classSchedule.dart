@@ -1,15 +1,16 @@
-import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
+import 'package:academicpanel/model/pages/home_page_model.dart';
 import 'package:academicpanel/theme/animation/threed_containel.dart';
 
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/export.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:lottie/lottie.dart';
 
 class HomeClassschedule extends StatefulWidget {
-  final List<ClassscheduleModel> todayClass;
+  final HomeTodayClassSchedule todayClass;
   const HomeClassschedule({super.key, required this.todayClass});
 
   @override
@@ -19,6 +20,8 @@ class HomeClassschedule extends StatefulWidget {
 class _HomeClassscheduleState extends State<HomeClassschedule> {
   @override
   Widget build(BuildContext context) {
+    final classList = widget.todayClass.listClassScheduleModel;
+    final noClass = widget.todayClass.noclassModel;
     String formatTime12Hour(String time24) {
       try {
         final parts = time24.split(':');
@@ -69,7 +72,37 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
           ),
           Divider(color: ColorStyle.red),
 
-          if (widget.todayClass.isEmpty)
+          if (noClass != null)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              // spacing: 10,
+              children: [
+                ClipRect(
+                  child: SizedBox(
+                    height: 120,
+                    width: double.maxFinite,
+                    child: Transform.scale(
+                      scale: 2,
+                      child: LottieBuilder.asset(
+                        ImageStyle.upCommingClassaAimatedIcon(),
+                        frameRate: FrameRate.max,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ),
+
+                Text(
+                  noClass.title,
+                  style: Fontstyle.defult(
+                    18,
+                    FontWeight.bold,
+                    ColorStyle.Textblue,
+                  ),
+                ),
+              ],
+            )
+          else if (classList!.isEmpty)
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               // spacing: 10,
@@ -115,7 +148,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                         spacing: 12,
                         children: [
                           Text(
-                            "${widget.todayClass[0].course.name.capitalizeFirst!} - (${widget.todayClass[0].course.code})",
+                            "${widget.todayClass.listClassScheduleModel![0].course.name.capitalizeFirst!} - (${widget.todayClass.listClassScheduleModel![0].course.code})",
                             style: Fontstyle.defult(
                               16.5,
                               FontWeight.w600,
@@ -131,7 +164,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                "${formatTime12Hour(widget.todayClass[0].startTime)} - ${formatTime12Hour(widget.todayClass[0].endTime)}",
+                                "${formatTime12Hour(widget.todayClass.listClassScheduleModel![0].startTime)} - ${formatTime12Hour(widget.todayClass.listClassScheduleModel![0].endTime)}",
                                 style: Fontstyle.defult(
                                   14.5,
                                   FontWeight.w600,
@@ -149,7 +182,10 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                widget.todayClass[0].room,
+                                widget
+                                    .todayClass
+                                    .listClassScheduleModel![0]
+                                    .room,
                                 style: Fontstyle.defult(
                                   14.5,
                                   FontWeight.w600,
@@ -164,7 +200,10 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                widget.todayClass[0].instructor,
+                                widget
+                                    .todayClass
+                                    .listClassScheduleModel![0]
+                                    .instructor,
                                 style: Fontstyle.defult(
                                   14.5,
                                   FontWeight.w600,
@@ -180,7 +219,8 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                     // ================== RIGHT SIDE (Dynamic) ==================
 
                     // 2. FIX: Use "Collection If". No need for ternary operators or SizedBox.shrink
-                    if (widget.todayClass.length > 1) ...[
+                    if (widget.todayClass.listClassScheduleModel!.length >
+                        1) ...[
                       // The Divider
                       Container(
                         width: 2,
@@ -197,7 +237,11 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                             // Loop starting from index 1
                             for (
                               int i = 1;
-                              i < widget.todayClass.length;
+                              i <
+                                  widget
+                                      .todayClass
+                                      .listClassScheduleModel!
+                                      .length;
                               i++
                             ) ...[
                               Padding(
@@ -227,7 +271,8 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                                         children: [
                                           Text(
                                             widget
-                                                .todayClass[i]
+                                                .todayClass
+                                                .listClassScheduleModel![i]
                                                 .course
                                                 .name
                                                 .capitalizeFirst!,
@@ -241,7 +286,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                                           ),
                                           const SizedBox(height: 2),
                                           Text(
-                                            "${formatTime12Hour(widget.todayClass[i].startTime)} - ${formatTime12Hour(widget.todayClass[i].endTime)}",
+                                            "${formatTime12Hour(widget.todayClass.listClassScheduleModel![i].startTime)} - ${formatTime12Hour(widget.todayClass.listClassScheduleModel![i].endTime)}",
                                             style: Fontstyle.defult(
                                               12,
                                               FontWeight.w500,

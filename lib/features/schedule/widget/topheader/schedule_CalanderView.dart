@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:academicpanel/controller/page/schedule_page_contoller.dart';
-import 'package:academicpanel/features/schedule/widget/topheader/classSchedule.dart';
+import 'package:academicpanel/features/schedule/widget/topheader/schedule_classSchedule.dart';
 import 'package:academicpanel/theme/animation/threeD_containerHead.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
@@ -10,16 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class CalanderView extends StatefulWidget {
+class ScheduleCalanderview extends StatefulWidget {
   final SchedulePageContoller schedulePageContoller;
 
-  const CalanderView({super.key, required this.schedulePageContoller});
+  const ScheduleCalanderview({super.key, required this.schedulePageContoller});
 
   @override
-  State<CalanderView> createState() => _CalanderViewState();
+  State<ScheduleCalanderview> createState() => _ScheduleCalanderviewState();
 }
 
-class _CalanderViewState extends State<CalanderView> {
+class _ScheduleCalanderviewState extends State<ScheduleCalanderview> {
   final focusedDate = DateTime.now().obs;
   final days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'];
 
@@ -150,7 +150,9 @@ class _CalanderViewState extends State<CalanderView> {
                         selectedDate.value = date;
                         focusedDate.value = date;
                         _scrollToDate(date);
-                        controller.fetchclassScheduleCalander(dayShort);
+                        controller.fetchclassScheduleCalander(
+                          focusedDate.value,
+                        );
                       },
                       child: Obx(() {
                         final isSelected =
@@ -230,7 +232,7 @@ class _CalanderViewState extends State<CalanderView> {
                 padding: const EdgeInsets.only(left: 20),
                 child: Container(height: 20, width: 2, color: ColorStyle.red),
               ),
-              Classschedule(schedulePageContoller: controller),
+              ScheduleClassschedule(schedulePageContoller: controller),
             ],
           ),
         ),
@@ -238,26 +240,3 @@ class _CalanderViewState extends State<CalanderView> {
     );
   }
 }
-
-
-// Container(
-//                 height: 40,
-//                 decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(0),
-//                   border: Border.all(color: ColorStyle.light),
-//                   boxShadow: [
-//                     BoxShadow(
-//                       color: Colors.black87,
-//                       blurStyle: BlurStyle.outer,
-//                       blurRadius: 5,
-                        
-//                       spreadRadius: 0.1,
-//                     ),
-//                   ],
-//                 ),
-//                 child: Image.asset(
-//                   ImageStyle.navSchedule(),
-//                   color: Colors.white,
-//                   scale: 16,
-//                 ),
-//               ),

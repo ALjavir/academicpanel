@@ -26,6 +26,7 @@ class LoadAlldata extends GetxController {
   Future<void> loadAllDepartmentData() async {
     final fetchedData = await departmentController.fetchDepartmentData(
       getAcademicCalendar: true,
+      getNoCalss: true,
     );
     allDataDepartment = fetchedData;
     update();

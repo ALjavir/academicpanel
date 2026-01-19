@@ -22,9 +22,7 @@ class RowAssessmentModel {
     Map<String, dynamic> map,
     String studentId,
   ) {
-    // 2. Extract the Result Map safely
     final allResults = map['result'] as Map<String, dynamic>?;
-    // 3. Find MY score using my ID
     dynamic myScoreRaw = allResults != null ? allResults[studentId] : 0;
     return RowAssessmentModel(
       assessment: map['assessment'] ?? 'TBA',

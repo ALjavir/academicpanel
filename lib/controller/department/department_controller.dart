@@ -1,6 +1,7 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
+import 'package:academicpanel/model/departmentSuperModel/row_noClass_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
 import 'package:academicpanel/utility/error_widget/error_snackbar.dart';
 import 'package:get/get_instance/get_instance.dart';
@@ -11,9 +12,11 @@ class DepartmentController extends GetxController {
   final firebaseDatapath = Get.find<FirebaseDatapath>();
 
   final List<RowAcademiccalendarModel> academiccalendarModelData = [];
+  final List<RowNoclassModel> noClassData = [];
 
   Future<DepartmentModel> fetchDepartmentData({
     bool getAcademicCalendar = false,
+    bool getNoCalss = false,
   }) async {
     final userModel = userController.user.value;
     final departmentRef = firebaseDatapath.departmentData(
@@ -32,8 +35,21 @@ class DepartmentController extends GetxController {
           );
         }
       }
+      if (getNoCalss) {
+        final List<dynamic> noClassList =
+            departmentResultData['no_class'] ?? [];
 
-      return DepartmentModel(academiccalendarModel: academiccalendarModelData);
+        for (var item in noClassList) {
+          noClassData.add(
+            RowNoclassModel.fromJson(item as Map<String, dynamic>),
+          );
+        }
+      }
+
+      return DepartmentModel(
+        academiccalendarModel: academiccalendarModelData,
+        rowNoclassModel: noClassData,
+      );
     } catch (e) {
       print(e);
       errorSnackbar(title: "Department Data Fetching Error", e: e);

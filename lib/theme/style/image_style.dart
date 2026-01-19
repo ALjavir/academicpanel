@@ -8,12 +8,24 @@ class ImageStyle {
     return 'lib/assets/icon/home.png';
   }
 
+  static String assessment() {
+    return 'lib/assets/icon/assessment.png';
+  }
+
   static String navSchedule() {
     return 'lib/assets/icon/calendar.png';
   }
 
   static String navAnnouncement() {
     return 'lib/assets/icon/chat.png';
+  }
+
+  static String exam() {
+    return 'lib/assets/icon/exam.png';
+  }
+
+  static String holidays() {
+    return 'lib/assets/icon/holidays.png';
   }
 
   static String navAccount() {
