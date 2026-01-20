@@ -1,6 +1,6 @@
 import 'package:academicpanel/model/Auth/signin_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
-import 'package:academicpanel/utility/error_widget/error_snackbar.dart';
+import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

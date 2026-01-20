@@ -5,11 +5,11 @@ import 'package:academicpanel/features/auth/widget/custom_textfield.dart';
 import 'package:academicpanel/model/Auth/signin_model.dart';
 
 import 'package:academicpanel/navigation/routes/routes.dart';
-import 'package:academicpanel/network/check_connection/check_connection.dart';
-import 'package:academicpanel/theme/animation/diagonal_reveal.dart';
+import 'package:academicpanel/utility/check_connection.dart';
+import 'package:academicpanel/theme/template/animation/diagonal_reveal.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
-import 'package:academicpanel/utility/error_widget/error_snackbar.dart';
-import 'package:academicpanel/utility/loading/loading.dart';
+import 'package:academicpanel/utility/error_snackbar.dart';
+import 'package:academicpanel/utility/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';

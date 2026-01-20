@@ -6,13 +6,14 @@ import 'package:academicpanel/features/auth/widget/custom_dropdown_button.dart';
 import 'package:academicpanel/features/auth/widget/custom_textfield.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
-import 'package:academicpanel/network/check_connection/check_connection.dart';
+import 'package:academicpanel/utility/check_connection.dart';
 
-import 'package:academicpanel/theme/animation/diagonal_reveal.dart';
+import 'package:academicpanel/theme/template/animation/diagonal_reveal.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
-import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
-import 'package:academicpanel/utility/loading/loading.dart';
+import 'package:academicpanel/utility/error_snackbar.dart';
+
+import 'package:academicpanel/utility/loading.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';

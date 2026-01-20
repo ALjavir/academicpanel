@@ -1,5 +1,5 @@
 import 'package:academicpanel/controller/page/schedule_page_contoller.dart';
-import 'package:academicpanel/theme/animation/threed_containel.dart';
+import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';

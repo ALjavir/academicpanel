@@ -2,7 +2,7 @@ import 'dart:core';
 
 import 'package:academicpanel/controller/course/course_controller.dart';
 import 'package:academicpanel/controller/department/department_controller.dart';
-import 'package:academicpanel/controller/helper/helper.dart';
+
 import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/Account/home_account_model.dart';
@@ -17,8 +17,9 @@ import 'package:academicpanel/model/pages/home_page_model.dart';
 import 'package:academicpanel/model/result/row_cgpa_model.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
+import 'package:academicpanel/theme/style/date_In_range.dart';
+import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:get/get.dart';
-import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
 
 import 'package:intl/intl.dart';
 
@@ -138,7 +139,7 @@ class HomePageController extends GetxController {
           if (noCLassData.rowNoclassModel != null) {
             for (var i in noCLassData.rowNoclassModel!) {
               // Holiday Check
-              if (Helper.isDateInRange(now, i.startDate!, i.endDate!)) {
+              if (DateInRange.isDateInRange(now, i.startDate!, i.endDate!)) {
                 todayClassScheduleListHome.noclassModel = NoclassModel(
                   title: i.title!,
                   startDate: i.startDate!,
@@ -411,18 +412,23 @@ class HomePageController extends GetxController {
         assessmentData = loadAlldata.allDataSection!;
       }
 
+      // print(
+      //   "this is the assment list----------------------: ${assessmentData.announcements}",
+      // );
+
       if (assessmentData.assessment != null) {
         final assessmenttList = assessmentData.assessment!;
         for (var item in assessmenttList) {
-          if (assessmentHome.length >= 4) break;
-
-          if (item.date.isAfter(DateTime.now())) {
+          if (item.startTime.isAfter(DateTime.now())) {
             assessmentHome.add(item);
           }
+          // if (assessmentHome.length >= 4) break;
         }
       }
 
-      return assessmentHome;
+      final finalAssessmentHome = assessmentHome.reversed.take(4).toList();
+
+      return finalAssessmentHome;
     } catch (e) {
       errorSnackbar(title: "Error fetching Assment", e: e);
       return [];

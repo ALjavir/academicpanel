@@ -3,7 +3,8 @@ import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
 import 'package:academicpanel/network/save_data/local_stroge/local_stoge.dart';
-import 'package:academicpanel/utility/error_widget/error_snackBar.dart';
+import 'package:academicpanel/utility/error_snackbar.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';

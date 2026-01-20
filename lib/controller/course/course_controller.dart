@@ -2,7 +2,8 @@ import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/model/Announcement/row_announcement_model.dart';
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
-import 'package:academicpanel/model/assessment/row_assessment_model.dart';
+import 'package:academicpanel/model/assessment/row_assessmen_model.dart';
+
 import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/model/user/user_model.dart';
@@ -97,7 +98,7 @@ class CourseController extends GetxController {
 
           // --- BLOCK 3: ASSESSMENT ---
           if (getAssessment) {
-            print("In side the Assessment");
+            //  print("In side the Assessment");
             final assessmentQuery = await courseRef
                 .collection('section')
                 .doc(sectionId)
@@ -105,24 +106,30 @@ class CourseController extends GetxController {
                 .get();
 
             if (assessmentQuery.docs.isNotEmpty) {
-              // 2. Loop through each assessment document (e.g., "Quiz 1")
-              foundAssessments = assessmentQuery.docs.map((doc) {
-                final data = doc.data();
-                final rowAssessment = RowAssessmentModel.fromMap(
-                  data,
-                  studentId,
-                );
-                //  print("This is the rowAssessment: ${rowAssessment}");
+              try {
+                foundAssessments = assessmentQuery.docs.map((doc) {
+                  final data = doc.data();
+                  print("This is the rowAssessment doc: $doc");
+                  final rowAssessment = RowAssessmentModel.fromJson(
+                    data,
+                    studentId,
+                  );
 
-                return AssessmentModel(
-                  assessment: rowAssessment.assessment,
-                  date: rowAssessment.date,
-                  link: rowAssessment.link,
-                  syllabus: rowAssessment.syllabus,
-                  rowCourseModel: rowCourse,
-                  result: (rowAssessment.result).toDouble(),
-                );
-              }).toList();
+                  return AssessmentModel(
+                    assessment: rowAssessment.assessment,
+                    link: rowAssessment.link,
+                    syllabus: rowAssessment.syllabus,
+                    rowCourseModel: rowCourse,
+                    result: (rowAssessment.result).toDouble(),
+                    startTime: rowAssessment.startTime,
+                    endTime: rowAssessment.endTime,
+                    instructor: rowAssessment.instructor.toList(),
+                    room: rowAssessment.room,
+                  );
+                }).toList();
+              } catch (e) {
+                print("This is the e: $e");
+              }
             }
           }
         }
@@ -159,7 +166,7 @@ class CourseController extends GetxController {
 
       // SORT ASSESSMENTS BY DATE (Newest First)
       if (getAssessment) {
-        allAssessments.sort((a, b) => b.date.compareTo(a.date));
+        allAssessments.sort((a, b) => b.startTime.compareTo(a.startTime));
       }
 
       return SectionsuperModel(

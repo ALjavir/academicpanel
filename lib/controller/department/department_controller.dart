@@ -3,7 +3,7 @@ import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/row_noClass_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
-import 'package:academicpanel/utility/error_widget/error_snackbar.dart';
+import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
 

@@ -1,5 +1,5 @@
 import 'package:academicpanel/model/pages/home_page_model.dart';
-import 'package:academicpanel/theme/animation/threed_containel.dart';
+import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';

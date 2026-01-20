@@ -1,6 +1,6 @@
 import 'package:academicpanel/controller/course/course_controller.dart';
 import 'package:academicpanel/controller/department/department_controller.dart';
-import 'package:academicpanel/controller/helper/helper.dart';
+
 import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
@@ -8,9 +8,9 @@ import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/noClass_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
-import 'package:academicpanel/model/departmentSuperModel/row_noClass_model.dart';
 import 'package:academicpanel/model/pages/schedule_page_model.dart';
-import 'package:academicpanel/utility/error_widget/error_snackbar.dart';
+import 'package:academicpanel/theme/style/date_In_range.dart';
+import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/state_manager.dart';
 
@@ -24,7 +24,8 @@ class SchedulePageContoller extends GetxController {
       ClassSchedulePageSchedule(days: [], classSchedule: []).obs;
   List<RowAcademiccalendarModel> academicCalendarData = [];
 
-  RxList<AssessmentModel> assessmentschedule = RxList<AssessmentModel>();
+  final Rx<AssessmentPageSchedule> assessmentschedulePage =
+      AssessmentPageSchedule(assessmentModel: [], courseCode: []).obs;
 
   @override
   void onInit() {
@@ -33,9 +34,10 @@ class SchedulePageContoller extends GetxController {
     final focusedDate = DateTime.now().obs;
 
     fetchclassScheduleCalander(focusedDate.value);
-    fetchAssment('CHE-101');
+    fetchAssessment(sortBy: 'incomplete');
   }
 
+  // A: --------------------------------------------------------------------------Class Schedule Calander----------------------------------------------------------------------
   Future<ClassSchedulePageSchedule> fetchclassScheduleCalander(
     DateTime date,
   ) async {
@@ -65,7 +67,7 @@ class SchedulePageContoller extends GetxController {
           if (noCLassData.rowNoclassModel != null) {
             for (var i in noCLassData.rowNoclassModel!) {
               // Holiday Check
-              if (Helper.isDateInRange(date, i.startDate!, i.endDate!)) {
+              if (DateInRange.isDateInRange(date, i.startDate!, i.endDate!)) {
                 classSchedulePageSchedule.value.noClass = NoclassModel(
                   title: i.title!,
                   startDate: i.startDate!,
@@ -122,6 +124,7 @@ class SchedulePageContoller extends GetxController {
     }
   }
 
+  // B: --------------------------------------------------------------------------Academic Calendar----------------------------------------------------------------------
   Future<List<RowAcademiccalendarModel>> fetchAcademicCalendar() async {
     try {
       if (loadAlldata.allDataDepartment?.academiccalendarModel == null ||
@@ -142,20 +145,25 @@ class SchedulePageContoller extends GetxController {
     }
   }
 
-  Future<List<AssessmentModel>> fetchAssment(String sortBy) async {
-    // sortBy can be: "complete", "incomplete", or a course code like "CSE101"
+  // C: --------------------------------------------------------------------------Assessment----------------------------------------------------------------------
+  Future<AssessmentPageSchedule> fetchAssessment({
+    String sortBy = 'default',
+  }) async {
     try {
-      // 1. Clear previous list
-      assessmentschedule.clear();
+      assessmentschedulePage.value.assessmentModel.clear();
+      assessmentschedulePage.value.courseCode.clear();
 
       SectionsuperModel assessmentData;
       final userModel = userController.user.value;
 
-      // 2. Fetch or Load Data
+      assessmentschedulePage.value.courseCode.addAll(
+        userModel!.current_course!.values,
+      );
+
       if (loadAlldata.allDataSection?.assessment == null ||
           loadAlldata.allDataSection!.assessment!.isEmpty) {
         final fetchedData = await courseController.fetchSectionData(
-          userModel: userModel!,
+          userModel: userModel,
           getAssessment: true,
         );
         assessmentData = fetchedData;
@@ -163,17 +171,14 @@ class SchedulePageContoller extends GetxController {
         assessmentData = loadAlldata.allDataSection!;
       }
 
-      // 3. Filter Data
       if (assessmentData.assessment != null) {
         final assessmentList = assessmentData.assessment!;
         final now = DateTime.now();
-
-        // Normalize 'Today' to midnight for accurate date comparison
         final today = DateTime(now.year, now.month, now.day);
 
         for (var item in assessmentList) {
-          // Normalize item date to midnight
-          final DateTime itemDate = item.date;
+          // Normalize item date to midnight for accurate comparison
+          final DateTime itemDate = item.startTime;
           final DateTime eventDay = DateTime(
             itemDate.year,
             itemDate.month,
@@ -183,35 +188,48 @@ class SchedulePageContoller extends GetxController {
           bool shouldAdd = false;
 
           if (sortBy == "complete") {
-            // CASE 1: Filter by Status "Complete" (Strictly Past)
             if (eventDay.isBefore(today)) {
               shouldAdd = true;
             }
           } else if (sortBy == "incomplete") {
-            // CASE 2: Filter by Status "Incomplete" (Today or Future)
-            if (eventDay.isAtSameMomentAs(today) || eventDay.isAfter(today)) {
+            if (!eventDay.isBefore(today)) {
               shouldAdd = true;
             }
+          } else if (sortBy == 'default') {
+            shouldAdd = true;
           } else {
-            // CASE 3: Filter by Course Code (e.g., "CSE101")
-            // If it's not "complete" or "incomplete", we assume it's a code.
-
             if (item.rowCourseModel.code == sortBy) {
               shouldAdd = true;
             }
           }
 
-          // Add to list if it matched the criteria
           if (shouldAdd) {
-            assessmentschedule.add(item);
+            assessmentschedulePage.value.assessmentModel.add(item);
           }
         }
       }
+      List<AssessmentModel> finalAssessmentschedulePage = [];
+      if (sortBy == 'complete') {
+        finalAssessmentschedulePage = assessmentschedulePage
+            .value
+            .assessmentModel
+            .toList();
+      } else {
+        finalAssessmentschedulePage = assessmentschedulePage
+            .value
+            .assessmentModel
+            .reversed
+            .toList();
+      }
 
-      return assessmentschedule;
+      assessmentschedulePage.value.assessmentModel =
+          finalAssessmentschedulePage;
+      return assessmentschedulePage.value;
     } catch (e) {
       print("Error fetching Assessment: $e");
-      return [];
+      return assessmentschedulePage.value;
     }
   }
 }
+
+ // A: --------------------------------------------------------------------------HOME TOP HEADER----------------------------------------------------------------------

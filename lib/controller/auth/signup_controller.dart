@@ -12,8 +12,8 @@ import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart'
 import 'package:academicpanel/network/save_data/local_stroge/local_stoge.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
-import 'package:academicpanel/utility/error_widget/error_snackbar.dart';
-import 'package:academicpanel/utility/loading/loading.dart';
+import 'package:academicpanel/utility/error_snackbar.dart';
+import 'package:academicpanel/utility/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';

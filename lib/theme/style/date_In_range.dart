@@ -1,6 +1,4 @@
-class Helper {
-  /// Checks if [target] date falls between [start] and [end] (Inclusive).
-  /// This ignores the TIME and only compares the DATE (Year, Month, Day).
+class DateInRange {
   static bool isDateInRange(DateTime target, DateTime start, DateTime end) {
     // Normalize all dates to midnight (00:00:00) to ignore time differences
     final t = DateTime(target.year, target.month, target.day);

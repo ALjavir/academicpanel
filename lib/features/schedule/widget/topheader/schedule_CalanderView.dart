@@ -2,7 +2,7 @@
 
 import 'package:academicpanel/controller/page/schedule_page_contoller.dart';
 import 'package:academicpanel/features/schedule/widget/topheader/schedule_classSchedule.dart';
-import 'package:academicpanel/theme/animation/threeD_containerHead.dart';
+import 'package:academicpanel/theme/template/animation/threeD_containerHead.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
@@ -228,9 +228,13 @@ class _ScheduleCalanderviewState extends State<ScheduleCalanderview> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Container(height: 20, width: 2, color: ColorStyle.red),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+
+                children: [
+                  Container(height: 20, width: 2, color: ColorStyle.red),
+                  Container(height: 20, width: 2, color: ColorStyle.red),
+                ],
               ),
               ScheduleClassschedule(schedulePageContoller: controller),
             ],

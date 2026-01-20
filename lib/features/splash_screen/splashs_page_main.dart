@@ -1,13 +1,13 @@
 import 'package:academicpanel/controller/splashs/splashs_controller.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
-import 'package:academicpanel/network/check_connection/check_connection.dart';
-import 'package:academicpanel/theme/animation/blurry_typewriter_text.dart';
-import 'package:academicpanel/theme/animation/diagonal_reveal.dart';
-import 'package:academicpanel/theme/animation/threed_logo.dart';
+import 'package:academicpanel/utility/check_connection.dart';
+import 'package:academicpanel/theme/template/animation/blurry_typewriter_text.dart';
+import 'package:academicpanel/theme/template/animation/diagonal_reveal.dart';
+import 'package:academicpanel/theme/template/animation/threed_logo.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
-import 'package:academicpanel/utility/loading/loading.dart';
+import 'package:academicpanel/utility/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
