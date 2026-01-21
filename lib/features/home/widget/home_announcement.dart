@@ -23,7 +23,7 @@ class HomeAnnouncement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ThreeDContainel(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(12),
       redious: 10,
       child: Column(
         children: [

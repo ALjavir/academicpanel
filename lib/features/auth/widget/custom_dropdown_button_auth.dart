@@ -3,21 +3,22 @@ import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
-class CustomDropdownbutton extends StatefulWidget {
+class CustomDropdownbuttonAuth extends StatefulWidget {
   final Function(String?) onChanged;
   final String? initialValue;
 
-  const CustomDropdownbutton({
+  const CustomDropdownbuttonAuth({
     super.key,
     required this.onChanged,
     this.initialValue,
   });
 
   @override
-  State<CustomDropdownbutton> createState() => _MydropdownbuttonState();
+  State<CustomDropdownbuttonAuth> createState() =>
+      _CustomDropdownbuttonAuthState();
 }
 
-class _MydropdownbuttonState extends State<CustomDropdownbutton> {
+class _CustomDropdownbuttonAuthState extends State<CustomDropdownbuttonAuth> {
   final List<String> items = ['CSE', 'EEE', 'BBA', 'ENG'];
 
   String? selectedValu;

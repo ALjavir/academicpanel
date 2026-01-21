@@ -11,7 +11,7 @@ class AssessmentTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.zero, // Remove default padding
+      padding: EdgeInsets.all(6),
       shrinkWrap: true,
       physics:
           const NeverScrollableScrollPhysics(), // Keeps it stable inside your Dashboard
@@ -22,13 +22,16 @@ class AssessmentTemplate extends StatelessWidget {
 
         return IntrinsicHeight(
           child: Row(
+            spacing: 5,
             crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 10,
             children: [
               Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                //spacing: 4,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
+                  Baseline(
+                    baseline: 16,
+                    baselineType: TextBaseline.alphabetic,
                     child: Container(
                       width: 10,
                       height: 10,
@@ -38,31 +41,30 @@ class AssessmentTemplate extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 4),
                   if (!isLast)
                     Expanded(
-                      child: Container(width: 2, color: Colors.grey.shade300),
+                      child: Container(width: 1.5, color: Colors.grey.shade300),
                     ),
                 ],
               ),
 
-              // --- MIDDLE SECTION: Content ---
+              //const SizedBox(width: 8),
+
+              // MIDDLE: Content
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 4,
                   children: [
-                    // Title (Message)
                     Text(
                       item.assessment,
                       maxLines: 2,
-                      softWrap: true,
                       style: Fontstyle.defult(
-                        16,
+                        16, // 👈 MUST match baseline value above
                         FontWeight.w600,
                         ColorStyle.Textblue,
                       ),
                     ),
-
                     Text(
                       "${item.rowCourseModel.name} (${item.rowCourseModel.code})",
                       style: Fontstyle.defult(
@@ -71,13 +73,12 @@ class AssessmentTemplate extends StatelessWidget {
                         ColorStyle.lightBlue,
                       ),
                     ),
-
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 18),
                   ],
                 ),
               ),
 
-              // --- RIGHT SECTION: Time Badge ---
+              // RIGHT: Time badge
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,

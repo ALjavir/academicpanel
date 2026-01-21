@@ -24,6 +24,14 @@ class ImageStyle {
     return 'lib/assets/icon/exam.png';
   }
 
+  static String info() {
+    return 'lib/assets/icon/info.png';
+  }
+
+  static String sort() {
+    return 'lib/assets/icon/sort.png';
+  }
+
   static String holidays() {
     return 'lib/assets/icon/holidays.png';
   }

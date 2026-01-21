@@ -34,7 +34,7 @@ class SchedulePageContoller extends GetxController {
     final focusedDate = DateTime.now().obs;
 
     fetchclassScheduleCalander(focusedDate.value);
-    fetchAssessment(sortBy: 'incomplete');
+    fetchAssessment(sortBy: 'All');
   }
 
   // A: --------------------------------------------------------------------------Class Schedule Calander----------------------------------------------------------------------
@@ -147,23 +147,19 @@ class SchedulePageContoller extends GetxController {
 
   // C: --------------------------------------------------------------------------Assessment----------------------------------------------------------------------
   Future<AssessmentPageSchedule> fetchAssessment({
-    String sortBy = 'default',
+    String sortBy = 'All',
   }) async {
     try {
-      assessmentschedulePage.value.assessmentModel.clear();
-      assessmentschedulePage.value.courseCode.clear();
+      final Set<String> tempCourseCodes = {"All"};
+      List<AssessmentModel> tempAssessmentList = [];
 
       SectionsuperModel assessmentData;
       final userModel = userController.user.value;
 
-      assessmentschedulePage.value.courseCode.addAll(
-        userModel!.current_course!.values,
-      );
-
       if (loadAlldata.allDataSection?.assessment == null ||
           loadAlldata.allDataSection!.assessment!.isEmpty) {
         final fetchedData = await courseController.fetchSectionData(
-          userModel: userModel,
+          userModel: userModel!,
           getAssessment: true,
         );
         assessmentData = fetchedData;
@@ -171,13 +167,19 @@ class SchedulePageContoller extends GetxController {
         assessmentData = loadAlldata.allDataSection!;
       }
 
+      // 3. Process Data
       if (assessmentData.assessment != null) {
         final assessmentList = assessmentData.assessment!;
         final now = DateTime.now();
+
+        // Normalize today to midnight for comparison
         final today = DateTime(now.year, now.month, now.day);
 
         for (var item in assessmentList) {
-          // Normalize item date to midnight for accurate comparison
+          // A. Always add the course code to the filter list (regardless of current filter)
+          tempCourseCodes.add(item.rowCourseModel.code);
+
+          // B. Date Logic
           final DateTime itemDate = item.startTime;
           final DateTime eventDay = DateTime(
             itemDate.year,
@@ -187,6 +189,7 @@ class SchedulePageContoller extends GetxController {
 
           bool shouldAdd = false;
 
+          // C. Filter Logic
           if (sortBy == "complete") {
             if (eventDay.isBefore(today)) {
               shouldAdd = true;
@@ -195,7 +198,7 @@ class SchedulePageContoller extends GetxController {
             if (!eventDay.isBefore(today)) {
               shouldAdd = true;
             }
-          } else if (sortBy == 'default') {
+          } else if (sortBy == 'All') {
             shouldAdd = true;
           } else {
             if (item.rowCourseModel.code == sortBy) {
@@ -204,26 +207,30 @@ class SchedulePageContoller extends GetxController {
           }
 
           if (shouldAdd) {
-            assessmentschedulePage.value.assessmentModel.add(item);
+            tempAssessmentList.add(item);
           }
         }
       }
-      List<AssessmentModel> finalAssessmentschedulePage = [];
-      if (sortBy == 'complete') {
-        finalAssessmentschedulePage = assessmentschedulePage
-            .value
-            .assessmentModel
-            .toList();
-      } else {
-        finalAssessmentschedulePage = assessmentschedulePage
-            .value
-            .assessmentModel
-            .reversed
-            .toList();
-      }
 
-      assessmentschedulePage.value.assessmentModel =
-          finalAssessmentschedulePage;
+      tempAssessmentList.sort((a, b) {
+        if (sortBy == 'incomplete') {
+          return a.startTime.compareTo(b.startTime); // Ascending
+        } else {
+          return b.startTime.compareTo(
+            a.startTime,
+          ); // Descending (Newest on top)
+        }
+      });
+
+      List<String> finalCodes = tempCourseCodes.toList();
+      finalCodes.add("complete");
+      finalCodes.add("incomplete");
+
+      assessmentschedulePage.update((val) {
+        val?.courseCode = finalCodes;
+        val?.assessmentModel = tempAssessmentList;
+      });
+
       return assessmentschedulePage.value;
     } catch (e) {
       print("Error fetching Assessment: $e");

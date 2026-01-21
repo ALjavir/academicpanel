@@ -127,10 +127,10 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
                     Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          padding: const EdgeInsets.symmetric(vertical: 7),
                           child: Container(
-                            width: 12,
-                            height: 12,
+                            width: 10,
+                            height: 10,
                             decoration: const BoxDecoration(
                               color: ColorStyle.red,
                               shape: BoxShape.circle,

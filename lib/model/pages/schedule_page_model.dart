@@ -14,7 +14,7 @@ class ClassSchedulePageSchedule {
 }
 
 class AssessmentPageSchedule {
-  final List<String> courseCode;
+  List<String> courseCode;
   List<AssessmentModel> assessmentModel;
   AssessmentPageSchedule({
     required this.courseCode,

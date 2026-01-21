@@ -2,7 +2,7 @@ import 'package:academicpanel/controller/auth/signup_controller.dart';
 import 'package:academicpanel/features/auth/widget/auth_headertext.dart';
 import 'package:academicpanel/features/auth/widget/auth_image.dart';
 import 'package:academicpanel/features/auth/widget/custom_button.dart';
-import 'package:academicpanel/features/auth/widget/custom_dropdown_button.dart';
+import 'package:academicpanel/features/auth/widget/custom_dropdown_button_auth.dart';
 import 'package:academicpanel/features/auth/widget/custom_textfield.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
@@ -227,7 +227,7 @@ class _SignupPageMainState extends State<SignupPageMain> {
                       maxline: 2,
                       lebalText: "Address",
                     ),
-                    CustomDropdownbutton(
+                    CustomDropdownbuttonAuth(
                       initialValue: selectedDepartment,
                       onChanged: (value) {
                         //print("Selected Department: $value");

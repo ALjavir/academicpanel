@@ -11,7 +11,7 @@ class AnnouncementTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.zero, // Remove default padding
+      padding: EdgeInsets.all(6), // Remove default padding
       shrinkWrap: true,
       physics:
           const NeverScrollableScrollPhysics(), // Keeps it stable inside your Dashboard
@@ -26,21 +26,25 @@ class AnnouncementTemplate extends StatelessWidget {
             spacing: 10,
             children: [
               Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                //spacing: 4,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
+                  Baseline(
+                    baseline: 16,
+                    baselineType: TextBaseline.alphabetic,
                     child: Container(
-                      width: 12,
-                      height: 12,
+                      width: 10,
+                      height: 10,
                       decoration: const BoxDecoration(
                         color: ColorStyle.red,
                         shape: BoxShape.circle,
                       ),
                     ),
                   ),
+                  const SizedBox(height: 4),
                   if (!isLast)
                     Expanded(
-                      child: Container(width: 2, color: Colors.grey.shade300),
+                      child: Container(width: 1.5, color: Colors.grey.shade300),
                     ),
                 ],
               ),

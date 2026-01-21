@@ -2,7 +2,7 @@ import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/model/Announcement/row_announcement_model.dart';
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
-import 'package:academicpanel/model/assessment/row_assessmen_model.dart';
+import 'package:academicpanel/model/assessment/row_assessment_model.dart';
 
 import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
@@ -128,7 +128,7 @@ class CourseController extends GetxController {
                   );
                 }).toList();
               } catch (e) {
-                print("This is the e: $e");
+                // print("This is the e: $e");
               }
             }
           }
