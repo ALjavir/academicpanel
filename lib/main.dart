@@ -17,6 +17,7 @@ Future<void> main() async {
   Get.put(DepartmentController(), permanent: true);
   Get.put(RoutesController(), permanent: true);
   Get.put(CheckConnection(), permanent: true);
+
   //await uploadacademi();
   //await uploadmix();
 

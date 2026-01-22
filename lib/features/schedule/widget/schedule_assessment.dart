@@ -42,9 +42,9 @@ class _ScheduleAssessmentState extends State<ScheduleAssessment> {
                 ),
                 DropdownbuttonTemplate(
                   onChanged: (value) async {
-                    print(
-                      "the selected value/////////////////////////////////////: $value",
-                    );
+                    // print(
+                    //   "the selected value/////////////////////////////////////: $value",
+                    // );
                     await widget.schedulePageContoller.fetchAssessment(
                       sortBy: value!,
                     );
@@ -65,8 +65,6 @@ class _ScheduleAssessmentState extends State<ScheduleAssessment> {
             Obx(() {
               final data =
                   widget.schedulePageContoller.assessmentschedulePage.value;
-              // 2. Now this check is reactive.
-              // If the list changes from Empty -> Full, this code runs again automatically.
 
               if (data.assessmentModel.isEmpty) {
                 return Center(

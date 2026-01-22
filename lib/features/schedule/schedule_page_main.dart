@@ -1,5 +1,6 @@
 import 'package:academicpanel/controller/page/schedule_page_contoller.dart';
 import 'package:academicpanel/features/schedule/widget/schedule_assessment.dart';
+import 'package:academicpanel/features/schedule/widget/schedule_exam.dart';
 import 'package:academicpanel/features/schedule/widget/topheader/schedule_AcademicCalendar.dart';
 import 'package:academicpanel/features/schedule/widget/topheader/schedule_CalanderView.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
@@ -94,6 +95,7 @@ class _SchedulePageMainState extends State<SchedulePageMain> {
             // Now you can remove the broken button code inside this widget
             ScheduleCalanderview(schedulePageContoller: schedulePageContoller),
             ScheduleAssessment(schedulePageContoller: schedulePageContoller),
+            ScheduleExam(schedulePageContoller: schedulePageContoller),
             SizedBox(height: 100),
           ],
         ),

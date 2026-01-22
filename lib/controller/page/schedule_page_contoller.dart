@@ -22,19 +22,23 @@ class SchedulePageContoller extends GetxController {
 
   final Rx<ClassSchedulePageSchedule> classSchedulePageSchedule =
       ClassSchedulePageSchedule(days: [], classSchedule: []).obs;
-  List<RowAcademiccalendarModel> academicCalendarData = [];
+  final List<RowAcademiccalendarModel> academicCalendarData = [];
 
   final Rx<AssessmentPageSchedule> assessmentschedulePage =
       AssessmentPageSchedule(assessmentModel: [], courseCode: []).obs;
 
+  final ExamPageSchedule examPageSchedule = ExamPageSchedule(
+    midExam: [],
+    finalExam: [],
+  );
+
   @override
   void onInit() {
     super.onInit();
-    // Fetch today's data immediately when app starts
     final focusedDate = DateTime.now().obs;
-
     fetchclassScheduleCalander(focusedDate.value);
     fetchAssessment(sortBy: 'All');
+    fetchExamPageSchedule();
   }
 
   // A: --------------------------------------------------------------------------Class Schedule Calander----------------------------------------------------------------------
@@ -132,11 +136,15 @@ class SchedulePageContoller extends GetxController {
         final fetchData = await departmentController.fetchDepartmentData(
           getAcademicCalendar: true,
         );
-        academicCalendarData = fetchData.academiccalendarModel ?? [];
+
+        academicCalendarData.clear();
+        academicCalendarData.addAll(fetchData.academiccalendarModel ?? []);
       } else {
-        print("Data found in Cache (loadAlldata). Using it.");
-        academicCalendarData =
-            loadAlldata.allDataDepartment!.academiccalendarModel!;
+        // print("Data found in Cache (loadAlldata). Using it.");
+        academicCalendarData.clear();
+        academicCalendarData.addAll(
+          loadAlldata.allDataDepartment!.academiccalendarModel!,
+        );
       }
       return academicCalendarData;
     } catch (e) {
@@ -227,8 +235,10 @@ class SchedulePageContoller extends GetxController {
       finalCodes.add("incomplete");
 
       assessmentschedulePage.update((val) {
-        val?.courseCode = finalCodes;
-        val?.assessmentModel = tempAssessmentList;
+        val?.courseCode.clear();
+        val?.courseCode.addAll(finalCodes);
+        val?.assessmentModel.clear();
+        val?.assessmentModel.addAll(tempAssessmentList);
       });
 
       return assessmentschedulePage.value;
@@ -237,6 +247,42 @@ class SchedulePageContoller extends GetxController {
       return assessmentschedulePage.value;
     }
   }
-}
 
- // A: --------------------------------------------------------------------------HOME TOP HEADER----------------------------------------------------------------------
+  // D: ------------------------------------------------------------------------EXAM----------------------------------------------------------------------
+
+  Future<ExamPageSchedule> fetchExamPageSchedule() async {
+    try {
+      SectionsuperModel assessmentData;
+      final userModel = userController.user.value;
+
+      if (loadAlldata.allDataSection?.assessment == null ||
+          loadAlldata.allDataSection!.assessment!.isEmpty) {
+        final fetchedData = await courseController.fetchSectionData(
+          userModel: userModel!,
+          getAssessment: true,
+        );
+        assessmentData = fetchedData;
+      } else {
+        assessmentData = loadAlldata.allDataSection!;
+      }
+      for (var i in assessmentData.assessment!) {
+        if (i.assessment.toLowerCase() == 'mid') {
+          examPageSchedule.midExam.add(i);
+        } else if (i.assessment.toLowerCase() == 'final') {
+          examPageSchedule.finalExam.add(i);
+        }
+      }
+
+      final midR = examPageSchedule.midExam.reversed.toList();
+      final finalR = examPageSchedule.finalExam.reversed.toList();
+      examPageSchedule.midExam.clear();
+      examPageSchedule.finalExam.clear();
+      examPageSchedule.midExam.addAll(midR);
+      examPageSchedule.finalExam.addAll(finalR);
+
+      return examPageSchedule;
+    } catch (e) {
+      return examPageSchedule;
+    }
+  }
+}

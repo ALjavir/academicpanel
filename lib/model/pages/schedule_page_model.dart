@@ -14,10 +14,17 @@ class ClassSchedulePageSchedule {
 }
 
 class AssessmentPageSchedule {
-  List<String> courseCode;
-  List<AssessmentModel> assessmentModel;
+  final List<String> courseCode;
+  final List<AssessmentModel> assessmentModel;
   AssessmentPageSchedule({
     required this.courseCode,
     required this.assessmentModel,
   });
+}
+
+class ExamPageSchedule {
+  final List<AssessmentModel> midExam;
+  final List<AssessmentModel> finalExam;
+
+  ExamPageSchedule({required this.midExam, required this.finalExam});
 }

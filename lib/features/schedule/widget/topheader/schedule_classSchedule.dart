@@ -100,7 +100,7 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
           );
         } else {
           return ListView.builder(
-            padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+            padding: EdgeInsets.fromLTRB(16, 20, 16, 16),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount:
@@ -163,13 +163,14 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
                             ),
                           ),
                           Row(
+                            spacing: 4,
                             children: [
                               Icon(
                                 Icons.watch_later_outlined,
                                 color: ColorStyle.red,
                                 size: 18,
                               ),
-                              const SizedBox(width: 4),
+
                               Text(
                                 "${formatTime12Hour(item.startTime)} - ${formatTime12Hour(item.endTime)}",
                                 style: Fontstyle.defult(
@@ -181,13 +182,14 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
                             ],
                           ),
                           Row(
+                            spacing: 4,
                             children: [
                               Icon(
                                 Icons.location_on_outlined,
                                 color: ColorStyle.red,
                                 size: 20,
                               ),
-                              const SizedBox(width: 4),
+
                               Text(
                                 item.room,
                                 style: Fontstyle.defult(
@@ -196,13 +198,13 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
                                   ColorStyle.Textblue,
                                 ),
                               ),
-                              const SizedBox(width: 16),
+                              const SizedBox(width: 12),
                               Icon(
                                 Icons.person_outline,
-                                color: Colors.red[900],
+                                color: ColorStyle.red,
                                 size: 20,
                               ),
-                              const SizedBox(width: 4),
+
                               Text(
                                 item.instructor,
                                 style: Fontstyle.defult(

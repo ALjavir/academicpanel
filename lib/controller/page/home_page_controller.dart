@@ -32,8 +32,8 @@ class HomePageController extends GetxController {
 
   HomeTodayClassSchedule todayClassScheduleListHome = HomeTodayClassSchedule();
 
-  List<AnnouncementModel> announcementtHome = [];
-  List<AssessmentModel> assessmentHome = [];
+  final List<AnnouncementModel> announcementtHome = [];
+  final List<AssessmentModel> assessmentHome = [];
 
   // ------------------------------------------------------------------------------MAIN HOME CONTROLLER----------------------------------------------------------------------
   Future<HomePageModel> mainHomeController() async {

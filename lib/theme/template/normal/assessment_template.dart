@@ -22,7 +22,7 @@ class AssessmentTemplate extends StatelessWidget {
 
         return IntrinsicHeight(
           child: Row(
-            spacing: 5,
+            spacing: 10,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
@@ -60,7 +60,7 @@ class AssessmentTemplate extends StatelessWidget {
                       item.assessment,
                       maxLines: 2,
                       style: Fontstyle.defult(
-                        16, // 👈 MUST match baseline value above
+                        16,
                         FontWeight.w600,
                         ColorStyle.Textblue,
                       ),
