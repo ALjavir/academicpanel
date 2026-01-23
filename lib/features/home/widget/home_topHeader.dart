@@ -9,6 +9,7 @@ import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/utility/loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 
 class HomeTopHeader extends StatefulWidget {
   final HomeTopHeaderModel homeTopHeaderModel;
@@ -90,7 +91,7 @@ class _HomeTopHeaderState extends State<HomeTopHeader> {
                   children: [
                     Text(
                       textAlign: TextAlign.center,
-                      'Hello, ${widget.homeTopHeaderModel.lastName}',
+                      'Hello, ${widget.homeTopHeaderModel.lastName.capitalizeFirst!}',
 
                       style: Fontstyle.defult(
                         22,

@@ -93,7 +93,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                 ),
 
                 Text(
-                  noClass.title,
+                  noClass.title.capitalizeFirst!,
                   style: Fontstyle.defult(
                     18,
                     FontWeight.bold,
@@ -203,7 +203,8 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                                 widget
                                     .todayClass
                                     .listClassScheduleModel![0]
-                                    .instructor,
+                                    .instructor
+                                    .capitalizeFirst!,
                                 style: Fontstyle.defult(
                                   14.5,
                                   FontWeight.w600,

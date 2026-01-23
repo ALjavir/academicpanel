@@ -3,6 +3,7 @@ import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/hybridDate_style.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 
 class AnnouncementTemplate extends StatelessWidget {
   final List<AnnouncementModel> announcement;
@@ -57,7 +58,7 @@ class AnnouncementTemplate extends StatelessWidget {
                   children: [
                     // Title (Message)
                     Text(
-                      item.message,
+                      item.message.capitalizeFirst!,
                       maxLines: 2,
                       softWrap: true,
                       style: Fontstyle.defult(
@@ -68,7 +69,7 @@ class AnnouncementTemplate extends StatelessWidget {
                     ),
 
                     Text(
-                      "${item.rowCourseModel.name} (${item.rowCourseModel.code})",
+                      "${item.rowCourseModel.name.capitalizeFirst!} (${item.rowCourseModel.code})",
                       style: Fontstyle.defult(
                         12,
                         FontWeight.w500,

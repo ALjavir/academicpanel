@@ -2,7 +2,9 @@ import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/hybridDate_style.dart';
+import 'package:academicpanel/theme/template/normal/showDialogAssessment_template.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 
 class AssessmentTemplate extends StatelessWidget {
   final List<AssessmentModel> assessment;
@@ -48,52 +50,64 @@ class AssessmentTemplate extends StatelessWidget {
                     ),
                 ],
               ),
-
-              //const SizedBox(width: 8),
-
-              // MIDDLE: Content
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      item.assessment,
+                      item.assessment.capitalizeFirst!,
                       maxLines: 2,
+
                       style: Fontstyle.defult(
                         16,
                         FontWeight.w600,
+
                         ColorStyle.Textblue,
                       ),
                     ),
                     Text(
-                      "${item.rowCourseModel.name} (${item.rowCourseModel.code})",
+                      "${item.rowCourseModel.name.capitalizeFirst!} (${item.rowCourseModel.code})",
                       style: Fontstyle.defult(
                         12,
                         FontWeight.w500,
                         ColorStyle.lightBlue,
                       ),
                     ),
+
                     const SizedBox(height: 18),
                   ],
                 ),
               ),
 
-              // RIGHT: Time badge
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: ColorStyle.red,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  HybriddateStyle.getHybridDate(item.startTime),
-                  style: Fontstyle.defult(
-                    10,
-                    FontWeight.w600,
-                    ColorStyle.light,
+              InkWell(
+                onTap: () {
+                  showDialogAssessment(context, item);
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: ColorStyle.red,
+                    borderRadius: BorderRadius.circular(12),
+
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 1,
+                        color: Colors.black26,
+                        offset: Offset(0.5, 1),
+                        spreadRadius: 0.5,
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    "${HybriddateStyle.getHybridDate(item.startTime)} ->",
+                    style: Fontstyle.defult(
+                      10,
+                      FontWeight.w600,
+                      ColorStyle.light,
+                    ),
                   ),
                 ),
               ),

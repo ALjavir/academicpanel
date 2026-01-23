@@ -26,13 +26,17 @@ class Fontstyle {
     );
   }
 
-  static TextStyle defult(double fontSize, FontWeight fontweight, Color color) {
+  static TextStyle defult(
+    double fontSize,
+    FontWeight fontweight,
+    Color color, {
+    bool underline = false,
+  }) {
     return TextStyle(
       fontFamily: 'Inter',
       fontSize: fontSize,
       color: color,
       fontWeight: fontweight,
-      decoration: TextDecoration.none,
     );
   }
 
@@ -49,7 +53,9 @@ class Fontstyle {
       fontSize: fontSize,
       color: color,
       fontWeight: fontweight,
+
       decoration: TextDecoration.none,
+
       shadows: [
         BoxShadow(
           color: color3d,

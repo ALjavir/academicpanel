@@ -37,7 +37,7 @@ class SchedulePageContoller extends GetxController {
     super.onInit();
     final focusedDate = DateTime.now().obs;
     fetchclassScheduleCalander(focusedDate.value);
-    fetchAssessment(sortBy: 'All');
+    fetchAssessment(sortBy: 'incomplete');
     fetchExamPageSchedule();
   }
 

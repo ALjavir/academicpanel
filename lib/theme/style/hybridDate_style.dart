@@ -10,15 +10,15 @@ class HybriddateStyle {
     if (absDiff.inDays > 7) {
       return DateFormat('d MMM').format(d);
     }
-    final String weekday = DateFormat(
-      'E',
-    ).format(DateTime(d.year, d.month, d.day));
-    // final String weekday = DateFormat('E').format(d);
+    // final String weekday = DateFormat(
+    //   'E',
+    // ).format(DateTime(d.year, d.month, d.day));
+    // // final String weekday = DateFormat('E').format(d);
     if (absDiff.inDays >= 1) {
       if (isFuture) {
-        return "In ${absDiff.inDays}d • $weekday";
+        return "In ${absDiff.inDays}d";
       } else {
-        return "${absDiff.inDays}d ago • $weekday";
+        return "${absDiff.inDays}d ago";
       }
     }
     if (absDiff.inHours > 0) {
