@@ -9,7 +9,8 @@ import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/noClass_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
 import 'package:academicpanel/model/pages/schedule_page_model.dart';
-import 'package:academicpanel/theme/style/date_In_range.dart';
+import 'package:academicpanel/theme/style/dateTime_style.dart';
+
 import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/state_manager.dart';
@@ -71,7 +72,7 @@ class SchedulePageContoller extends GetxController {
           if (noCLassData.rowNoclassModel != null) {
             for (var i in noCLassData.rowNoclassModel!) {
               // Holiday Check
-              if (DateInRange.isDateInRange(date, i.startDate!, i.endDate!)) {
+              if (DatetimeStyle.isDateInRange(date, i.startDate!, i.endDate!)) {
                 classSchedulePageSchedule.value.noClass = NoclassModel(
                   title: i.title!,
                   startDate: i.startDate!,
@@ -103,10 +104,10 @@ class SchedulePageContoller extends GetxController {
       if (classScheduleData.schedules != null) {
         for (var i in classScheduleData.schedules!) {
           if (shouldPopulateDays) {
-            model.days.add(i.day);
+            model.days.add(i.rowClassscheduleModel.day);
           }
 
-          if (i.day == dayKey) {
+          if (i.rowClassscheduleModel.day == dayKey) {
             model.classSchedule.add(i);
           }
         }
@@ -188,7 +189,7 @@ class SchedulePageContoller extends GetxController {
           tempCourseCodes.add(item.rowCourseModel.code);
 
           // B. Date Logic
-          final DateTime itemDate = item.startTime;
+          final DateTime itemDate = item.rowAssessmentModel.startTime;
           final DateTime eventDay = DateTime(
             itemDate.year,
             itemDate.month,
@@ -222,10 +223,12 @@ class SchedulePageContoller extends GetxController {
 
       tempAssessmentList.sort((a, b) {
         if (sortBy == 'incomplete') {
-          return a.startTime.compareTo(b.startTime); // Ascending
+          return a.rowAssessmentModel.startTime.compareTo(
+            b.rowAssessmentModel.startTime,
+          ); // Ascending
         } else {
-          return b.startTime.compareTo(
-            a.startTime,
+          return b.rowAssessmentModel.startTime.compareTo(
+            a.rowAssessmentModel.startTime,
           ); // Descending (Newest on top)
         }
       });
@@ -266,9 +269,9 @@ class SchedulePageContoller extends GetxController {
         assessmentData = loadAlldata.allDataSection!;
       }
       for (var i in assessmentData.assessment!) {
-        if (i.assessment.toLowerCase() == 'mid') {
+        if (i.rowAssessmentModel.assessment.toLowerCase() == 'mid') {
           examPageSchedule.midExam.add(i);
-        } else if (i.assessment.toLowerCase() == 'final') {
+        } else if (i.rowAssessmentModel.assessment.toLowerCase() == 'final') {
           examPageSchedule.finalExam.add(i);
         }
       }

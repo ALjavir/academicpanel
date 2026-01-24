@@ -1,9 +1,9 @@
 import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/model/Announcement/row_announcement_model.dart';
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
+import 'package:academicpanel/model/ClassSchedule/row_classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/assessment/row_assessment_model.dart';
-
 import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/model/user/user_model.dart';
@@ -55,26 +55,25 @@ class CourseController extends GetxController {
           final rowCourse = RowCourseModel.fromMap(infoData);
 
           // --- BLOCK 1: SCHEDULE ---
-
           if (getClassSchedule) {
             final scheduleMap = secData['schedule'] as Map<String, dynamic>?;
+            final instructor = secData['instructor'].toString();
 
             if (scheduleMap != null) {
-              // LOOP through every key (su, mo, tu...) found in the map
-              scheduleMap.forEach((key, value) {
-                // key = "su", value = {startTime: "14:00", ...}
-                final singleSchedule = ClassscheduleModel.fromJoinedData(
-                  dayKey: key, // Pass the specific day (su, tu)
-                  courseInfo: infoData,
-                  sectionData: secData,
-
-                  // Pass ONLY the data for this specific day
-                  daySchedule: value as Map<String, dynamic>,
-                  defaultCode: courseCode,
-                );
-
-                // Add to our list
-                foundSchedules.add(singleSchedule);
+              scheduleMap.forEach((dayKey, value) {
+                if (value is Map<String, dynamic>) {
+                  final scheduleDetails = RowClassscheduleModel.fromMap(
+                    value,
+                    dayKey,
+                  );
+                  foundSchedules.add(
+                    ClassscheduleModel(
+                      rowClassscheduleModel: scheduleDetails,
+                      rowCourseModel: rowCourse,
+                      instructor: instructor,
+                    ),
+                  );
+                }
               });
             }
           }
@@ -88,8 +87,7 @@ class CourseController extends GetxController {
                 final rowAnnouncement = RowAnnouncementModel.fromMap(map);
                 // print("This is the rowAnnaounment: ${rowAnnouncement.message}");
                 return AnnouncementModel(
-                  message: rowAnnouncement.message,
-                  date: rowAnnouncement.date,
+                  rowAnnouncementModel: rowAnnouncement,
                   rowCourseModel: rowCourse,
                 );
               }).toList();
@@ -99,6 +97,7 @@ class CourseController extends GetxController {
           // --- BLOCK 3: ASSESSMENT ---
           if (getAssessment) {
             //  print("In side the Assessment");
+            final gClassRoom = secData['gClassRoom'].toString();
             final assessmentQuery = await courseRef
                 .collection('section')
                 .doc(sectionId)
@@ -109,22 +108,16 @@ class CourseController extends GetxController {
               try {
                 foundAssessments = assessmentQuery.docs.map((doc) {
                   final data = doc.data();
-                  print("This is the rowAssessment doc: $doc");
+                  // print("This is the rowAssessment doc: $doc");
                   final rowAssessment = RowAssessmentModel.fromJson(
                     data,
                     studentId,
                   );
 
                   return AssessmentModel(
-                    assessment: rowAssessment.assessment,
-                    link: rowAssessment.link,
-                    syllabus: rowAssessment.syllabus,
+                    rowAssessmentModel: rowAssessment,
                     rowCourseModel: rowCourse,
-                    result: (rowAssessment.result).toDouble(),
-                    startTime: rowAssessment.startTime,
-                    endTime: rowAssessment.endTime,
-                    instructor: rowAssessment.instructor.toList(),
-                    room: rowAssessment.room,
+                    gClassRoom: gClassRoom,
                   );
                 }).toList();
               } catch (e) {
@@ -161,12 +154,20 @@ class CourseController extends GetxController {
 
       // 4. Sorting
       if (getAnnouncement) {
-        allAnnouncements.sort((a, b) => b.date.compareTo(a.date));
+        allAnnouncements.sort(
+          (a, b) => b.rowAnnouncementModel.date.compareTo(
+            a.rowAnnouncementModel.date,
+          ),
+        );
       }
 
       // SORT ASSESSMENTS BY DATE (Newest First)
       if (getAssessment) {
-        allAssessments.sort((a, b) => b.startTime.compareTo(a.startTime));
+        allAssessments.sort(
+          (a, b) => b.rowAssessmentModel.startTime.compareTo(
+            a.rowAssessmentModel.startTime,
+          ),
+        );
       }
 
       return SectionsuperModel(

@@ -1,6 +1,27 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class HybriddateStyle {
+class DatetimeStyle {
+  static String formatTime12Hour(DateTime dateTime, BuildContext context) {
+    try {
+      final fromDateTimeIs = TimeOfDay.fromDateTime(dateTime).format(context);
+      if (fromDateTimeIs == '00:00') {
+        fromDateTimeIs == 'Class Time';
+      }
+      return fromDateTimeIs;
+    } catch (e) {
+      return 'TBA';
+    }
+  }
+
+  static bool isDateInRange(DateTime target, DateTime start, DateTime end) {
+    final t = DateTime(target.year, target.month, target.day);
+    final s = DateTime(start.year, start.month, start.day);
+    final e = DateTime(end.year, end.month, end.day);
+    return (t.isAtSameMomentAs(s) || t.isAfter(s)) &&
+        (t.isAtSameMomentAs(e) || t.isBefore(e));
+  }
+
   static String getHybridDate(DateTime d) {
     final now = DateTime.now();
     final diff = now.difference(d);

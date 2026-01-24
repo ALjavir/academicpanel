@@ -155,7 +155,7 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
                         spacing: 6,
                         children: [
                           Text(
-                            "${item.course.name.capitalizeFirst!} - (${item.course.code})",
+                            "${item.rowCourseModel.name.capitalizeFirst!} - (${item.rowCourseModel.code})",
                             style: Fontstyle.defult(
                               15.5,
                               FontWeight.w600,
@@ -172,7 +172,7 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
                               ),
 
                               Text(
-                                "${formatTime12Hour(item.startTime)} - ${formatTime12Hour(item.endTime)}",
+                                "${formatTime12Hour(item.rowClassscheduleModel.startTime)} - ${formatTime12Hour(item.rowClassscheduleModel.endTime)}",
                                 style: Fontstyle.defult(
                                   14,
                                   FontWeight.w600,
@@ -191,7 +191,7 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
                               ),
 
                               Text(
-                                item.room,
+                                item.rowClassscheduleModel.room,
                                 style: Fontstyle.defult(
                                   14,
                                   FontWeight.w600,

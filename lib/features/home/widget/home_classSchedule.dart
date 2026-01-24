@@ -133,7 +133,6 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
               ],
             )
           else
-            // CONTENT
             IntrinsicHeight(
               child: Center(
                 child: Row(
@@ -148,7 +147,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                         spacing: 12,
                         children: [
                           Text(
-                            "${widget.todayClass.listClassScheduleModel![0].course.name.capitalizeFirst!} - (${widget.todayClass.listClassScheduleModel![0].course.code})",
+                            "${classList[0].rowCourseModel.name.capitalizeFirst!} - (${classList[0].rowCourseModel.code})",
                             style: Fontstyle.defult(
                               16.5,
                               FontWeight.w600,
@@ -164,7 +163,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                "${formatTime12Hour(widget.todayClass.listClassScheduleModel![0].startTime)} - ${formatTime12Hour(widget.todayClass.listClassScheduleModel![0].endTime)}",
+                                "${formatTime12Hour(classList[0].rowClassscheduleModel.startTime)} - ${formatTime12Hour(classList[0].rowClassscheduleModel.endTime)}",
                                 style: Fontstyle.defult(
                                   14.5,
                                   FontWeight.w600,
@@ -185,6 +184,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                                 widget
                                     .todayClass
                                     .listClassScheduleModel![0]
+                                    .rowClassscheduleModel
                                     .room,
                                 style: Fontstyle.defult(
                                   14.5,
@@ -220,8 +220,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                     // ================== RIGHT SIDE (Dynamic) ==================
 
                     // 2. FIX: Use "Collection If". No need for ternary operators or SizedBox.shrink
-                    if (widget.todayClass.listClassScheduleModel!.length >
-                        1) ...[
+                    if (classList.length > 1) ...[
                       // The Divider
                       Container(
                         width: 2,
@@ -274,7 +273,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                                             widget
                                                 .todayClass
                                                 .listClassScheduleModel![i]
-                                                .course
+                                                .rowCourseModel
                                                 .name
                                                 .capitalizeFirst!,
                                             maxLines: 2,
@@ -287,7 +286,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                                           ),
                                           const SizedBox(height: 2),
                                           Text(
-                                            "${formatTime12Hour(widget.todayClass.listClassScheduleModel![i].startTime)} - ${formatTime12Hour(widget.todayClass.listClassScheduleModel![i].endTime)}",
+                                            "${formatTime12Hour(classList[i].rowClassscheduleModel.startTime)} - ${formatTime12Hour(classList[i].rowClassscheduleModel.endTime)}",
                                             style: Fontstyle.defult(
                                               12,
                                               FontWeight.w500,

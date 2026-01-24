@@ -1,9 +1,11 @@
 import 'package:academicpanel/controller/page/schedule_page_contoller.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
+import 'package:academicpanel/theme/style/dateTime_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/animation/Expandable_Page_View.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
+import 'package:academicpanel/theme/template/normal/showDialogAssessment_template.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:intl/intl.dart';
@@ -41,14 +43,6 @@ class _ScheduleExamState extends State<ScheduleExam> {
 
   @override
   Widget build(BuildContext context) {
-    String formatTime12Hour(DateTime dateTime) {
-      try {
-        return TimeOfDay.fromDateTime(dateTime).format(context);
-      } catch (e) {
-        return '';
-      }
-    }
-
     final midExamItem = widget.schedulePageContoller.examPageSchedule.midExam;
     final finalExamItem =
         widget.schedulePageContoller.examPageSchedule.finalExam;
@@ -133,7 +127,10 @@ class _ScheduleExamState extends State<ScheduleExam> {
                         itemCount: currentExams.length,
 
                         itemBuilder: (context, listIndex) {
-                          final item = currentExams[listIndex];
+                          final rowAssessmentModel =
+                              currentExams[listIndex].rowAssessmentModel;
+                          final rowCourseModel =
+                              currentExams[listIndex].rowCourseModel;
                           final isLast = listIndex == currentExams.length - 1;
 
                           return IntrinsicHeight(
@@ -176,7 +173,7 @@ class _ScheduleExamState extends State<ScheduleExam> {
                                     spacing: 6,
                                     children: [
                                       Text(
-                                        "${item.rowCourseModel.name.capitalizeFirst!} - (${item.rowCourseModel.code})",
+                                        "${rowCourseModel.name.capitalizeFirst!} - (${rowCourseModel.code})",
                                         style: Fontstyle.defult(
                                           15.5,
                                           FontWeight.w600,
@@ -194,7 +191,7 @@ class _ScheduleExamState extends State<ScheduleExam> {
                                           ),
 
                                           Text(
-                                            "${formatTime12Hour(item.startTime)} - ${formatTime12Hour(item.endTime)}",
+                                            "${DatetimeStyle.formatTime12Hour(rowAssessmentModel.startTime, context)} - ${DatetimeStyle.formatTime12Hour(rowAssessmentModel.endTime, context)}",
                                             style: Fontstyle.defult(
                                               14,
                                               FontWeight.w600,
@@ -214,7 +211,7 @@ class _ScheduleExamState extends State<ScheduleExam> {
                                           ),
 
                                           Text(
-                                            item.room,
+                                            rowAssessmentModel.room,
                                             style: Fontstyle.defult(
                                               14,
                                               FontWeight.w600,
@@ -229,7 +226,7 @@ class _ScheduleExamState extends State<ScheduleExam> {
                                             size: 20,
                                           ),
                                           Text(
-                                            item.instructor[0],
+                                            rowAssessmentModel.instructor[0],
                                             style: Fontstyle.defult(
                                               14,
                                               FontWeight.w600,
@@ -245,7 +242,7 @@ class _ScheduleExamState extends State<ScheduleExam> {
                                             ),
                                           ),
                                           Text(
-                                            item.instructor[1],
+                                            rowAssessmentModel.instructor[1],
                                             style: Fontstyle.defult(
                                               14,
                                               FontWeight.w600,
@@ -258,24 +255,48 @@ class _ScheduleExamState extends State<ScheduleExam> {
                                     ],
                                   ),
                                 ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: ColorStyle.red,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Text(
-                                    DateFormat('d, MMM').format(item.startTime),
-                                    style: Fontstyle.defult(
-                                      10,
-                                      FontWeight.w600,
-                                      ColorStyle.light,
-                                    ),
-                                  ),
+                                openLink(
+                                  assessmentModel: currentExams[listIndex],
+                                  context: context,
                                 ),
+
+                                // InkWell(
+                                //   onTap: () {
+                                //     showDialogAssessment(
+                                //       context,
+                                //       currentExams[listIndex],
+                                //     );
+                                //   },
+                                //   child: Container(
+                                //     padding: const EdgeInsets.symmetric(
+                                //       horizontal: 10,
+                                //       vertical: 4,
+                                //     ),
+                                //     decoration: BoxDecoration(
+                                //       color: ColorStyle.red,
+                                //       borderRadius: BorderRadius.circular(12),
+
+                                //       boxShadow: [
+                                //         BoxShadow(
+                                //           blurRadius: 1,
+                                //           color: Colors.black26,
+                                //           offset: Offset(0.5, 1),
+                                //           spreadRadius: 0.5,
+                                //         ),
+                                //       ],
+                                //     ),
+                                //     child: Text(
+                                //       DateFormat(
+                                //         'd MMM',
+                                //       ).format(rowAssessmentModel.startTime),
+                                //       style: Fontstyle.defult(
+                                //         10,
+                                //         FontWeight.w600,
+                                //         ColorStyle.light,
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           );

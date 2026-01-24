@@ -1,7 +1,8 @@
 import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
+import 'package:academicpanel/theme/style/dateTime_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
-import 'package:academicpanel/theme/style/hybridDate_style.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 
@@ -58,7 +59,7 @@ class AnnouncementTemplate extends StatelessWidget {
                   children: [
                     // Title (Message)
                     Text(
-                      item.message.capitalizeFirst!,
+                      item.rowAnnouncementModel.message.capitalizeFirst!,
                       maxLines: 2,
                       softWrap: true,
                       style: Fontstyle.defult(
@@ -93,7 +94,7 @@ class AnnouncementTemplate extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  HybriddateStyle.getHybridDate(item.date),
+                  DatetimeStyle.getHybridDate(item.rowAnnouncementModel.date),
                   style: Fontstyle.defult(
                     10,
                     FontWeight.w600,

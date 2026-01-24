@@ -52,18 +52,18 @@ class RowAccountModel {
   }
 }
 
-class RoeInstallmentModel {
+class RowInstallmentModel {
   final DateTime? deadline;
   final double amount_;
   final double fine;
 
-  RoeInstallmentModel({
+  RowInstallmentModel({
     required this.deadline,
     required this.amount_,
     required this.fine,
   });
 
-  factory RoeInstallmentModel.fromMap(Map<String, dynamic> map) {
+  factory RowInstallmentModel.fromMap(Map<String, dynamic> map) {
     DateTime? dateObj;
 
     // 1. Safe Conversion: Timestamp -> DateTime
@@ -71,7 +71,7 @@ class RoeInstallmentModel {
       dateObj = (map['deadline'] as Timestamp).toDate();
     }
 
-    return RoeInstallmentModel(
+    return RowInstallmentModel(
       deadline: dateObj,
       // 2. Get the percentage directly (e.g., 50)
       amount_: (map['amount_%'] ?? 0).toDouble(),

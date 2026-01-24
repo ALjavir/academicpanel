@@ -8,9 +8,16 @@ class RowNoclassModel {
 
   RowNoclassModel({this.title, this.startDate, this.endDate, this.type});
   factory RowNoclassModel.fromJson(Map<String, dynamic> data) {
+    String checkTBA(dynamic value) {
+      if (value == null || (value is String && value.trim().isEmpty)) {
+        return 'TBA';
+      }
+      return value.toString();
+    }
+
     return RowNoclassModel(
-      title: data['title'] ?? 'TBA',
-      type: data['type'] ?? 'TBA',
+      title: checkTBA(data['title']),
+      type: checkTBA(data['type']),
       startDate: (data['startDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
       endDate: (data['endDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );

@@ -1,24 +1,13 @@
+import 'package:academicpanel/model/assessment/row_assessment_model.dart';
 import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
 
 class AssessmentModel {
-  final String assessment;
-  final DateTime startTime;
-  final DateTime endTime;
-  final String link;
-  final String room;
-  final String syllabus;
-  final double result;
-  final List<String> instructor;
+  final RowAssessmentModel rowAssessmentModel;
   final RowCourseModel rowCourseModel;
+  final String gClassRoom;
   AssessmentModel({
-    required this.result,
-    required this.assessment,
+    required this.rowAssessmentModel,
     required this.rowCourseModel,
-    required this.link,
-    required this.syllabus,
-    required this.startTime,
-    required this.endTime,
-    required this.instructor,
-    required this.room,
+    required this.gClassRoom,
   });
 }

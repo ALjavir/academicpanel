@@ -2,7 +2,6 @@ import 'dart:core';
 
 import 'package:academicpanel/controller/course/course_controller.dart';
 import 'package:academicpanel/controller/department/department_controller.dart';
-
 import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/Account/home_account_model.dart';
@@ -17,10 +16,9 @@ import 'package:academicpanel/model/pages/home_page_model.dart';
 import 'package:academicpanel/model/result/row_cgpa_model.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
-import 'package:academicpanel/theme/style/date_In_range.dart';
+import 'package:academicpanel/theme/style/dateTime_style.dart';
 import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:get/get.dart';
-
 import 'package:intl/intl.dart';
 
 class HomePageController extends GetxController {
@@ -139,7 +137,7 @@ class HomePageController extends GetxController {
           if (noCLassData.rowNoclassModel != null) {
             for (var i in noCLassData.rowNoclassModel!) {
               // Holiday Check
-              if (DateInRange.isDateInRange(now, i.startDate!, i.endDate!)) {
+              if (DatetimeStyle.isDateInRange(now, i.startDate!, i.endDate!)) {
                 todayClassScheduleListHome.noclassModel = NoclassModel(
                   title: i.title!,
                   startDate: i.startDate!,
@@ -175,7 +173,7 @@ class HomePageController extends GetxController {
 
       for (var tempca in tempClassschedule) {
         todayClassScheduleListHome.listClassScheduleModel?.addIf(
-          tempca.day == dayKey,
+          tempca.rowClassscheduleModel.day == dayKey,
           tempca,
         );
       }
@@ -185,7 +183,7 @@ class HomePageController extends GetxController {
       todayClassScheduleListHome.listClassScheduleModel?.removeWhere((
         classItem,
       ) {
-        final parts = classItem.endTime.split(':');
+        final parts = classItem.rowClassscheduleModel.endTime.split(':');
         final endHour = int.parse(parts[0]);
         final endMinute = int.parse(parts[1]);
         final classEndMinutes = (endHour * 60) + endMinute;
@@ -195,9 +193,9 @@ class HomePageController extends GetxController {
       todayClassScheduleListHome.listClassScheduleModel?.removeWhere((
         classItem,
       ) {
-        if (classItem.endTime.isEmpty) return false;
+        if (classItem.rowClassscheduleModel.endTime.isEmpty) return false;
 
-        final parts = classItem.endTime.split(':');
+        final parts = classItem.rowClassscheduleModel.endTime.split(':');
         if (parts.length != 2) return false;
 
         final endHour = int.parse(parts[0]);
@@ -279,7 +277,7 @@ class HomePageController extends GetxController {
 
         for (var key in installmentsMap.keys) {
           // 1. Create Model (Handles Timestamp conversion internally)
-          final instData = RoeInstallmentModel.fromMap(
+          final instData = RowInstallmentModel.fromMap(
             installmentsMap[key] as Map<String, dynamic>,
           );
 
@@ -419,7 +417,7 @@ class HomePageController extends GetxController {
       if (assessmentData.assessment != null) {
         final assessmenttList = assessmentData.assessment!;
         for (var item in assessmenttList) {
-          if (item.startTime.isAfter(DateTime.now())) {
+          if (item.rowAssessmentModel.startTime.isAfter(DateTime.now())) {
             assessmentHome.add(item);
           }
           // if (assessmentHome.length >= 4) break;
