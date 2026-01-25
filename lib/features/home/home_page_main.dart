@@ -6,12 +6,12 @@ import 'package:academicpanel/features/home/widget/home_cgpaInfo.dart';
 import 'package:academicpanel/features/home/widget/home_topHeader.dart';
 import 'package:academicpanel/features/home/widget/home_classSchedule.dart';
 import 'package:academicpanel/model/pages/home_page_model.dart';
+import 'package:academicpanel/navigation/appbar/custom_appbar.dart';
 import 'package:academicpanel/theme/template/animation/diagonal_reveal.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/utility/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 
@@ -36,16 +36,7 @@ class _HomePageMainState extends State<HomePageMain> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.transparent,
-        leading: SizedBox.shrink(),
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.black26,
-          statusBarIconBrightness: Brightness.light,
-          statusBarBrightness: Brightness.dark,
-        ),
-      ),
+      appBar: CustomAppbar(),
       backgroundColor: ColorStyle.light,
       // Keep your animation wrapper
       body: DiagonalReveal(

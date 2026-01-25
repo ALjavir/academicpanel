@@ -90,7 +90,6 @@ class SchedulePageContoller extends GetxController {
       if (loadAlldata.allDataSection?.schedules == null ||
           loadAlldata.allDataSection!.schedules!.isEmpty) {
         classScheduleData = await courseController.fetchSectionData(
-          userModel: userModel!,
           getClassSchedule: true,
         );
         loadAlldata.allDataSection = classScheduleData;
@@ -163,12 +162,10 @@ class SchedulePageContoller extends GetxController {
       List<AssessmentModel> tempAssessmentList = [];
 
       SectionsuperModel assessmentData;
-      final userModel = userController.user.value;
 
       if (loadAlldata.allDataSection?.assessment == null ||
           loadAlldata.allDataSection!.assessment!.isEmpty) {
         final fetchedData = await courseController.fetchSectionData(
-          userModel: userModel!,
           getAssessment: true,
         );
         assessmentData = fetchedData;
@@ -256,12 +253,10 @@ class SchedulePageContoller extends GetxController {
   Future<ExamPageSchedule> fetchExamPageSchedule() async {
     try {
       SectionsuperModel assessmentData;
-      final userModel = userController.user.value;
 
       if (loadAlldata.allDataSection?.assessment == null ||
           loadAlldata.allDataSection!.assessment!.isEmpty) {
         final fetchedData = await courseController.fetchSectionData(
-          userModel: userModel!,
           getAssessment: true,
         );
         assessmentData = fetchedData;

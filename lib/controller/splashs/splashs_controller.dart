@@ -63,7 +63,7 @@ class SplashsController extends GetxController {
       final userModel = UserModel.fromJson(data);
       userController.user.value = userModel;
 
-      await loadAlldata.loadAllCourseData(userModel);
+      await loadAlldata.mainLoadAllData();
 
       // Everything OK → go home
       isLoading.value = false;

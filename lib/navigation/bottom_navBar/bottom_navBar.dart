@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:academicpanel/controller/page/schedule_page_contoller.dart';
 import 'package:academicpanel/features/home/home_page_main.dart';
+import 'package:academicpanel/features/result/result_page_main.dart';
 import 'package:academicpanel/features/schedule/schedule_page_main.dart';
 import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
@@ -22,7 +23,11 @@ class _BottomNavbarState extends State<BottomNavbar> {
   late Future<List<RowAcademiccalendarModel>> data = schedulePageContoller
       .fetchAcademicCalendar();
 
-  final List<Widget> _pages = [HomePageMain(), SchedulePageMain()];
+  final List<Widget> _pages = [
+    HomePageMain(),
+    SchedulePageMain(),
+    ResultPageMain(),
+  ];
 
   @override
   Widget build(BuildContext context) {

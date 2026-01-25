@@ -36,7 +36,7 @@ class FirebaseDatapath extends GetxController {
         .doc(semester);
   }
 
-  DocumentReference<Map<String, dynamic>> cgpaData(
+  DocumentReference<Map<String, dynamic>> resultData(
     String department,
     String student_id,
   ) {

@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:academicpanel/controller/course/course_controller.dart';
 import 'package:academicpanel/controller/department/department_controller.dart';
 import 'package:academicpanel/controller/masterController/load_allData.dart';
+import 'package:academicpanel/controller/result/result_controller.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/Account/home_account_model.dart';
 import 'package:academicpanel/model/Account/row_account_model.dart';
@@ -13,6 +14,7 @@ import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/noClass_model.dart';
 import 'package:academicpanel/model/pages/home_page_model.dart';
+import 'package:academicpanel/model/result/result_model.dart';
 import 'package:academicpanel/model/result/row_cgpa_model.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
@@ -25,6 +27,7 @@ class HomePageController extends GetxController {
   final userController = Get.find<UserController>();
   final courseController = Get.find<CourseController>();
   final departmentController = Get.find<DepartmentController>();
+  final resultController = Get.find<ResultController>();
   final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
   final loadAlldata = Get.find<LoadAlldata>();
 
@@ -42,10 +45,7 @@ class HomePageController extends GetxController {
         homeTodayClassSchedule: await todayClassSchedule(userModel),
 
         homeAccountInfoModel: await fetchAccountInfo(userModel),
-        homeRowCgpaModel: await fetchCGPAinfo(
-          userModel.id,
-          userModel.department,
-        ),
+        homeRowCgpaModel: await fetchCGPAinfo(),
         homeAnouncement: await fetchAllAnnouncements(userModel),
         homeAssessment: await fetchAssment(userModel),
       );
@@ -68,6 +68,7 @@ class HomePageController extends GetxController {
           balance: 0,
         ),
         homeRowCgpaModel: RowCgpaModel(
+          comment: '',
           credit_completed: 0,
           target_credit: 0,
           credit_enrolled: 0,
@@ -154,7 +155,6 @@ class HomePageController extends GetxController {
 
         if (loadAlldata.allDataSection!.schedules!.isEmpty) {
           final fetchedData = await courseController.fetchSectionData(
-            userModel: userModel,
             getClassSchedule: true,
           );
           classScheduleData = fetchedData;
@@ -333,24 +333,24 @@ class HomePageController extends GetxController {
   }
 
   // d: ----------------------------------------------------------------------------CGPA----------------------------------------------------------------------------------
-  Future<RowCgpaModel> fetchCGPAinfo(String id, String department) async {
+  Future<RowCgpaModel> fetchCGPAinfo() async {
     try {
-      final cgpaDocRef = await firebaseDatapath.cgpaData(department, id).get();
+      ResultModel resultModel;
 
-      final dataMap = cgpaDocRef.data();
-      if (dataMap != null) {
-        return RowCgpaModel.fromMap(dataMap);
-      } else {
-        return RowCgpaModel(
-          credit_completed: 0,
-          target_credit: 0,
-          credit_enrolled: 0,
-          pervious_cgpa: 0,
-          current_cgpa: 0,
+      if (loadAlldata.allDataResult?.rowCgpaModel == null ||
+          loadAlldata.allDataResult!.rowCgpaModel == null) {
+        final fetchedData = await resultController.fetchResultData(
+          getCGPA: true,
         );
+        resultModel = fetchedData;
+      } else {
+        resultModel = loadAlldata.allDataResult!;
       }
+
+      return resultModel.rowCgpaModel!;
     } catch (e) {
       return RowCgpaModel(
+        comment: '',
         credit_completed: 0,
         target_credit: 0,
         credit_enrolled: 0,
@@ -370,7 +370,6 @@ class HomePageController extends GetxController {
 
       if (loadAlldata.allDataSection!.announcements!.isEmpty) {
         final fetchedData = await courseController.fetchSectionData(
-          userModel: userModel,
           getAnnouncement: true,
         );
         announcementData = fetchedData;
@@ -402,7 +401,6 @@ class HomePageController extends GetxController {
 
       if (loadAlldata.allDataSection!.assessment!.isEmpty) {
         final fetchedData = await courseController.fetchSectionData(
-          userModel: userModel,
           getAssessment: true,
         );
         assessmentData = fetchedData;

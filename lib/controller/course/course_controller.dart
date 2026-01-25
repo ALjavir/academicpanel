@@ -1,3 +1,4 @@
+import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/model/Announcement/row_announcement_model.dart';
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
@@ -6,7 +7,6 @@ import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/assessment/row_assessment_model.dart';
 import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
-import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -14,15 +14,15 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 class CourseController extends GetxController {
   final firebaseDatapath = Get.put(FirebaseDatapath());
-
+  final userController = Get.find<UserController>();
   Future<SectionsuperModel> fetchSectionData({
-    required UserModel userModel,
     bool getAssessment = false,
     bool getClassSchedule = false,
     bool getAnnouncement = false,
   }) async {
     try {
-      final studentId = userModel.id; // Use this for result lookup
+      final userModel = userController.user.value;
+      final studentId = userModel!.id; // Use this for result lookup
       final department = userModel.department;
       final courses = userModel.current_course ?? {};
 

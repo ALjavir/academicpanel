@@ -1,5 +1,6 @@
 import 'package:academicpanel/controller/course/course_controller.dart';
 import 'package:academicpanel/controller/department/department_controller.dart';
+import 'package:academicpanel/controller/result/result_controller.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/features/splash_screen/splashs_page_main.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
   Get.put(UserController(), permanent: true);
   Get.put(CourseController(), permanent: true);
   Get.put(DepartmentController(), permanent: true);
+  Get.put(ResultController(), permanent: true);
   Get.put(RoutesController(), permanent: true);
   Get.put(CheckConnection(), permanent: true);
 

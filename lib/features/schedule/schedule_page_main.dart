@@ -5,6 +5,7 @@ import 'package:academicpanel/features/schedule/widget/topheader/schedule_Academ
 import 'package:academicpanel/features/schedule/widget/topheader/schedule_CalanderView.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
+import 'package:academicpanel/theme/template/animation/diagonal_reveal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -87,17 +88,22 @@ class _SchedulePageMainState extends State<SchedulePageMain> {
             )
           : null,
       backgroundColor: ColorStyle.light,
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          spacing: 20,
-          children: [
-            // Now you can remove the broken button code inside this widget
-            ScheduleCalanderview(schedulePageContoller: schedulePageContoller),
-            ScheduleAssessment(schedulePageContoller: schedulePageContoller),
-            ScheduleExam(schedulePageContoller: schedulePageContoller),
-            SizedBox(height: 100),
-          ],
+      body: DiagonalReveal(
+        duration: Duration(milliseconds: 300),
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          child: Column(
+            spacing: 20,
+            children: [
+              // Now you can remove the broken button code inside this widget
+              ScheduleCalanderview(
+                schedulePageContoller: schedulePageContoller,
+              ),
+              ScheduleAssessment(schedulePageContoller: schedulePageContoller),
+              ScheduleExam(schedulePageContoller: schedulePageContoller),
+              SizedBox(height: 100),
+            ],
+          ),
         ),
       ),
     );

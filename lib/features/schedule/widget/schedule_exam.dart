@@ -8,7 +8,6 @@ import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:academicpanel/theme/template/normal/showDialogAssessment_template.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
-import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 class ScheduleExam extends StatefulWidget {
