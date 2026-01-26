@@ -34,12 +34,12 @@ class SchedulePageContoller extends GetxController {
   );
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
     final focusedDate = DateTime.now().obs;
-    fetchclassScheduleCalander(focusedDate.value);
-    fetchAssessment(sortBy: 'incomplete');
-    fetchExamPageSchedule();
+    await fetchclassScheduleCalander(focusedDate.value);
+    await fetchAssessment(sortBy: 'incomplete');
+    await fetchExamPageSchedule();
   }
 
   // A: --------------------------------------------------------------------------Class Schedule Calander----------------------------------------------------------------------

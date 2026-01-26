@@ -3,7 +3,7 @@ import 'package:academicpanel/controller/department/department_controller.dart';
 import 'package:academicpanel/controller/result/result_controller.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
-import 'package:academicpanel/model/result/result_model.dart';
+import 'package:academicpanel/model/resultSuperModel/result_model.dart';
 import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:get/get.dart';
 

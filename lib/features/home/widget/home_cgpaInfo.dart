@@ -1,4 +1,4 @@
-import 'package:academicpanel/model/result/row_cgpa_model.dart';
+import 'package:academicpanel/model/resultSuperModel/row_cgpa_model.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
@@ -54,7 +54,7 @@ class HomeCgpainfo extends StatelessWidget {
                         style: Fontstyle.defult(
                           10,
                           FontWeight.w600,
-                          ColorStyle.Textblue,
+                          ColorStyle.lightBlue,
                         ),
                       ),
                     ],
@@ -159,74 +159,8 @@ class HomeCgpainfo extends StatelessWidget {
               );
             },
           ),
-          // Padding(
-          //   padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-          //   child: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [
-          //       _buildInfoRow(
-          //         icon: ImageStyle.enrolledIcon(),
-          //         label: "Enrolled",
-          //         value: "${rowCgpaModel.credit_enrolled.toInt()}",
-          //         color: ColorStyle.red,
-          //         textColor: ColorStyle.Textblue,
-          //       ),
-          //       Container(height: 5, width: 2, color: Colors.grey.shade300),
-
-          //       _buildInfoRow(
-          //         icon: ImageStyle.remaingIcon(),
-          //         label: "Remaining",
-          //         value: "${remaining.toInt()}",
-          //         color: ColorStyle.red,
-          //         textColor: ColorStyle.Textblue,
-          //       ),
-          //       Container(width: 2, color: Colors.grey.shade300),
-          //       _buildInfoRow(
-          //         icon: ImageStyle.complitedBookIcon(),
-          //         label: "Completed",
-          //         value: "${rowCgpaModel.credit_completed.toInt()}",
-          //         color: ColorStyle.red,
-          //         textColor: ColorStyle.Textblue,
-          //       ),
-          //     ],
-          //   ),
-          // ),
         ],
       ),
-    );
-  }
-
-  // Helper Widget for the rows (Completed, Taken, Remaining)
-  Widget _buildInfoRow({
-    required String icon,
-    required String label,
-    required String value,
-    required Color color,
-    required Color textColor,
-  }) {
-    return Row(
-      spacing: 10,
-      children: [
-        Image.asset(icon, scale: 24, color: color),
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: "$label: ",
-                style: Fontstyle.defult(
-                  14,
-                  FontWeight.w600,
-                  ColorStyle.Textblue,
-                ),
-              ),
-              TextSpan(
-                text: value,
-                style: Fontstyle.defult(14, FontWeight.w600, ColorStyle.red),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

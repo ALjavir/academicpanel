@@ -11,15 +11,6 @@ class HomeAnnouncement extends StatelessWidget {
 
   const HomeAnnouncement({super.key, required this.announcements});
 
-  // // Helper function to convert DateTime to "2 hours ago"
-  // String _timeAgo(DateTime d) {
-  //   final Duration diff = DateTime.now().difference(d);
-  //   if (diff.inDays > 0) return "${diff.inDays}d ago";
-  //   if (diff.inHours > 0) return "${diff.inHours}h ago";
-  //   if (diff.inMinutes > 0) return "${diff.inMinutes}m ago";
-  //   return "Just now";
-  // }
-
   @override
   Widget build(BuildContext context) {
     return ThreeDContainel(

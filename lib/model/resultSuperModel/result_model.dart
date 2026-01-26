@@ -1,4 +1,4 @@
-import 'package:academicpanel/model/result/row_cgpa_model.dart';
+import 'package:academicpanel/model/resultSuperModel/row_cgpa_model.dart';
 
 class ResultModel {
   final RowCgpaModel? rowCgpaModel;

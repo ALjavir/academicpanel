@@ -318,7 +318,7 @@ class _ScheduleExamState extends State<ScheduleExam> {
                 width: active ? 12 : 8,
                 height: active ? 12 : 8,
                 decoration: BoxDecoration(
-                  color: active ? Colors.black : Colors.grey.shade400,
+                  color: active ? ColorStyle.red : Colors.grey.shade400,
                   shape: BoxShape.circle,
                 ),
               );

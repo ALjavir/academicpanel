@@ -14,8 +14,8 @@ import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/noClass_model.dart';
 import 'package:academicpanel/model/pages/home_page_model.dart';
-import 'package:academicpanel/model/result/result_model.dart';
-import 'package:academicpanel/model/result/row_cgpa_model.dart';
+import 'package:academicpanel/model/resultSuperModel/result_model.dart';
+import 'package:academicpanel/model/resultSuperModel/row_cgpa_model.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
 import 'package:academicpanel/theme/style/dateTime_style.dart';
@@ -46,7 +46,7 @@ class HomePageController extends GetxController {
 
         homeAccountInfoModel: await fetchAccountInfo(userModel),
         homeRowCgpaModel: await fetchCGPAinfo(),
-        homeAnouncement: await fetchAllAnnouncements(userModel),
+        homeAnouncement: await fetchAllAnnouncements(),
         homeAssessment: await fetchAssment(userModel),
       );
     } catch (e) {
@@ -362,9 +362,7 @@ class HomePageController extends GetxController {
 
   // e: ----------------------------------------------------------------------------Announcemnt----------------------------------------------------------------------------------
 
-  Future<List<AnnouncementModel>> fetchAllAnnouncements(
-    UserModel userModel,
-  ) async {
+  Future<List<AnnouncementModel>> fetchAllAnnouncements() async {
     try {
       SectionsuperModel announcementData;
 

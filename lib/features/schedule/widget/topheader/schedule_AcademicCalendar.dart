@@ -22,11 +22,11 @@ void scheduleAcademicCalendar(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                 blendMode: BlendMode.srcOver,
                 child: Container(
                   decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: Colors.white54),
+                    border: Border.all(width: 1, color: ColorStyle.light),
                     borderRadius: BorderRadius.circular(10),
                     color: ColorStyle.glassWhite,
                   ),

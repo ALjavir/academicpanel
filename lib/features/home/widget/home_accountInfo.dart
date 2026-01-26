@@ -33,19 +33,12 @@ class HomeAccountinfo extends StatelessWidget {
       return _buildInstallmentCard(homeAccountInfoModel.upcomingInstallment!);
     }
 
-    // -------------------------------------------
-    // PRIORITY 2: Semester Summary (Green Chart)
-    // -------------------------------------------
     // If we have active semester data (paid or due exists)
     if (homeAccountInfoModel.totalPaid > 0 ||
         homeAccountInfoModel.totalDue > 0) {
       return _buildSummaryCard();
     }
 
-    // -------------------------------------------
-    // PRIORITY 3: Just Balance (Default State)
-    // -------------------------------------------
-    // Fallback if semester hasn't started or no data
     return _buildBalanceCard();
   }
 
@@ -179,25 +172,28 @@ class HomeAccountinfo extends StatelessWidget {
               ),
             ],
           ),
-          progressColor: Colors.green,
-          backgroundColor: Colors.orange,
 
+          progressColor: Color(0xff1F51FF),
+          backgroundWidth: 1.5,
+
+          backgroundColor: Color(0xffFF5F1F),
           circularStrokeCap: CircularStrokeCap.round,
         ),
 
-        // Right: Stats Legend
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _legendItem(
-                color: Colors.green,
+                // color: Colors.green,
+                color: Color(0xff1F51FF),
                 label: "Total Paid",
                 amount: homeAccountInfoModel.totalPaid.toInt(),
               ),
               Divider(height: 10),
               _legendItem(
-                color: Colors.orange,
+                // color: Colors.orange,
+                color: Color(0xffFF5F1F),
                 label: "Remaining",
                 amount: homeAccountInfoModel.totalDue.toInt(),
               ),
@@ -267,7 +263,7 @@ class HomeAccountinfo extends StatelessWidget {
         SizedBox(width: 8),
         Text(
           label,
-          style: Fontstyle.defult(14, FontWeight.w500, ColorStyle.lightBlue),
+          style: Fontstyle.defult(14, FontWeight.w600, ColorStyle.Textblue),
         ),
         Spacer(),
         RichText(
