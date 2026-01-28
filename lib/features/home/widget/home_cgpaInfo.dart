@@ -33,7 +33,9 @@ class HomeCgpainfo extends StatelessWidget {
               //spacing: 6,
               children: [
                 Image.asset(
-                  ImageStyle.growthIcon(),
+                  rowCgpaModel.current_cgpa > rowCgpaModel.pervious_cgpa
+                      ? ImageStyle.cgpaUpIcon()
+                      : ImageStyle.cgpaDownIcon(),
                   scale: 22,
                   color: ColorStyle.red,
                 ),

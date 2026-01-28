@@ -16,7 +16,7 @@ class SplashsController extends GetxController {
 
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   final userController = Get.find<UserController>();
-  final loadAlldata = Get.find<LoadAlldata>();
+  final loadAlldata = Get.put(LoadAlldata());
 
   RxBool isLoading = true.obs;
 

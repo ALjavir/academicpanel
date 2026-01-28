@@ -56,8 +56,12 @@ class ImageStyle {
     return 'lib/assets/icon/upCommingClassesHeaderIcon.png';
   }
 
-  static String growthIcon() {
-    return 'lib/assets/icon/grow.png';
+  static String cgpaUpIcon() {
+    return 'lib/assets/icon/cgpaUp.png';
+  }
+
+  static String cgpaDownIcon() {
+    return 'lib/assets/icon/cgpaDown.png';
   }
 
   static String announcementIcon() {

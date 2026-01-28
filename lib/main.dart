@@ -1,6 +1,5 @@
 import 'package:academicpanel/controller/course/course_controller.dart';
 import 'package:academicpanel/controller/department/department_controller.dart';
-import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/result/result_controller.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/features/splash_screen/splashs_page_main.dart';
@@ -20,7 +19,6 @@ Future<void> main() async {
   Get.put(ResultController(), permanent: true);
   Get.put(RoutesController(), permanent: true);
   Get.put(CheckConnection(), permanent: true);
-  Get.put(LoadAlldata(), permanent: true);
 
   //await uploadacademi();
   //await uploadmix();
