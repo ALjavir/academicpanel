@@ -38,7 +38,7 @@ into a **single real-time mobile dashboard**.
 
 ## 📽 Design & System Overview
 📄 **Project Presentation (Concept & UI Preview)**  
-👉 [View Presentation](./Blue_and_Pink_Modern_Mobile_Apps_Presentation.pptx)
+👉 [View Presentation](docs/Blue_and_Pink_Modern_Mobile_Apps_Presentation.pptx)
 
 The presentation includes:
 - UI wireframes & design concepts
