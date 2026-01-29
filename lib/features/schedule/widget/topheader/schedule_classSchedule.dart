@@ -3,6 +3,7 @@ import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
+import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get/state_manager.dart';
@@ -124,28 +125,7 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 10,
                   children: [
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 7),
-                          child: Container(
-                            width: 10,
-                            height: 10,
-                            decoration: const BoxDecoration(
-                              color: ColorStyle.red,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        ),
-                        if (!isLast)
-                          Expanded(
-                            child: Container(
-                              width: 2,
-                              color: Colors.grey.shade300,
-                            ),
-                          ),
-                      ],
-                    ),
+                    DotlineTemplate(isLast: isLast, index: index),
 
                     // --- MIDDLE SECTION: Content ---
                     Expanded(

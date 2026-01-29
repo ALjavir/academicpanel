@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   String? uid;
   String? image;
@@ -12,6 +14,7 @@ class UserModel {
   Map<String, String>? current_course;
   final String? current_semester;
   final int? current_balance;
+  final DateTime? last_semester;
 
   UserModel({
     this.uid,
@@ -27,6 +30,7 @@ class UserModel {
     required this.email,
     this.current_semester,
     this.current_balance,
+    this.last_semester,
   });
 
   // Convert model → Firestore JSON
@@ -34,7 +38,6 @@ class UserModel {
     'uid': uid,
     'id': id,
     'image': image,
-
     'first_name': firstName,
     'last_name': lastName,
     'department': department,
@@ -61,13 +64,14 @@ class UserModel {
         ? data['phone']
         : int.tryParse('${data['phone']}') ?? 0,
     id: data['id'] ?? '',
+    last_semester:
+        (data['last_semester'] as Timestamp?)?.toDate() ?? DateTime.now(),
   );
 
   // Copy existing model with edited values
   UserModel copyWith({
     String? uid,
     String? image,
-
     String? id,
     String? firstName,
     String? lastName,

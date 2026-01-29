@@ -146,7 +146,6 @@ class HomeAccountinfo extends StatelessWidget {
     return Column(
       spacing: 10,
       children: [
-        // Left: Circular Graph
         CircularPercentIndicator(
           radius: 55.0,
           lineWidth: 8.0,

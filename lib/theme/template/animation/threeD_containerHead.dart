@@ -1,3 +1,4 @@
+import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:flutter/material.dart';
 
 class ThreedContainerhead extends StatefulWidget {
@@ -34,7 +35,7 @@ class _ThreedContainerheadState extends State<ThreedContainerhead> {
       constraints: widget.boxConstraints,
 
       decoration: BoxDecoration(
-        //  color: ColorStyle.Textblue,
+        color: ColorStyle.glassWhite,
         image: DecorationImage(
           fit: BoxFit.cover,
 

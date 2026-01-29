@@ -5,6 +5,7 @@ import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/animation/Expandable_Page_View.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
+import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
 import 'package:academicpanel/theme/template/normal/showDialogAssessment_template.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
@@ -138,29 +139,9 @@ class _ScheduleExamState extends State<ScheduleExam> {
                               crossAxisAlignment: CrossAxisAlignment.start,
 
                               children: [
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 7,
-                                      ),
-                                      child: Container(
-                                        width: 10,
-                                        height: 10,
-                                        decoration: const BoxDecoration(
-                                          color: ColorStyle.red,
-                                          shape: BoxShape.circle,
-                                        ),
-                                      ),
-                                    ),
-                                    if (!isLast)
-                                      Expanded(
-                                        child: Container(
-                                          width: 2,
-                                          color: Colors.grey.shade300,
-                                        ),
-                                      ),
-                                  ],
+                                DotlineTemplate(
+                                  isLast: isLast,
+                                  index: listIndex,
                                 ),
 
                                 // Content

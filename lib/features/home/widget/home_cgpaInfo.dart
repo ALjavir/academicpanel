@@ -15,8 +15,6 @@ class HomeCgpainfo extends StatelessWidget {
     final double diff = rowCgpaModel.current_cgpa - rowCgpaModel.pervious_cgpa;
     final bool isPositive = diff >= 0;
 
-    //print("DEBUG: CGPA Diff: $diff, Is Positive: $isPositive");
-
     final double remaining =
         rowCgpaModel.target_credit - rowCgpaModel.credit_completed;
 

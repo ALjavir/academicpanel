@@ -2,6 +2,7 @@ import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/dateTime_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
+import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
@@ -27,29 +28,7 @@ class AnnouncementTemplate extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 10,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                //spacing: 4,
-                children: [
-                  Baseline(
-                    baseline: 16,
-                    baselineType: TextBaseline.alphabetic,
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: const BoxDecoration(
-                        color: ColorStyle.red,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  if (!isLast)
-                    Expanded(
-                      child: Container(width: 1.5, color: Colors.grey.shade300),
-                    ),
-                ],
-              ),
+              DotlineTemplate(isLast: isLast, index: index),
 
               // --- MIDDLE SECTION: Content ---
               Expanded(
