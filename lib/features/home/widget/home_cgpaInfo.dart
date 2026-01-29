@@ -16,7 +16,8 @@ class HomeCgpainfo extends StatelessWidget {
     final bool isPositive = diff >= 0;
 
     final double remaining =
-        rowCgpaModel.target_credit - rowCgpaModel.credit_completed;
+        (rowCgpaModel.credit_completed + rowCgpaModel.credit_enrolled) -
+        rowCgpaModel.target_credit;
 
     return ThreeDContainel(
       hight: MediaQuery.of(context).size.height * 0.25,

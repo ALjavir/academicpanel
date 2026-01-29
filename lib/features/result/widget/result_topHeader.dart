@@ -27,6 +27,7 @@ class ResultTopheader extends StatelessWidget {
         rowCgpaModel.credit_completed / rowCgpaModel.target_credit;
     final double enrolledPercent =
         rowCgpaModel.credit_enrolled / rowCgpaModel.target_credit;
+
     return ThreedContainerhead(
       imagePath: ImageStyle.resultTopBackground(),
       padding: EdgeInsets.fromLTRB(10, 40, 10, 30),
@@ -175,8 +176,8 @@ class ResultTopheader extends StatelessWidget {
 
               const SizedBox(height: 24),
               const Divider(color: Colors.grey, height: 1),
-
               const SizedBox(height: 24),
+
               Row(
                 spacing: 4,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -276,46 +277,28 @@ class ResultTopheader extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // --- CREDIT TIMELINE (Progress Bar) ---
-              // Outer Ring: e.g., Credits Taken
-              // Calculate percentages first for cleaner code
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  // -------------------------------------------------------
-                  // LAYER 1: Completed Credit (Blue) - The Base
-                  // -------------------------------------------------------
                   CircularPercentIndicator(
                     radius: 55.0,
                     lineWidth: 8.0,
                     percent: completedPercent,
                     circularStrokeCap: CircularStrokeCap.round,
-                    progressColor: const Color(0xff1F51FF), // Blue
-                    backgroundColor: const Color(
-                      0xff1F51FF,
-                    ).withOpacity(0.2), // Main Background Track
+                    progressColor: const Color(0xff1F51FF),
+                    backgroundColor: Colors.white24,
                   ),
 
-                  // -------------------------------------------------------
-                  // LAYER 2: Enrolled Credit (Orange) - Starts after Blue
-                  // -------------------------------------------------------
                   CircularPercentIndicator(
                     radius: 55.0,
                     lineWidth: 8.0,
                     percent: enrolledPercent,
                     circularStrokeCap: CircularStrokeCap.round,
-                    progressColor: const Color(0xffFF5F1F), // Orange
-                    // 🔴 IMPORTANT 1: Make background transparent so we see the Blue layer's track
+                    progressColor: const Color(0xffFF5F1F),
                     backgroundColor: Colors.transparent,
-
-                    // 🔴 IMPORTANT 2: Calculate Start Angle in Degrees
-                    // Logic: (Completed % * 360) tells it to rotate to where the blue line ended.
                     startAngle: completedPercent * 360,
                   ),
 
-                  // -------------------------------------------------------
-                  // LAYER 3: The Text in the Middle
-                  // -------------------------------------------------------
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -324,107 +307,24 @@ class ResultTopheader extends StatelessWidget {
                         style: Fontstyle.defult(
                           18,
                           FontWeight.w600,
-                          ColorStyle.Textblue,
+                          ColorStyle.light,
                         ),
                       ),
                       Text(
                         "Done",
                         style: Fontstyle.defult(
-                          12,
-                          FontWeight.w600,
-                          ColorStyle.Textblue,
+                          13,
+                          FontWeight.bold,
+                          ColorStyle.light,
                         ),
                       ),
                     ],
                   ),
                 ],
               ),
-              // Row(
-              //   children: [
-              //     _buildCreditStep(
-              //       icon: Icons.library_books_rounded,
-              //       label: "Completed",
-              //       value: "${rowCgpaModel.credit_completed}",
-              //       isActive: true,
-              //     ),
-              //     _buildDottedLine(),
-              //     _buildCreditStep(
-              //       icon: Icons.book,
-              //       label: "Current",
-              //       value: "${rowCgpaModel.credit_enrolled}",
-              //       isActive: true,
-              //     ),
-              //     _buildDottedLine(),
-              //     _buildCreditStep(
-              //       icon: Icons.hourglass_bottom_rounded,
-              //       label: "Remaining",
-              //       value: "$remainingCredits",
-              //       isActive: false,
-              //       isLast: true,
-              //     ),
-              //   ],
-              // ),
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  // Helper Widget for Credit Steps
-  Widget _buildCreditStep({
-    required IconData icon,
-    required String label,
-    required String value,
-    required bool isActive,
-    bool isLast = false,
-  }) {
-    final color = isActive || isLast ? const Color(0xFFB71C1C) : Colors.grey;
-    final textColor = const Color(0xFF1E3A8A);
-
-    return Expanded(
-      child: Column(
-        children: [
-          Icon(icon, color: color, size: 28),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: textColor,
-            ),
-          ),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: textColor,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Helper Widget for Dotted Line
-  Widget _buildDottedLine() {
-    return SizedBox(
-      width: 40,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: List.generate(
-          5,
-          (index) => Container(
-            width: 3,
-            height: 3,
-            decoration: BoxDecoration(
-              color: const Color(0xFF1E3A8A),
-              shape: BoxShape.circle,
-            ),
-          ),
-        ),
       ),
     );
   }
