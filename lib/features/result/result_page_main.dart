@@ -1,5 +1,5 @@
 import 'package:academicpanel/controller/page/result_page_controller.dart';
-import 'package:academicpanel/features/result/widget/result_topHeader.dart';
+import 'package:academicpanel/features/result/widget/resultTopHeader/resultTopHeader_main.dart';
 import 'package:academicpanel/navigation/appbar/custom_appbar.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ class _ResultPageMainState extends State<ResultPageMain> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ResultTopheader(resultPageController: resultPageController),
+            ResulttopheaderMain(resultPageController: resultPageController),
           ],
         ),
       ),

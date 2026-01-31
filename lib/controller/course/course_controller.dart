@@ -1,4 +1,3 @@
-import 'package:academicpanel/controller/result/result_controller.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/model/Announcement/row_announcement_model.dart';

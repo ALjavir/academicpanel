@@ -1,25 +1,19 @@
-import 'package:academicpanel/controller/page/schedule_page_contoller.dart';
-import 'package:academicpanel/theme/style/color_style.dart';
-import 'package:academicpanel/theme/style/dateTime_style.dart';
-import 'package:academicpanel/theme/style/font_style.dart';
-import 'package:academicpanel/theme/style/image_style.dart';
+import 'package:academicpanel/controller/page/result_page_controller.dart';
+import 'package:academicpanel/controller/result/result_controller.dart';
 import 'package:academicpanel/theme/template/animation/Expandable_Page_View.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
-import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
-import 'package:academicpanel/theme/template/normal/showDialogAssessment_template.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_utils/src/extensions/string_extensions.dart';
-import 'package:lottie/lottie.dart';
+import 'package:flutter/services.dart';
 
-class ScheduleExam extends StatefulWidget {
-  final SchedulePageContoller schedulePageContoller;
-  const ScheduleExam({super.key, required this.schedulePageContoller});
+class ResultCurrentsem extends StatefulWidget {
+  final ResultPageController resultPageController;
+  const ResultCurrentsem({super.key, required this.resultPageController});
 
   @override
-  State<ScheduleExam> createState() => _ScheduleExamState();
+  State<ResultCurrentsem> createState() => _ResultCurrentsemState();
 }
 
-class _ScheduleExamState extends State<ScheduleExam> {
+class _ResultCurrentsemState extends State<ResultCurrentsem> {
   PageController controller = PageController();
 
   double currentPageValue = 0.0;
@@ -43,11 +37,8 @@ class _ScheduleExamState extends State<ScheduleExam> {
 
   @override
   Widget build(BuildContext context) {
-    final midExamItem = widget.schedulePageContoller.examPageSchedule.midExam;
-    final finalExamItem =
-        widget.schedulePageContoller.examPageSchedule.finalExam;
-    final examList = [midExamItem, finalExamItem];
-
+    final listCurrentSemResultData =
+        widget.resultPageController.listCurrentSemResultData;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
@@ -55,7 +46,7 @@ class _ScheduleExamState extends State<ScheduleExam> {
         children: [
           ExpandablePageView(
             controller: controller,
-            itemCount: examList.length,
+            itemCount: listCurrentSemResultData.length,
             itemBuilder: (context, pageIndex) {
               final currentExams = examList[pageIndex];
               if (currentExams.isEmpty) {

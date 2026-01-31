@@ -1,17 +1,17 @@
-import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
+import 'package:academicpanel/model/resultSuperModel/row_assessment_mark.dart';
 
-class AssessmentResult {
+class CurrentSemResultModel {
   final RowCourseModel rowCourseModel;
-  final List<AssessmentModel> quizList;
-  final List<AssessmentModel> assignmentList;
-  final AssessmentModel presentation;
-  final AssessmentModel viva;
-  final AssessmentModel midE;
-  final AssessmentModel finalE;
+  final List<RowAssessmentMark> quizList;
+  final List<RowAssessmentMark> assignmentList;
+  final RowAssessmentMark presentation;
+  final RowAssessmentMark viva;
+  final RowAssessmentMark midE;
+  final RowAssessmentMark finalE;
   final double totalMark;
   final String grade;
-  AssessmentResult({
+  CurrentSemResultModel({
     required this.quizList,
     required this.assignmentList,
     required this.presentation,

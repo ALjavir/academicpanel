@@ -57,7 +57,10 @@ class AssessmentTemplate extends StatelessWidget {
                   ],
                 ),
               ),
-              openLink(assessmentModel: assessment[index], context: context),
+              showFullInfoAssessment(
+                assessmentModel: assessment[index],
+                context: context,
+              ),
 
               // InkWell(
               //   onTap: () {

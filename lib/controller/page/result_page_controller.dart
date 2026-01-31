@@ -6,6 +6,7 @@ import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/model/pages/result_Page_model.dart';
 import 'package:academicpanel/model/resultSuperModel/result_model.dart';
+import 'package:academicpanel/model/resultSuperModel/row_assessment_mark.dart';
 import 'package:academicpanel/model/resultSuperModel/row_cgpacr_model.dart';
 import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -17,14 +18,14 @@ class ResultPageController extends GetxController {
   final userController = Get.find<UserController>();
   final courseController = Get.find<CourseController>();
 
-  late final RowCgpaCrModel rowCgpaModelData;
-  final List<AssessmentResult> ListAssessmentResult = [];
+  late RowCgpaCrModel rowCgpaModelData;
+  List<CurrentSemResultModel> listCurrentSemResultData = [];
 
   @override
   Future<void> onInit() async {
     super.onInit();
     await fetchCGPAinfo();
-    await fetchListAssessmentResult();
+    await fetchListCurrentSemResult();
   }
 
   // a: ----------------------------------------------------------------------------CGPA----------------------------------------------------------------------------------
@@ -55,14 +56,9 @@ class ResultPageController extends GetxController {
     }
   }
 
-  Future<List<AssessmentResult>> fetchListAssessmentResult() async {
+  Future<List<CurrentSemResultModel>> fetchListCurrentSemResult() async {
     try {
-      final Set<String> tempCourseCodes = {};
-      List<List<AssessmentModel>> tempAssessmentList = [];
-      //  List<List<AssessmentResult>> tempAssesmentResult = [];
-
       SectionsuperModel assessmentData;
-
       if (loadAlldata.allDataSection!.assessment!.isEmpty) {
         final fetchedData = await courseController.fetchSectionData(
           getAssessment: true,
@@ -72,24 +68,95 @@ class ResultPageController extends GetxController {
         assessmentData = loadAlldata.allDataSection!;
       }
 
-      Map<String, List<AssessmentModel>> groupedData = {};
-
+      Map<String, List<AssessmentModel>> groupedDataTemp = {};
       for (var item in assessmentData.assessment!) {
-        // If the list for this code doesn't exist, create it. Then add the item.
-        groupedData.putIfAbsent(item.rowCourseModel.code, () => []).add(item);
+        groupedDataTemp
+            .putIfAbsent(item.rowCourseModel.code, () => [])
+            .add(item);
       }
-      for (var i in groupedData.values) {
-        print(i);
-        for (var i in i) {
-          print(i.rowAssessmentModel.assessment);
+      List<CurrentSemResultModel> groupedDataFinal = [];
+      for (var courseAssessments in groupedDataTemp.values) {
+        List<RowAssessmentMark> quizList = [];
+        List<RowAssessmentMark> assignmentList = [];
+
+        RowAssessmentMark midE = RowAssessmentMark(
+          assessment: "",
+          mark: 0,
+          score: 0,
+        );
+        RowAssessmentMark finalE = RowAssessmentMark(
+          assessment: "",
+          mark: 0,
+          score: 0,
+        );
+        RowAssessmentMark presentation = RowAssessmentMark(
+          assessment: "",
+          mark: 0,
+          score: 0,
+        );
+        RowAssessmentMark viva = RowAssessmentMark(
+          assessment: "",
+          mark: 0,
+          score: 0,
+        );
+
+        double totalMark = 0;
+        for (var j in courseAssessments) {
+          final rowssmerk = RowAssessmentMark(
+            assessment: j.rowAssessmentModel.assessment,
+            mark: j.rowAssessmentModel.mark,
+            score: j.rowAssessmentModel.result,
+          );
+
+          if (j.rowAssessmentModel.result.toInt().toString() ==
+              userController.user.value!.id) {
+            totalMark += 0;
+          } else {
+            totalMark += j.rowAssessmentModel.result;
+          }
+
+          String type = j.rowAssessmentModel.assessment.toLowerCase();
+
+          if (type.startsWith("q")) {
+            quizList.add(rowssmerk);
+          } else if (type.startsWith("a")) {
+            assignmentList.add(rowssmerk);
+          } else if (type.startsWith("m")) {
+            midE = rowssmerk;
+          } else if (type.startsWith("f")) {
+            finalE = rowssmerk;
+          } else if (type.startsWith("p")) {
+            presentation = rowssmerk;
+          } else if (type.startsWith("v")) {
+            viva = rowssmerk;
+          }
         }
+
+        quizList.sort((a, b) => a.assessment.compareTo(b.assessment));
+        assignmentList.sort((a, b) => a.assessment.compareTo(b.assessment));
+
+        CurrentSemResultModel mainAssessmentModel = CurrentSemResultModel(
+          quizList: quizList,
+          assignmentList: assignmentList,
+          presentation: presentation,
+          viva: viva,
+          midE: midE,
+          finalE: finalE,
+          totalMark: totalMark,
+          grade: "grade",
+          rowCourseModel: courseAssessments.first.rowCourseModel,
+        );
+
+        groupedDataFinal.add(mainAssessmentModel);
+      }
+      for (var i in groupedDataFinal) {
+        print("${i.rowCourseModel.code} - ${i.totalMark}}");
       }
 
-      // 2. Convert the Map values back to your List<List>
-
-      return ListAssessmentResult;
+      return listCurrentSemResultData = groupedDataFinal;
     } catch (e) {
-      return ListAssessmentResult;
+      print("Error: $e");
+      return [];
     }
   }
 }

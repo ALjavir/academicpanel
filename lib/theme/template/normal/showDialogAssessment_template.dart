@@ -8,7 +8,8 @@ import 'package:get/get_utils/src/extensions/export.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-Widget openLink({
+Widget showFullInfoAssessment({
+  bool showNormalDate = false,
   required BuildContext context,
   required AssessmentModel assessmentModel,
 }) {
@@ -32,7 +33,9 @@ Widget openLink({
         ],
       ),
       child: Text(
-        "${DatetimeStyle.getHybridDate(assessmentModel.rowAssessmentModel.startTime)} ->",
+        showNormalDate
+            ? "${DateFormat('d MMM').format(assessmentModel.rowAssessmentModel.startTime)} ->"
+            : "${DatetimeStyle.getHybridDate(assessmentModel.rowAssessmentModel.startTime)} ->",
         style: Fontstyle.defult(10, FontWeight.w600, ColorStyle.light),
       ),
     ),
