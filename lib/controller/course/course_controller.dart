@@ -1,3 +1,4 @@
+import 'package:academicpanel/controller/result/result_controller.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/model/Announcement/row_announcement_model.dart';
@@ -15,6 +16,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 class CourseController extends GetxController {
   final firebaseDatapath = Get.put(FirebaseDatapath());
   final userController = Get.find<UserController>();
+
   Future<SectionsuperModel> fetchSectionData({
     bool getAssessment = false,
     bool getClassSchedule = false,
@@ -22,14 +24,14 @@ class CourseController extends GetxController {
   }) async {
     try {
       final userModel = userController.user.value;
-      final studentId = userModel!.id; // Use this for result lookup
+      final studentId = userModel!.id;
       final department = userModel.department;
       final courses = userModel.current_course ?? {};
 
       // 1. Loop through courses
       final courseFutures = courses.entries.map((entry) async {
         String courseCode = entry.key;
-        String sectionId = entry.value;
+        String sectionId = entry.value['section'];
 
         final courseRef = firebaseDatapath.courseData(department, courseCode);
 

@@ -1,6 +1,6 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/resultSuperModel/result_model.dart';
-import 'package:academicpanel/model/resultSuperModel/row_cgpa_model.dart';
+import 'package:academicpanel/model/resultSuperModel/row_cgpacr_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -23,7 +23,9 @@ class ResultController extends GetxController {
 
       if (getCGPA) {
         if (resultData!.isNotEmpty) {
-          return ResultModel(rowCgpaModel: RowCgpaModel.fromMap(resultData));
+          return ResultModel(
+            rowCgpaCrModel: RowCgpaCrModel.fromMap(resultData),
+          );
         }
       }
 

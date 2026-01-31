@@ -1,4 +1,4 @@
-import 'package:academicpanel/model/resultSuperModel/row_cgpa_model.dart';
+import 'package:academicpanel/model/resultSuperModel/row_cgpacr_model.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
@@ -6,7 +6,7 @@ import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:flutter/material.dart';
 
 class HomeCgpainfo extends StatelessWidget {
-  final RowCgpaModel rowCgpaModel;
+  final RowCgpaCrModel rowCgpaModel;
 
   const HomeCgpainfo({super.key, required this.rowCgpaModel});
 
@@ -14,10 +14,6 @@ class HomeCgpainfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final double diff = rowCgpaModel.current_cgpa - rowCgpaModel.pervious_cgpa;
     final bool isPositive = diff >= 0;
-
-    final double remaining =
-        (rowCgpaModel.credit_completed + rowCgpaModel.credit_enrolled) -
-        rowCgpaModel.target_credit;
 
     return ThreeDContainel(
       hight: MediaQuery.of(context).size.height * 0.25,
@@ -93,21 +89,22 @@ class HomeCgpainfo extends StatelessWidget {
             child: Divider(color: ColorStyle.red),
           ),
           ListView.builder(
-            padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+            padding: const EdgeInsets.fromLTRB(8, 12, 8, 0),
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemCount: 3,
             itemBuilder: (context, index) {
               final List<String> icon = [
-                ImageStyle.enrolledIcon(),
-                ImageStyle.remaingIcon(),
-                ImageStyle.complitedBookIcon(),
+                ImageStyle.crTotalIcon(),
+                ImageStyle.crComplet(),
+                ImageStyle.crEnrolledIcon(),
               ];
-              final List<String> label = ["Enrolled", "Remaining", "Completed"];
+
+              final List<String> label = ["Total", "Completed", "Enrolled"];
               final List<int> value = [
-                rowCgpaModel.credit_enrolled.toInt(),
-                remaining.toInt(),
+                rowCgpaModel.target_credit.toInt(),
                 rowCgpaModel.credit_completed.toInt(),
+                rowCgpaModel.credit_enrolled.toInt(),
               ];
 
               return IntrinsicHeight(
@@ -145,7 +142,7 @@ class HomeCgpainfo extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: '${value[index]}',
+                            text: '${value[index].abs()}',
                             style: Fontstyle.defult(
                               14,
                               FontWeight.w600,

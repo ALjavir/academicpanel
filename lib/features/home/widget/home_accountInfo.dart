@@ -181,20 +181,19 @@ class HomeAccountinfo extends StatelessWidget {
 
         Expanded(
           child: Column(
+            spacing: 10,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              _legendItem(
+                color: Color(0xffFF5F1F),
+                label: "Total Due",
+                amount: homeAccountInfoModel.totalDue.toInt(),
+              ),
               _legendItem(
                 // color: Colors.green,
                 color: Color(0xff1F51FF),
                 label: "Total Paid",
                 amount: homeAccountInfoModel.totalPaid.toInt(),
-              ),
-              Divider(height: 10),
-              _legendItem(
-                // color: Colors.orange,
-                color: Color(0xffFF5F1F),
-                label: "Remaining",
-                amount: homeAccountInfoModel.totalDue.toInt(),
               ),
             ],
           ),

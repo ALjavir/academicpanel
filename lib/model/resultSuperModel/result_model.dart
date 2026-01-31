@@ -1,7 +1,7 @@
-import 'package:academicpanel/model/resultSuperModel/row_cgpa_model.dart';
+import 'package:academicpanel/model/resultSuperModel/row_cgpacr_model.dart';
 
 class ResultModel {
-  final RowCgpaModel? rowCgpaModel;
+  final RowCgpaCrModel? rowCgpaCrModel;
 
-  ResultModel({this.rowCgpaModel});
+  ResultModel({this.rowCgpaCrModel});
 }

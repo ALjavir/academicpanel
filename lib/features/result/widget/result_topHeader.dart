@@ -25,8 +25,6 @@ class ResultTopheader extends StatelessWidget {
     final bool isPositive = improvement >= 0;
     final double completedPercent =
         rowCgpaModel.credit_completed / rowCgpaModel.target_credit;
-    final double enrolledPercent =
-        rowCgpaModel.credit_enrolled / rowCgpaModel.target_credit;
 
     return ThreedContainerhead(
       imagePath: ImageStyle.resultTopBackground(),
@@ -277,33 +275,18 @@ class ResultTopheader extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  CircularPercentIndicator(
-                    radius: 55.0,
-                    lineWidth: 8.0,
-                    percent: completedPercent,
-                    circularStrokeCap: CircularStrokeCap.round,
-                    progressColor: const Color(0xff1F51FF),
-                    backgroundColor: Colors.white24,
-                  ),
-
-                  CircularPercentIndicator(
-                    radius: 55.0,
-                    lineWidth: 8.0,
-                    percent: enrolledPercent,
-                    circularStrokeCap: CircularStrokeCap.round,
-                    progressColor: const Color(0xffFF5F1F),
-                    backgroundColor: Colors.transparent,
-                    startAngle: completedPercent * 360,
-                  ),
-
-                  Column(
+              Center(
+                child: CircularPercentIndicator(
+                  radius: 55.0,
+                  lineWidth: 8.0,
+                  percent: completedPercent,
+                  progressColor: Color(0xff1F51FF),
+                  backgroundWidth: 1.5,
+                  center: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "${((completedPercent + enrolledPercent) * 100).toInt()}%",
+                        "${(completedPercent * 100).toInt()}%",
                         style: Fontstyle.defult(
                           18,
                           FontWeight.w600,
@@ -320,7 +303,10 @@ class ResultTopheader extends StatelessWidget {
                       ),
                     ],
                   ),
-                ],
+
+                  backgroundColor: Color(0xffFF5F1F),
+                  circularStrokeCap: CircularStrokeCap.round,
+                ),
               ),
             ],
           ),

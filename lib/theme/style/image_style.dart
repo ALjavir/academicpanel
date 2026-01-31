@@ -72,16 +72,16 @@ class ImageStyle {
     return 'lib/assets/icon/reminder.png';
   }
 
-  static String complitedBookIcon() {
-    return 'lib/assets/icon/complet_book.png';
+  static String crTotalIcon() {
+    return 'lib/assets/icon/CrTotal.png';
   }
 
-  static String enrolledIcon() {
-    return 'lib/assets/icon/enrolled.png';
+  static String crEnrolledIcon() {
+    return 'lib/assets/icon/CrEnrolled.png';
   }
 
-  static String remaingIcon() {
-    return 'lib/assets/icon/remaing.png';
+  static String crComplet() {
+    return 'lib/assets/icon/CrComplet.png';
   }
 
   static String no_internet() {

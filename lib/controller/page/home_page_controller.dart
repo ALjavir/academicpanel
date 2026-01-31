@@ -15,7 +15,7 @@ import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/noClass_model.dart';
 import 'package:academicpanel/model/pages/home_page_model.dart';
 import 'package:academicpanel/model/resultSuperModel/result_model.dart';
-import 'package:academicpanel/model/resultSuperModel/row_cgpa_model.dart';
+import 'package:academicpanel/model/resultSuperModel/row_cgpacr_model.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
 import 'package:academicpanel/theme/style/dateTime_style.dart';
@@ -67,7 +67,7 @@ class HomePageController extends GetxController {
           paidPercentage: 0,
           balance: 0,
         ),
-        homeRowCgpaModel: RowCgpaModel(
+        homeRowCgpaModel: RowCgpaCrModel(
           comment: '',
           credit_completed: 0,
           target_credit: 0,
@@ -84,15 +84,23 @@ class HomePageController extends GetxController {
   Future<HomeTopHeaderModel> fetchHomePageHeader(UserModel userModel) async {
     try {
       // 1. Format Date: "Monday January 1"
+      final now = DateTime.now();
+
       String getFormattedDate() {
-        return DateFormat('EEEE MMMM d').format(DateTime.now());
+        return DateFormat('EEEE MMMM d').format(now);
       }
 
       String getSemester() {
-        return userModel.current_semester!
-            .split('-')
-            .map((e) => e.trim())
-            .join(' - ' + "20");
+        String semmesterIs = '';
+        if (now.month <= 4) {
+          semmesterIs = "Spring - ${DateFormat('y').format(now)}";
+        } else if (now.month <= 8) {
+          semmesterIs = "Summer - ${DateFormat('y').format(now)}";
+        } else {
+          semmesterIs = "Fall - ${DateFormat('y').format(now)}";
+        }
+
+        return semmesterIs;
       }
 
       // 3. Return Model
@@ -217,10 +225,10 @@ class HomePageController extends GetxController {
   Future<HomeAccountModel> fetchAccountInfo(UserModel userModel) async {
     try {
       final department = userModel.department;
-      final semester = userModel.current_semester;
+      final semester = "Spring-26";
 
       // 1. Reference to Parent (Semester Rules)
-      final accountDocRef = firebaseDatapath.accountData(department, semester!);
+      final accountDocRef = firebaseDatapath.accountData(department, semester);
       // print("Account Doc Ref: ${accountDocRef.path}");
 
       // 2. Fetch Parent (Rules) and Child (Student Data)
@@ -280,6 +288,7 @@ class HomePageController extends GetxController {
           final instData = RowInstallmentModel.fromMap(
             installmentsMap[key] as Map<String, dynamic>,
           );
+          print(instData.deadline);
 
           if (instData.deadline != null) {
             final diffDays = instData.deadline!.difference(now).inDays;
@@ -308,11 +317,8 @@ class HomePageController extends GetxController {
         }
       }
 
-      // --- RETURN SUMMARY ---
-      // Remaining = Total I must pay - What I actually paid (net)
-      double remaining = dueWithWaver - netPaidForTuition;
       return HomeAccountModel(
-        totalDue: remaining < 0 ? 0 : remaining.toDouble(),
+        totalDue: dueWithWaver.toDouble(),
 
         totalPaid: netPaidForTuition.toDouble(),
 
@@ -333,12 +339,11 @@ class HomePageController extends GetxController {
   }
 
   // d: ----------------------------------------------------------------------------CGPA----------------------------------------------------------------------------------
-  Future<RowCgpaModel> fetchCGPAinfo() async {
+  Future<RowCgpaCrModel> fetchCGPAinfo() async {
     try {
       ResultModel resultModel;
 
-      if (loadAlldata.allDataResult?.rowCgpaModel == null ||
-          loadAlldata.allDataResult!.rowCgpaModel == null) {
+      if (loadAlldata.allDataResult?.rowCgpaCrModel == null) {
         final fetchedData = await resultController.fetchResultData(
           getCGPA: true,
         );
@@ -347,9 +352,9 @@ class HomePageController extends GetxController {
         resultModel = loadAlldata.allDataResult!;
       }
 
-      return resultModel.rowCgpaModel!;
+      return resultModel.rowCgpaCrModel!;
     } catch (e) {
-      return RowCgpaModel(
+      return RowCgpaCrModel(
         comment: '',
         credit_completed: 0,
         target_credit: 0,

@@ -11,8 +11,8 @@ class UserModel {
   final String? address;
   final String password;
   final String email;
-  Map<String, String>? current_course;
-  final String? current_semester;
+  Map<String, dynamic>? current_course;
+
   final int? current_balance;
   final DateTime? last_semester;
 
@@ -28,7 +28,7 @@ class UserModel {
     this.address,
     required this.password,
     required this.email,
-    this.current_semester,
+
     this.current_balance,
     this.last_semester,
   });
@@ -51,9 +51,9 @@ class UserModel {
     uid: data['uid'] ?? '',
     image: data['image'] ?? '',
     //image: _convertToDirectLink(data['image'].toString()),
-    current_course: Map<String, String>.from(data['current_course'] ?? {}),
+    current_course: Map<String, dynamic>.from(data['current_course'] ?? {}),
     current_balance: data['current_balance'] ?? 0,
-    current_semester: data['current_semester'] ?? '',
+
     email: data['email'] ?? '',
     firstName: data['first_name'] ?? '',
     lastName: data['last_name'] ?? '',
