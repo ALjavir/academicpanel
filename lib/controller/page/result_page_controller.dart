@@ -153,7 +153,9 @@ class ResultPageController extends GetxController {
         print("${i.rowCourseModel.code} - ${i.totalMark}}");
       }
 
-      return listCurrentSemResultData = groupedDataFinal;
+      listCurrentSemResultData = groupedDataFinal;
+
+      return listCurrentSemResultData;
     } catch (e) {
       print("Error: $e");
       return [];

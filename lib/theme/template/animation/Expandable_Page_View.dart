@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-
 class ExpandablePageView extends StatefulWidget {
   final int itemCount;
   final Widget Function(BuildContext, int) itemBuilder;
