@@ -1,11 +1,17 @@
+import 'dart:math' as math;
+import 'dart:ui';
+
 import 'package:academicpanel/controller/page/result_page_controller.dart';
+import 'package:academicpanel/model/pages/result_Page_model.dart';
 import 'package:academicpanel/model/resultSuperModel/row_assessment_mark.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/animation/Expandable_Page_View.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
+import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:lottie/lottie.dart';
 
 class ResultCurrentsem extends StatefulWidget {
@@ -199,45 +205,15 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
                         ],
                       ),
                       Divider(color: ColorStyle.red),
-                      Container(
-                        margin: const EdgeInsets.all(16),
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.05),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.white10),
-                        ),
-                        child: Stack(
-                          children: [
-                            // 1. The Main Vertical Axis Line
-                            Positioned(
-                              left: 60,
-                              top: 0,
-                              bottom: 0,
-                              child: Container(
-                                width: 1.5,
-                                color: Colors.blueAccent.withOpacity(0.5),
-                              ),
-                            ),
-
-                            // 2. The Data Rows
-                            Column(
-                              children: [
-                                _buildAxisRow("Quiz", currentResult.quizList),
-                                _buildAxisRow(
-                                  "Assign.",
-                                  currentResult.assignmentList,
-                                ),
-                                _buildAxisRow("Pres.", [
-                                  currentResult.presentation,
-                                ]),
-                                _buildAxisRow("Viva", [currentResult.viva]),
-                                _buildAxisRow("Mid", [currentResult.midE]),
-                                _buildAxisRow("Final", [currentResult.finalE]),
-                              ],
-                            ),
-                          ],
-                        ),
+                      Column(
+                        children: [
+                          ShowData("Quiz", currentResult.quizList),
+                          ShowData("Assign.", currentResult.assignmentList),
+                          ShowData("Pres.", [currentResult.presentation]),
+                          ShowData("Viva", [currentResult.viva]),
+                          ShowData("Mid", [currentResult.midE]),
+                          ShowData("Final", [currentResult.finalE]),
+                        ],
                       ),
                     ],
                   ),
@@ -266,65 +242,97 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
       );
   }
 
-  Widget _buildAxisRow(String label, List<RowAssessmentMark> marks) {
-    if (marks.isEmpty || (marks[0].assessment == ""))
+  Widget ShowData(String title, List<RowAssessmentMark> marks) {
+    // 1. Safety Check
+    if (marks.isEmpty || (marks.length == 1 && marks[0].assessment == "")) {
       return const SizedBox.shrink();
-
-    return SizedBox(
-      height: 50,
+    }
+    return IntrinsicHeight(
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Vertical Label
-          SizedBox(
-            width: 50,
+          Transform.rotate(
+            angle: -math.pi / 2,
             child: Text(
-              label,
+              title,
               style: const TextStyle(
-                color: Colors.green,
-                fontSize: 12,
+                fontSize: 16,
+
                 fontWeight: FontWeight.w600,
+                color: Colors.blue,
               ),
             ),
           ),
+          SizedBox(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: 4,
 
-          // The Axis Node (The Red Dot)
-          Container(
-            width: 10,
-            height: 10,
-            margin: const EdgeInsets.only(left: 5, right: 15),
-            decoration: const BoxDecoration(
-              color: Colors.redAccent,
-              shape: BoxShape.circle,
+                  itemBuilder: (context, index) {
+                    return const Icon(
+                      Icons.brightness_1,
+                      size: 11,
+                      color: Colors.red,
+                    );
+                  },
+                ),
+
+                Expanded(
+                  child: Container(
+                    width: 1.5,
+                    color: Colors.grey.shade300,
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                  ),
+                ),
+              ],
             ),
           ),
 
-          // Horizontal Scores with Dashed Line effect
-          Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: marks.length,
-              itemBuilder: (context, index) {
-                final m = marks[index];
-                return Row(
-                  children: [
-                    // Visual "Grid" Dot
-                    Text(
-                      "${m.score}/${m.mark}",
-                      style: const TextStyle(color: Colors.red, fontSize: 13),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(
+                children: marks.map((item) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
                     ),
-                    if (index != marks.length - 1)
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        width: 20,
-                        height: 1,
-                        color: Colors.redAccent.withOpacity(
-                          0.2,
-                        ), // Connecting line
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "${item.assessment}: ",
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                          TextSpan(
+                            text: "${item.mark}",
+                            style: const TextStyle(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
                       ),
-                  ],
-                );
-              },
-            ),
+                    ),
+                  );
+                }).toList(),
+              ),
+
+              const SizedBox(height: 24),
+            ],
           ),
         ],
       ),
