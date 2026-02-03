@@ -1,17 +1,13 @@
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:academicpanel/controller/page/result_page_controller.dart';
-import 'package:academicpanel/model/pages/result_Page_model.dart';
 import 'package:academicpanel/model/resultSuperModel/row_assessment_mark.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/animation/Expandable_Page_View.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
-import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:lottie/lottie.dart';
 
 class ResultCurrentsem extends StatefulWidget {
@@ -207,12 +203,14 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
                       Divider(color: ColorStyle.red),
                       Column(
                         children: [
-                          ShowData("Quiz", currentResult.quizList),
-                          ShowData("Assign.", currentResult.assignmentList),
-                          ShowData("Pres.", [currentResult.presentation]),
-                          ShowData("Viva", [currentResult.viva]),
-                          ShowData("Mid", [currentResult.midE]),
-                          ShowData("Final", [currentResult.finalE]),
+                          showData("Quiz", currentResult.quizList),
+                          showData("Assign.", currentResult.assignmentList),
+
+                          // SINGLE TYPES: Wrap them in brackets [] to treat them as a list
+                          showData("Pres.", [currentResult.presentation]),
+                          showData("Viva", [currentResult.viva]),
+                          showData("Mid", [currentResult.midE]),
+                          showData("Final", [currentResult.finalE]),
                         ],
                       ),
                     ],
@@ -242,97 +240,94 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
       );
   }
 
-  Widget ShowData(String title, List<RowAssessmentMark> marks) {
-    // 1. Safety Check
+  Widget showData(String title, List<RowAssessmentMark?>? incomingMarks) {
+    final List<RowAssessmentMark> marks =
+        incomingMarks?.whereType<RowAssessmentMark>().toList() ?? [];
+
     if (marks.isEmpty || (marks.length == 1 && marks[0].assessment == "")) {
       return const SizedBox.shrink();
     }
+
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Transform.rotate(
-            angle: -math.pi / 2,
+          // FIXED: RotatedBox handles layout correctly
+          RotatedBox(
+            quarterTurns: -1,
             child: Text(
               title,
               style: const TextStyle(
                 fontSize: 16,
-
                 fontWeight: FontWeight.w600,
                 color: Colors.blue,
               ),
             ),
           ),
-          SizedBox(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: 4,
 
-                  itemBuilder: (context, index) {
-                    return const Icon(
-                      Icons.brightness_1,
-                      size: 11,
-                      color: Colors.red,
-                    );
-                  },
+          // The Vertical Line
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(Icons.brightness_1, size: 11, color: Colors.red),
+              Expanded(
+                child: Container(
+                  width: 1.5,
+                  color: Colors.grey.shade300,
+                  margin: const EdgeInsets.symmetric(vertical: 4),
                 ),
-
-                Expanded(
-                  child: Container(
-                    width: 1.5,
-                    color: Colors.grey.shade300,
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Wrap(
-                children: marks.map((item) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "${item.assessment}: ",
-                            style: const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                            ),
-                          ),
-                          TextSpan(
-                            text: "${item.mark}",
-                            style: const TextStyle(
-                              color: Colors.black87,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
+          const SizedBox(width: 8),
 
-              const SizedBox(height: 24),
-            ],
+          // The Marks
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: marks.map((item) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey.shade300),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "${item.assessment}: ",
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                            TextSpan(
+                              text: "${item.mark}",
+                              style: const TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 24),
+              ],
+            ),
           ),
         ],
       ),
