@@ -90,25 +90,12 @@ class HomePageController extends GetxController {
         return DateFormat('EEEE MMMM d').format(now);
       }
 
-      String getSemester() {
-        String semmesterIs = '';
-        if (now.month <= 4) {
-          semmesterIs = "Spring - ${DateFormat('y').format(now)}";
-        } else if (now.month <= 8) {
-          semmesterIs = "Summer - ${DateFormat('y').format(now)}";
-        } else {
-          semmesterIs = "Fall - ${DateFormat('y').format(now)}";
-        }
-
-        return semmesterIs;
-      }
-
       // 3. Return Model
       return HomeTopHeaderModel(
         lastName: userModel.lastName,
         image: userModel.image,
         date: getFormattedDate(),
-        semester: getSemester(),
+        semester: DatetimeStyle.getSemester(),
       );
     } catch (e) {
       errorSnackbar(title: "Error", e: e);

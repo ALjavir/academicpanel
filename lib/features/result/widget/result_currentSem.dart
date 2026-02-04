@@ -1,6 +1,5 @@
-import 'dart:math' as math;
-
 import 'package:academicpanel/controller/page/result_page_controller.dart';
+import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/resultSuperModel/row_assessment_mark.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
@@ -8,11 +7,18 @@ import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/animation/Expandable_Page_View.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:lottie/lottie.dart';
 
 class ResultCurrentsem extends StatefulWidget {
   final ResultPageController resultPageController;
-  const ResultCurrentsem({super.key, required this.resultPageController});
+  final UserController userController;
+  const ResultCurrentsem({
+    super.key,
+    required this.resultPageController,
+    required this.userController,
+  });
 
   @override
   State<ResultCurrentsem> createState() => _ResultCurrentsemState();
@@ -145,7 +151,7 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
 
                 return ThreeDContainel(
                   redious: 10,
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.fromLTRB(12, 12, 0, 12),
                   child: Column(
                     children: [
                       Row(
@@ -206,7 +212,6 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
                           showData("Quiz", currentResult.quizList),
                           showData("Assign.", currentResult.assignmentList),
 
-                          // SINGLE TYPES: Wrap them in brackets [] to treat them as a list
                           showData("Pres.", [currentResult.presentation]),
                           showData("Viva", [currentResult.viva]),
                           showData("Mid", [currentResult.midE]),
@@ -248,28 +253,83 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
       return const SizedBox.shrink();
     }
 
+    // Helper function to create the UI for a single mark (DRY Principle)
+    Widget _buildChip(RowAssessmentMark item) {
+      return Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: ColorStyle.light,
+
+          border: Border.all(color: Colors.black12, width: 1),
+
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade200,
+              blurStyle: BlurStyle.outer,
+              blurRadius: 8,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: RichText(
+          text: TextSpan(
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            children: [
+              TextSpan(
+                text:
+                    item.score.toInt().toString() ==
+                        widget.userController.user.value!.id
+                    ? "TBA / "
+                    : "${item.score} / ",
+                style: Fontstyle.defult(
+                  13,
+                  FontWeight.w600,
+                  ColorStyle.Textblue,
+                ),
+              ),
+
+              TextSpan(
+                text: item.mark.toString(),
+                style: Fontstyle.defult(
+                  13,
+                  FontWeight.w600,
+                  ColorStyle.lightBlue,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return IntrinsicHeight(
       child: Row(
+        spacing: 2,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // FIXED: RotatedBox handles layout correctly
-          RotatedBox(
-            quarterTurns: -1,
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.blue,
+          // 1. TITLE
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: RotatedBox(
+              quarterTurns: -1,
+              child: Text(
+                title,
+                style: Fontstyle.defult(
+                  16,
+                  FontWeight.w600,
+                  ColorStyle.Textblue,
+                ),
               ),
             ),
           ),
 
-          // The Vertical Line
+          // 2. LINE
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+
             children: [
-              const Icon(Icons.brightness_1, size: 11, color: Colors.red),
+              const Icon(Icons.brightness_1, size: 11, color: ColorStyle.red),
               Expanded(
                 child: Container(
                   width: 1.5,
@@ -280,54 +340,43 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
             ],
           ),
 
-          const SizedBox(width: 8),
+          const SizedBox(width: 0),
 
-          // The Marks
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: marks.map((item) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "${item.assessment}: ",
-                              style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                              ),
+            child:
+                (title.toLowerCase().startsWith("q") ||
+                    title.toLowerCase().startsWith("a"))
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: SizedBox(
+                      height: 35,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: marks.length,
+                        separatorBuilder: (c, i) => const SizedBox(width: 8),
+                        itemBuilder: (context, index) {
+                          return Container(
+                            child: Row(
+                              spacing: 8,
+                              children: [
+                                _buildChip(marks[index]),
+                                if (index < marks.length - 1)
+                                  Icon(
+                                    Icons.brightness_1,
+                                    size: 7,
+                                    color: ColorStyle.red,
+                                  ),
+                              ],
                             ),
-                            TextSpan(
-                              text: "${item.mark}",
-                              style: const TextStyle(
-                                color: Colors.black87,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 24),
-              ],
-            ),
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(children: [_buildChip(marks[0])]),
+                  ),
           ),
         ],
       ),

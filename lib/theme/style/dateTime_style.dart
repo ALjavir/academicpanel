@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DatetimeStyle {
+  static DateTime now = DateTime.now();
   static String formatTime12Hour(DateTime dateTime, BuildContext context) {
     try {
       final fromDateTimeIs = TimeOfDay.fromDateTime(dateTime).format(context);
@@ -23,7 +24,6 @@ class DatetimeStyle {
   }
 
   static String getHybridDate(DateTime d) {
-    final now = DateTime.now();
     final diff = now.difference(d);
     final isFuture = diff.isNegative;
     final absDiff = diff.abs();
@@ -48,5 +48,18 @@ class DatetimeStyle {
     final minutes = absDiff.inMinutes;
     if (minutes == 0) return "Just now";
     return isFuture ? "In ${minutes}m" : "${minutes}m ago";
+  }
+
+  static String getSemester() {
+    String semmesterIs = '';
+    if (now.month <= 4) {
+      semmesterIs = "Spring - ${DateFormat('y').format(now)}";
+    } else if (now.month <= 8) {
+      semmesterIs = "Summer - ${DateFormat('y').format(now)}";
+    } else {
+      semmesterIs = "Fall - ${DateFormat('y').format(now)}";
+    }
+
+    return semmesterIs;
   }
 }

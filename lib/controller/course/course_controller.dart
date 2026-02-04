@@ -171,6 +171,12 @@ class CourseController extends GetxController {
         );
       }
 
+      for (var i in allAssessments) {
+        if (i.rowCourseModel.code == "CSE-101") {
+          print(i.rowAssessmentModel.assessment);
+        }
+      }
+
       return SectionsuperModel(
         schedules: allSchedules,
         announcements: allAnnouncements,

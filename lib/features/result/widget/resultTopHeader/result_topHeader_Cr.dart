@@ -18,7 +18,8 @@ class ResultTopheaderCr extends StatelessWidget {
     final rowCgpaModel = resultPageController.rowCgpaModelData;
 
     final double completedPercent =
-        rowCgpaModel.credit_completed / rowCgpaModel.target_credit;
+        rowCgpaModel.value!.credit_completed /
+        rowCgpaModel.value!.target_credit;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +60,7 @@ class ResultTopheaderCr extends StatelessWidget {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: "${rowCgpaModel.credit_completed}",
+                            text: "${rowCgpaModel.value!.credit_completed}",
                             style: Fontstyle.defult(
                               18,
                               FontWeight.w600,
@@ -67,7 +68,7 @@ class ResultTopheaderCr extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: " / ${rowCgpaModel.target_credit}",
+                            text: " / ${rowCgpaModel.value!.target_credit}",
                             style: Fontstyle.defult(
                               18,
                               FontWeight.w500,

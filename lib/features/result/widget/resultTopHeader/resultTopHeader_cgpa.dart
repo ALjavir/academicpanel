@@ -11,9 +11,9 @@ class ResulttopheaderCgpa extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final rowCgpaModel = resultPageController.rowCgpaModelData;
-    final double cgpaProgress = rowCgpaModel.current_cgpa / 4.0;
+    final double cgpaProgress = rowCgpaModel.value!.current_cgpa / 4.0;
     final double improvement =
-        rowCgpaModel.current_cgpa - rowCgpaModel.pervious_cgpa;
+        rowCgpaModel.value!.current_cgpa - rowCgpaModel.value!.pervious_cgpa;
     final bool isPositive = improvement >= 0;
 
     return Column(
@@ -24,7 +24,7 @@ class ResulttopheaderCgpa extends StatelessWidget {
           TextSpan(
             children: [
               TextSpan(
-                text: "${rowCgpaModel.comment}  ",
+                text: "${rowCgpaModel.value!.comment}  ",
                 style: Fontstyle.defult(18, FontWeight.w600, ColorStyle.light),
               ),
               WidgetSpan(
@@ -77,7 +77,7 @@ class ResulttopheaderCgpa extends StatelessWidget {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: "${rowCgpaModel.current_cgpa}",
+                            text: "${rowCgpaModel.value!.current_cgpa}",
                             style: Fontstyle.defult(
                               18,
                               FontWeight.w600,
@@ -104,7 +104,8 @@ class ResulttopheaderCgpa extends StatelessWidget {
                       spacing: 4,
                       children: [
                         Image.asset(
-                          rowCgpaModel.current_cgpa > rowCgpaModel.pervious_cgpa
+                          rowCgpaModel.value!.current_cgpa >
+                                  rowCgpaModel.value!.pervious_cgpa
                               ? ImageStyle.cgpaUpIcon()
                               : ImageStyle.cgpaDownIcon(),
                           scale: 24,

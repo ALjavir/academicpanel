@@ -2,6 +2,7 @@ import 'package:academicpanel/controller/course/course_controller.dart';
 import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/result/result_controller.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
+
 import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/model/pages/result_Page_model.dart';
@@ -17,15 +18,20 @@ class ResultPageController extends GetxController {
   final loadAlldata = Get.find<LoadAlldata>();
   final userController = Get.find<UserController>();
   final courseController = Get.find<CourseController>();
+  RxBool isLoading = true.obs;
 
-  late RowCgpaCrModel rowCgpaModelData;
-  List<CurrentSemResultModel> listCurrentSemResultData = [];
+  final Rxn<RowCgpaCrModel> rowCgpaModelData = Rxn<RowCgpaCrModel>();
+
+  final RxList<CurrentSemResultModel> listCurrentSemResultData =
+      <CurrentSemResultModel>[].obs;
 
   @override
   Future<void> onInit() async {
     super.onInit();
-    await fetchCGPAinfo();
-    await fetchListCurrentSemResult();
+    isLoading.value = true;
+    await Future.wait([fetchCGPAinfo(), fetchListCurrentSemResult()]);
+
+    isLoading.value = false;
   }
 
   // a: ----------------------------------------------------------------------------CGPA----------------------------------------------------------------------------------
@@ -41,7 +47,7 @@ class ResultPageController extends GetxController {
         resultModel = loadAlldata.allDataResult!;
       }
 
-      return rowCgpaModelData = resultModel.rowCgpaCrModel!;
+      return rowCgpaModelData.value = resultModel.rowCgpaCrModel!;
     } catch (e) {
       errorSnackbar(title: 'Error in Result', e: e);
       print(e);
@@ -56,6 +62,7 @@ class ResultPageController extends GetxController {
     }
   }
 
+  // b: ----------------------------------------------------------------------------Current Sem Result----------------------------------------------------------------------------------
   Future<List<CurrentSemResultModel>> fetchListCurrentSemResult() async {
     try {
       SectionsuperModel assessmentData;
@@ -149,13 +156,11 @@ class ResultPageController extends GetxController {
 
         groupedDataFinal.add(mainAssessmentModel);
       }
-      for (var i in groupedDataFinal) {
-        print("${i.rowCourseModel.code} - ${i.totalMark}}");
-      }
+      // for (var i in groupedDataFinal) {
+      //   print("${i.rowCourseModel.code} - ${i.totalMark}}");
+      // }
 
-      listCurrentSemResultData = groupedDataFinal;
-
-      return listCurrentSemResultData;
+      return listCurrentSemResultData.value = groupedDataFinal;
     } catch (e) {
       print("Error: $e");
       return [];

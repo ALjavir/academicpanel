@@ -21,25 +21,33 @@ class SchedulePageContoller extends GetxController {
   final courseController = Get.find<CourseController>();
   final departmentController = Get.find<DepartmentController>();
 
+  RxBool isLoading = true.obs;
+
   final Rx<ClassSchedulePageSchedule> classSchedulePageSchedule =
       ClassSchedulePageSchedule(days: [], classSchedule: []).obs;
-  final List<RowAcademiccalendarModel> academicCalendarData = [];
+  final RxList<RowAcademiccalendarModel> academicCalendarData =
+      <RowAcademiccalendarModel>[].obs;
 
   final Rx<AssessmentPageSchedule> assessmentschedulePage =
       AssessmentPageSchedule(assessmentModel: [], courseCode: []).obs;
 
-  final ExamPageSchedule examPageSchedule = ExamPageSchedule(
+  final Rx<ExamPageSchedule> examPageSchedule = ExamPageSchedule(
     midExam: [],
     finalExam: [],
-  );
+  ).obs;
 
   @override
   Future<void> onInit() async {
     super.onInit();
+    isLoading.value = true;
     final focusedDate = DateTime.now().obs;
-    await fetchclassScheduleCalander(focusedDate.value);
-    await fetchAssessment(sortBy: 'incomplete');
-    await fetchExamPageSchedule();
+    await Future.wait([
+      fetchclassScheduleCalander(focusedDate.value),
+      fetchAssessment(sortBy: 'incomplete'),
+      fetchExamPageSchedule(),
+    ]);
+
+    isLoading.value = false;
   }
 
   // A: --------------------------------------------------------------------------Class Schedule Calander----------------------------------------------------------------------
@@ -265,22 +273,22 @@ class SchedulePageContoller extends GetxController {
       }
       for (var i in assessmentData.assessment!) {
         if (i.rowAssessmentModel.assessment.toLowerCase() == 'mid') {
-          examPageSchedule.midExam.add(i);
+          examPageSchedule.value.midExam.add(i);
         } else if (i.rowAssessmentModel.assessment.toLowerCase() == 'final') {
-          examPageSchedule.finalExam.add(i);
+          examPageSchedule.value.finalExam.add(i);
         }
       }
 
-      final midR = examPageSchedule.midExam.reversed.toList();
-      final finalR = examPageSchedule.finalExam.reversed.toList();
-      examPageSchedule.midExam.clear();
-      examPageSchedule.finalExam.clear();
-      examPageSchedule.midExam.addAll(midR);
-      examPageSchedule.finalExam.addAll(finalR);
+      final midR = examPageSchedule.value.midExam.reversed.toList();
+      final finalR = examPageSchedule.value.finalExam.reversed.toList();
+      examPageSchedule.value.midExam.clear();
+      examPageSchedule.value.finalExam.clear();
+      examPageSchedule.value.midExam.addAll(midR);
+      examPageSchedule.value.finalExam.addAll(finalR);
 
-      return examPageSchedule;
+      return examPageSchedule.value;
     } catch (e) {
-      return examPageSchedule;
+      return examPageSchedule.value;
     }
   }
 }

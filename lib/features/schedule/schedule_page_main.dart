@@ -6,10 +6,12 @@ import 'package:academicpanel/features/schedule/widget/topheader/schedule_Caland
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/animation/diagonal_reveal.dart';
+import 'package:academicpanel/utility/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 class SchedulePageMain extends StatefulWidget {
   const SchedulePageMain({super.key});
@@ -90,21 +92,28 @@ class _SchedulePageMainState extends State<SchedulePageMain> {
       backgroundColor: ColorStyle.light,
       body: DiagonalReveal(
         duration: Duration(milliseconds: 300),
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: Column(
-            spacing: 20,
-            children: [
-              // Now you can remove the broken button code inside this widget
-              ScheduleCalanderview(
-                schedulePageContoller: schedulePageContoller,
+        child: Obx(() {
+          if (schedulePageContoller.isLoading.value) {
+            return const Center(child: Loading(hight: 100));
+          } else {
+            return SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                spacing: 20,
+                children: [
+                  ScheduleCalanderview(
+                    schedulePageContoller: schedulePageContoller,
+                  ),
+                  ScheduleAssessment(
+                    schedulePageContoller: schedulePageContoller,
+                  ),
+                  ScheduleExam(schedulePageContoller: schedulePageContoller),
+                  SizedBox(height: 100),
+                ],
               ),
-              ScheduleAssessment(schedulePageContoller: schedulePageContoller),
-              ScheduleExam(schedulePageContoller: schedulePageContoller),
-              SizedBox(height: 100),
-            ],
-          ),
-        ),
+            );
+          }
+        }),
       ),
     );
   }

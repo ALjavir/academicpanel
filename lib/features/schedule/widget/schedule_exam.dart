@@ -43,9 +43,10 @@ class _ScheduleExamState extends State<ScheduleExam> {
 
   @override
   Widget build(BuildContext context) {
-    final midExamItem = widget.schedulePageContoller.examPageSchedule.midExam;
+    final midExamItem =
+        widget.schedulePageContoller.examPageSchedule.value.midExam;
     final finalExamItem =
-        widget.schedulePageContoller.examPageSchedule.finalExam;
+        widget.schedulePageContoller.examPageSchedule.value.finalExam;
     final examList = [midExamItem, finalExamItem];
 
     return Padding(
