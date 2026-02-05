@@ -7,8 +7,6 @@ import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/animation/Expandable_Page_View.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:lottie/lottie.dart';
 
 class ResultCurrentsem extends StatefulWidget {
@@ -211,7 +209,6 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
                         children: [
                           showData("Quiz", currentResult.quizList),
                           showData("Assign.", currentResult.assignmentList),
-
                           showData("Pres.", [currentResult.presentation]),
                           showData("Viva", [currentResult.viva]),
                           showData("Mid", [currentResult.midE]),

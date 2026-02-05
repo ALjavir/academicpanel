@@ -123,6 +123,8 @@ class ResultTopheaderCr extends StatelessWidget {
 
         Center(
           child: CircularPercentIndicator(
+            animationDuration: 1000,
+            animation: true,
             radius: 55.0,
             lineWidth: 8.0,
             percent: completedPercent,

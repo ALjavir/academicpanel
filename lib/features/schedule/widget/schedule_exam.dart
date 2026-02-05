@@ -59,10 +59,10 @@ class _ScheduleExamState extends State<ScheduleExam> {
             itemCount: examList.length,
             itemBuilder: (context, pageIndex) {
               final currentExams = examList[pageIndex];
-              if (currentExams.isEmpty) {
+              if (midExamItem.isEmpty && midExamItem.isEmpty) {
                 return ThreeDContainel(
                   redious: 10,
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -81,7 +81,8 @@ class _ScheduleExamState extends State<ScheduleExam> {
                         ),
                       ),
                       Text(
-                        "No exam for now, relax!",
+                        // "No exam for now, relax!",
+                        "No Data Found!!!",
                         style: Fontstyle.defult(
                           18,
                           FontWeight.bold,
@@ -118,127 +119,162 @@ class _ScheduleExamState extends State<ScheduleExam> {
                       ],
                     ),
                     Divider(color: ColorStyle.red),
-                    ListView.builder(
-                      padding: const EdgeInsets.all(6),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: currentExams.length,
-
-                      itemBuilder: (context, listIndex) {
-                        final rowAssessmentModel =
-                            currentExams[listIndex].rowAssessmentModel;
-                        final rowCourseModel =
-                            currentExams[listIndex].rowCourseModel;
-                        final isLast = listIndex == currentExams.length - 1;
-
-                        return IntrinsicHeight(
-                          child: Row(
-                            spacing: 10,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-
-                            children: [
-                              DotlineTemplate(isLast: isLast, index: listIndex),
-
-                              // Content
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  spacing: 6,
-                                  children: [
-                                    Text(
-                                      "${rowCourseModel.name.capitalizeFirst!} - (${rowCourseModel.code})",
-                                      style: Fontstyle.defult(
-                                        15.5,
-                                        FontWeight.w600,
-                                        ColorStyle.Textblue,
-                                      ),
-                                    ),
-
-                                    Row(
-                                      spacing: 4,
-                                      children: [
-                                        const Icon(
-                                          Icons.watch_later_outlined,
-                                          color: ColorStyle.red,
-                                          size: 18,
-                                        ),
-
-                                        Text(
-                                          "${DatetimeStyle.formatTime12Hour(rowAssessmentModel.startTime, context)} - ${DatetimeStyle.formatTime12Hour(rowAssessmentModel.endTime, context)}",
-                                          style: Fontstyle.defult(
-                                            14,
-                                            FontWeight.w600,
-                                            ColorStyle.Textblue,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                    Row(
-                                      spacing: 4,
-                                      children: [
-                                        const Icon(
-                                          Icons.location_on_outlined,
-                                          color: ColorStyle.red,
-                                          size: 20,
-                                        ),
-
-                                        Text(
-                                          rowAssessmentModel.room,
-                                          style: Fontstyle.defult(
-                                            14,
-                                            FontWeight.w600,
-                                            ColorStyle.Textblue,
-                                          ),
-                                        ),
-
-                                        const SizedBox(width: 12),
-                                        const Icon(
-                                          Icons.person_outline,
-                                          color: ColorStyle.red,
-                                          size: 20,
-                                        ),
-                                        Text(
-                                          rowAssessmentModel.instructor[0],
-                                          style: Fontstyle.defult(
-                                            14,
-                                            FontWeight.w600,
-                                            ColorStyle.Textblue,
-                                          ),
-                                        ),
-                                        Text(
-                                          '•',
-                                          style: Fontstyle.defult(
-                                            14,
-                                            FontWeight.normal,
-                                            ColorStyle.red,
-                                          ),
-                                        ),
-                                        Text(
-                                          rowAssessmentModel.instructor[1],
-                                          style: Fontstyle.defult(
-                                            14,
-                                            FontWeight.w600,
-                                            ColorStyle.Textblue,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 12),
-                                  ],
+                    if (currentExams.isEmpty)
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ClipRect(
+                            child: SizedBox(
+                              height: 120,
+                              width: double.maxFinite,
+                              child: Transform.scale(
+                                scale: 2,
+                                child: LottieBuilder.asset(
+                                  ImageStyle.upCommingClassaAimatedIcon(),
+                                  frameRate: FrameRate.max,
+                                  fit: BoxFit.contain,
                                 ),
                               ),
-                              showFullInfoAssessment(
-                                assessmentModel: currentExams[listIndex],
-                                context: context,
-                                showNormalDate: true,
-                              ),
-                            ],
+                            ),
                           ),
-                        );
-                      },
-                    ),
+                          Text(
+                            "No exam for now, relax!",
+
+                            style: Fontstyle.defult(
+                              18,
+                              FontWeight.bold,
+                              ColorStyle.Textblue,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                      )
+                    else
+                      ListView.builder(
+                        padding: const EdgeInsets.all(6),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: currentExams.length,
+
+                        itemBuilder: (context, listIndex) {
+                          final rowAssessmentModel =
+                              currentExams[listIndex].rowAssessmentModel;
+                          final rowCourseModel =
+                              currentExams[listIndex].rowCourseModel;
+                          final isLast = listIndex == currentExams.length - 1;
+
+                          return IntrinsicHeight(
+                            child: Row(
+                              spacing: 10,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+
+                              children: [
+                                DotlineTemplate(
+                                  isLast: isLast,
+                                  index: listIndex,
+                                ),
+
+                                // Content
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    spacing: 6,
+                                    children: [
+                                      Text(
+                                        "${rowCourseModel.name.capitalizeFirst!} - (${rowCourseModel.code})",
+                                        style: Fontstyle.defult(
+                                          15.5,
+                                          FontWeight.w600,
+                                          ColorStyle.Textblue,
+                                        ),
+                                      ),
+
+                                      Row(
+                                        spacing: 4,
+                                        children: [
+                                          const Icon(
+                                            Icons.watch_later_outlined,
+                                            color: ColorStyle.red,
+                                            size: 18,
+                                          ),
+
+                                          Text(
+                                            "${DatetimeStyle.formatTime12Hour(rowAssessmentModel.startTime, context)} - ${DatetimeStyle.formatTime12Hour(rowAssessmentModel.endTime, context)}",
+                                            style: Fontstyle.defult(
+                                              14,
+                                              FontWeight.w600,
+                                              ColorStyle.Textblue,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                      Row(
+                                        spacing: 4,
+                                        children: [
+                                          const Icon(
+                                            Icons.location_on_outlined,
+                                            color: ColorStyle.red,
+                                            size: 20,
+                                          ),
+
+                                          Text(
+                                            rowAssessmentModel.room,
+                                            style: Fontstyle.defult(
+                                              14,
+                                              FontWeight.w600,
+                                              ColorStyle.Textblue,
+                                            ),
+                                          ),
+
+                                          const SizedBox(width: 12),
+                                          const Icon(
+                                            Icons.person_outline,
+                                            color: ColorStyle.red,
+                                            size: 20,
+                                          ),
+                                          Text(
+                                            rowAssessmentModel.instructor[0],
+                                            style: Fontstyle.defult(
+                                              14,
+                                              FontWeight.w600,
+                                              ColorStyle.Textblue,
+                                            ),
+                                          ),
+                                          Text(
+                                            '•',
+                                            style: Fontstyle.defult(
+                                              14,
+                                              FontWeight.normal,
+                                              ColorStyle.red,
+                                            ),
+                                          ),
+                                          Text(
+                                            rowAssessmentModel.instructor[1],
+                                            style: Fontstyle.defult(
+                                              14,
+                                              FontWeight.w600,
+                                              ColorStyle.Textblue,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 12),
+                                    ],
+                                  ),
+                                ),
+                                showFullInfoAssessment(
+                                  assessmentModel: currentExams[listIndex],
+                                  context: context,
+                                  showNormalDate: true,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                   ],
                 ),
               );

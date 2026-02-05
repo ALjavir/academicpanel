@@ -24,6 +24,8 @@ class ResultPageController extends GetxController {
 
   final RxList<CurrentSemResultModel> listCurrentSemResultData =
       <CurrentSemResultModel>[].obs;
+  final Rxn<PrevSemResultResultPage> PrevSemResultData =
+      Rxn<PrevSemResultResultPage>();
 
   @override
   Future<void> onInit() async {
@@ -164,6 +166,32 @@ class ResultPageController extends GetxController {
     } catch (e) {
       print("Error: $e");
       return [];
+    }
+  }
+
+  // c: ----------------------------------------------------------------------------Prev Sem Result----------------------------------------------------------------------------------
+
+  Future<PrevSemResultResultPage> fetchPrevSemResultData(
+    String semester,
+  ) async {
+    try {
+      final resultModel = await resultController.fetchResultData(
+        getPrevResult: true,
+        semester: semester,
+      );
+
+      return PrevSemResultData.value = PrevSemResultResultPage(
+        prevSemester: semester,
+        listPrevSem: resultModel.listPrevSem!,
+        rowPrevResultList: resultModel.rowPrevResult!,
+      );
+    } catch (e) {
+      print("Error fetching previous semester result: $e");
+      return PrevSemResultData.value = PrevSemResultResultPage(
+        prevSemester: semester,
+        listPrevSem: [],
+        rowPrevResultList: [],
+      );
     }
   }
 }

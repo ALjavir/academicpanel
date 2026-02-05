@@ -53,23 +53,27 @@ class _ExpandablePageViewState extends State<ExpandablePageView> {
         itemCount: widget.itemCount,
         onPageChanged: widget.onPageChanged,
         itemBuilder: (context, index) {
-          return _SizeReportingWidget(
-            onSizeChange: (size) {
-              // Logic: Only update height if this is the CURRENT page
-              // or if the controller isn't ready yet (initial render)
-              final isControllerAttached = _pageController.positions.isNotEmpty;
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: _SizeReportingWidget(
+              onSizeChange: (size) {
+                // Logic: Only update height if this is the CURRENT page
+                // or if the controller isn't ready yet (initial render)
+                final isControllerAttached =
+                    _pageController.positions.isNotEmpty;
 
-              if (isControllerAttached) {
-                final currentPage = _pageController.page?.round() ?? 0;
-                if (currentPage != index) return;
-              }
+                if (isControllerAttached) {
+                  final currentPage = _pageController.page?.round() ?? 0;
+                  if (currentPage != index) return;
+                }
 
-              // Only rebuild if height actually changed to save performance
-              if (_currentHeight != size.height) {
-                setState(() => _currentHeight = size.height);
-              }
-            },
-            child: widget.itemBuilder(context, index),
+                // Only rebuild if height actually changed to save performance
+                if (_currentHeight != size.height) {
+                  setState(() => _currentHeight = size.height);
+                }
+              },
+              child: widget.itemBuilder(context, index),
+            ),
           );
         },
       ),
