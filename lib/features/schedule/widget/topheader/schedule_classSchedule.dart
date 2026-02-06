@@ -101,7 +101,7 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
           );
         } else {
           return ListView.builder(
-            padding: EdgeInsets.fromLTRB(16, 20, 16, 16),
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount:
@@ -135,10 +135,10 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
                         spacing: 6,
                         children: [
                           Text(
-                            "${item.rowCourseModel.name.capitalizeFirst!} - (${item.rowCourseModel.code})",
+                            "${item.rowCourseModel.name.capitalizeFirst!} (${item.rowCourseModel.code})",
                             style: Fontstyle.defult(
-                              15.5,
-                              FontWeight.w600,
+                              15,
+                              FontWeight.bold,
                               ColorStyle.Textblue,
                             ),
                           ),
@@ -148,14 +148,14 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
                               Icon(
                                 Icons.watch_later_outlined,
                                 color: ColorStyle.red,
-                                size: 18,
+                                size: 14,
                               ),
 
                               Text(
                                 "${formatTime12Hour(item.rowClassscheduleModel.startTime)} - ${formatTime12Hour(item.rowClassscheduleModel.endTime)}",
                                 style: Fontstyle.defult(
                                   14,
-                                  FontWeight.w600,
+                                  FontWeight.w500,
                                   ColorStyle.Textblue,
                                 ),
                               ),
@@ -167,35 +167,35 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
                               Icon(
                                 Icons.location_on_outlined,
                                 color: ColorStyle.red,
-                                size: 20,
+                                size: 16,
                               ),
 
                               Text(
                                 item.rowClassscheduleModel.room,
                                 style: Fontstyle.defult(
                                   14,
-                                  FontWeight.w600,
+                                  FontWeight.w500,
                                   ColorStyle.Textblue,
                                 ),
                               ),
-                              const SizedBox(width: 12),
+                              const SizedBox(width: 6),
                               Icon(
                                 Icons.person_outline,
                                 color: ColorStyle.red,
-                                size: 20,
+                                size: 16,
                               ),
 
                               Text(
                                 item.instructor,
                                 style: Fontstyle.defult(
                                   14,
-                                  FontWeight.w600,
+                                  FontWeight.w500,
                                   ColorStyle.Textblue,
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 10),
                         ],
                       ),
                     ),

@@ -46,7 +46,10 @@ class LoadAlldata extends GetxController {
   }
 
   Future<void> loadAllResultData() async {
-    final fetchedData = await resultController.fetchResultData(getCGPA: true);
+    final fetchedData = await resultController.fetchResultData(
+      getCGPA: true,
+      getPrevResult: true,
+    );
     allDataResult = fetchedData;
     update();
   }

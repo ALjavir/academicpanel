@@ -151,7 +151,10 @@ class _ScheduleExamState extends State<ScheduleExam> {
                       )
                     else
                       ListView.builder(
-                        padding: const EdgeInsets.all(6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 6,
+                        ),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: currentExams.length,
@@ -183,28 +186,28 @@ class _ScheduleExamState extends State<ScheduleExam> {
                                     spacing: 6,
                                     children: [
                                       Text(
-                                        "${rowCourseModel.name.capitalizeFirst!} - (${rowCourseModel.code})",
+                                        "${rowCourseModel.name.capitalizeFirst!}  (${rowCourseModel.code})",
                                         style: Fontstyle.defult(
-                                          15.5,
-                                          FontWeight.w600,
+                                          15,
+                                          FontWeight.bold,
                                           ColorStyle.Textblue,
                                         ),
                                       ),
-
+                                      //const SizedBox(height: 0),
                                       Row(
                                         spacing: 4,
                                         children: [
                                           const Icon(
                                             Icons.watch_later_outlined,
                                             color: ColorStyle.red,
-                                            size: 18,
+                                            size: 14,
                                           ),
 
                                           Text(
                                             "${DatetimeStyle.formatTime12Hour(rowAssessmentModel.startTime, context)} - ${DatetimeStyle.formatTime12Hour(rowAssessmentModel.endTime, context)}",
                                             style: Fontstyle.defult(
                                               14,
-                                              FontWeight.w600,
+                                              FontWeight.w500,
                                               ColorStyle.Textblue,
                                             ),
                                           ),
@@ -217,36 +220,36 @@ class _ScheduleExamState extends State<ScheduleExam> {
                                           const Icon(
                                             Icons.location_on_outlined,
                                             color: ColorStyle.red,
-                                            size: 20,
+                                            size: 16,
                                           ),
 
                                           Text(
                                             rowAssessmentModel.room,
                                             style: Fontstyle.defult(
                                               14,
-                                              FontWeight.w600,
+                                              FontWeight.w500,
                                               ColorStyle.Textblue,
                                             ),
                                           ),
 
-                                          const SizedBox(width: 12),
+                                          const SizedBox(width: 6),
                                           const Icon(
                                             Icons.person_outline,
                                             color: ColorStyle.red,
-                                            size: 20,
+                                            size: 16,
                                           ),
                                           Text(
                                             rowAssessmentModel.instructor[0],
                                             style: Fontstyle.defult(
                                               14,
-                                              FontWeight.w600,
+                                              FontWeight.w500,
                                               ColorStyle.Textblue,
                                             ),
                                           ),
                                           Text(
                                             '•',
                                             style: Fontstyle.defult(
-                                              14,
+                                              12,
                                               FontWeight.normal,
                                               ColorStyle.red,
                                             ),
@@ -255,7 +258,7 @@ class _ScheduleExamState extends State<ScheduleExam> {
                                             rowAssessmentModel.instructor[1],
                                             style: Fontstyle.defult(
                                               14,
-                                              FontWeight.w600,
+                                              FontWeight.w500,
                                               ColorStyle.Textblue,
                                             ),
                                           ),
@@ -265,6 +268,7 @@ class _ScheduleExamState extends State<ScheduleExam> {
                                     ],
                                   ),
                                 ),
+                                const SizedBox(width: 10),
                                 showFullInfoAssessment(
                                   assessmentModel: currentExams[listIndex],
                                   context: context,

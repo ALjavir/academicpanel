@@ -1,5 +1,6 @@
 import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
 import 'package:academicpanel/model/resultSuperModel/row_assessment_mark.dart';
+import 'package:academicpanel/model/resultSuperModel/row_prev_result.dart';
 
 class CurrentSemResultModel {
   final RowCourseModel rowCourseModel;
@@ -21,5 +22,16 @@ class CurrentSemResultModel {
     required this.totalMark,
     required this.grade,
     required this.rowCourseModel,
+  });
+}
+
+class PrevSemResultResultPage {
+  final String prevSemester;
+  final List<dynamic> listPrevSem;
+  final List<RowPrevResult> rowPrevResultList;
+  PrevSemResultResultPage({
+    required this.rowPrevResultList,
+    required this.prevSemester,
+    required this.listPrevSem,
   });
 }

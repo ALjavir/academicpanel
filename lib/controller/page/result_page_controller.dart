@@ -31,7 +31,15 @@ class ResultPageController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     isLoading.value = true;
-    await Future.wait([fetchCGPAinfo(), fetchListCurrentSemResult()]);
+    await Future.wait([
+      fetchCGPAinfo(),
+      fetchListCurrentSemResult(),
+      fetchPrevSemResultData(''),
+    ]);
+
+    for (var item in PrevSemResultData.value!.rowPrevResultList) {
+      print(item.grade);
+    }
 
     isLoading.value = false;
   }
@@ -179,16 +187,21 @@ class ResultPageController extends GetxController {
         getPrevResult: true,
         semester: semester,
       );
+      if (semester == '') {
+        semester = resultModel.listPrevSem!.last;
+      }
+      print("Inside the fetchPrevSemResultData function");
+      print("Previous Semester: $semester");
 
       return PrevSemResultData.value = PrevSemResultResultPage(
         prevSemester: semester,
-        listPrevSem: resultModel.listPrevSem!,
+        listPrevSem: resultModel.listPrevSem!.reversed.toList(),
         rowPrevResultList: resultModel.rowPrevResult!,
       );
     } catch (e) {
       print("Error fetching previous semester result: $e");
       return PrevSemResultData.value = PrevSemResultResultPage(
-        prevSemester: semester,
+        prevSemester: '',
         listPrevSem: [],
         rowPrevResultList: [],
       );

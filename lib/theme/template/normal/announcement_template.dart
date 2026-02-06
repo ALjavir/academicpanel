@@ -14,10 +14,9 @@ class AnnouncementTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.all(6), // Remove default padding
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       shrinkWrap: true,
-      physics:
-          const NeverScrollableScrollPhysics(), // Keeps it stable inside your Dashboard
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: announcement.length,
       itemBuilder: (context, index) {
         final item = announcement[index];

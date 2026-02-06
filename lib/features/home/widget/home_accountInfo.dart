@@ -261,7 +261,7 @@ class HomeAccountinfo extends StatelessWidget {
         SizedBox(width: 8),
         Text(
           label,
-          style: Fontstyle.defult(14, FontWeight.w600, ColorStyle.Textblue),
+          style: Fontstyle.defult(15, FontWeight.w500, ColorStyle.Textblue),
         ),
         Spacer(),
         RichText(
@@ -271,7 +271,7 @@ class HomeAccountinfo extends StatelessWidget {
                 text: NumberFormat.decimalPattern().format(amount),
                 style: Fontstyle.defult(
                   14,
-                  FontWeight.w600,
+                  FontWeight.bold,
                   ColorStyle.Textblue,
                 ),
               ),

@@ -8,7 +8,7 @@ import 'package:get/state_manager.dart';
 
 class DropdownbuttonTemplate extends StatefulWidget {
   final Function(String?) onChanged;
-  final List<String> items;
+  final List<dynamic> items;
   final String hint;
   final String? initialValue;
 
@@ -85,7 +85,7 @@ class _DropdownbuttonTemplateState extends State<DropdownbuttonTemplate> {
 
         dropdownStyleData: DropdownStyleData(
           offset: const Offset(-80, 0),
-          width: 100,
+          width: 120,
           decoration: BoxDecoration(
             color: ColorStyle.light,
             borderRadius: BorderRadius.circular(12),

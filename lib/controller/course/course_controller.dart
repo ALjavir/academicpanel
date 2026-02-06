@@ -109,7 +109,7 @@ class CourseController extends GetxController {
               try {
                 foundAssessments = assessmentQuery.docs.map((doc) {
                   final data = doc.data();
-                  // print("This is the rowAssessment doc: $doc");
+
                   final rowAssessment = RowAssessmentModel.fromJson(
                     data,
                     studentId,
@@ -169,12 +169,6 @@ class CourseController extends GetxController {
             a.rowAssessmentModel.startTime,
           ),
         );
-      }
-
-      for (var i in allAssessments) {
-        if (i.rowCourseModel.code == "CSE-101") {
-          print(i.rowAssessmentModel.assessment);
-        }
       }
 
       return SectionsuperModel(

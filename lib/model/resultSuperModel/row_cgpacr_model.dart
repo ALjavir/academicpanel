@@ -29,9 +29,15 @@ class RowCgpaCrModel {
     for (var i in courses.values) {
       credit_enrolled += (i['credit'] ?? 0) as num;
     }
+    String checkTBA(dynamic value) {
+      if (value == null || (value is String && value.trim().isEmpty)) {
+        return 'TBA';
+      }
+      return value.toString();
+    }
 
     return RowCgpaCrModel(
-      comment: map['comment'] ?? 'TBA',
+      comment: checkTBA(map['comment']),
 
       credit_completed: (map['credit_completed'] ?? 0).toDouble(),
       target_credit: (map['target_credit'] ?? 0).toDouble(),

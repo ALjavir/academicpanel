@@ -7,6 +7,7 @@ import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/animation/Expandable_Page_View.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class ResultCurrentsem extends StatefulWidget {
@@ -151,6 +152,7 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
                   redious: 10,
                   padding: const EdgeInsets.fromLTRB(12, 12, 0, 12),
                   child: Column(
+                    spacing: 4,
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,46 +163,52 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
                             scale: 22,
                             color: ColorStyle.red,
                           ),
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text:
-                                      "${currentResult.rowCourseModel.name}\n",
-                                  style: Fontstyle.defult(
-                                    16,
-                                    FontWeight.w600,
-                                    ColorStyle.Textblue,
-                                  ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: 2,
+                            children: [
+                              Text(
+                                "${currentResult.rowCourseModel.name.capitalizeFirst}",
+                                style: Fontstyle.defult(
+                                  18,
+                                  FontWeight.w600,
+                                  ColorStyle.Textblue,
                                 ),
-                                TextSpan(
-                                  text: "${currentResult.rowCourseModel.code}",
-                                  style: Fontstyle.defult(
-                                    13,
-                                    FontWeight.w600,
-                                    ColorStyle.lightBlue,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: " • ",
-                                  style: Fontstyle.defult(
-                                    13,
-                                    FontWeight.w600,
-                                    ColorStyle.red,
-                                  ),
-                                ),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          "${currentResult.rowCourseModel.code}",
+                                      style: Fontstyle.defult(
+                                        12,
+                                        FontWeight.w500,
+                                        ColorStyle.Textblue,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: " • ",
+                                      style: Fontstyle.defult(
+                                        12,
+                                        FontWeight.w600,
+                                        ColorStyle.red,
+                                      ),
+                                    ),
 
-                                TextSpan(
-                                  text:
-                                      "${currentResult.rowCourseModel.credit} Cradit",
-                                  style: Fontstyle.defult(
-                                    13,
-                                    FontWeight.w600,
-                                    ColorStyle.lightBlue,
-                                  ),
+                                    TextSpan(
+                                      text:
+                                          "${currentResult.rowCourseModel.credit} Cr.",
+                                      style: Fontstyle.defult(
+                                        12,
+                                        FontWeight.w500,
+                                        ColorStyle.Textblue,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -289,7 +297,7 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
               TextSpan(
                 text: item.mark.toString(),
                 style: Fontstyle.defult(
-                  13,
+                  12,
                   FontWeight.w600,
                   ColorStyle.lightBlue,
                 ),
@@ -313,7 +321,7 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
               child: Text(
                 title,
                 style: Fontstyle.defult(
-                  16,
+                  15,
                   FontWeight.w600,
                   ColorStyle.Textblue,
                 ),

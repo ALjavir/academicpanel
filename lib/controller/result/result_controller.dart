@@ -35,7 +35,14 @@ class ResultController extends GetxController {
       }
 
       if (getPrevResult) {
-        final prevSemList = resultDocRef["prevSemResult"] as List<String>?;
+        // print(
+        //   "Fetching previous results for student ID: $studentId in department: $department",
+        // );
+        // print(
+        //   "Fetched ${resultData!["prevSemResult"].runtimeType} results for $semester",
+        // );
+        final prevSemList = resultData!["prevSemResult"] as List<dynamic>?;
+
         if (semester.isEmpty) {
           if (prevSemList != null && prevSemList.isNotEmpty) {
             semester = prevSemList.last.toString();

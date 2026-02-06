@@ -13,7 +13,7 @@ class AssessmentTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.all(6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       shrinkWrap: true,
       physics:
           const NeverScrollableScrollPhysics(), // Keeps it stable inside your Dashboard
@@ -47,9 +47,9 @@ class AssessmentTemplate extends StatelessWidget {
                     Text(
                       "${rowCourseModel.name.capitalizeFirst!} (${rowCourseModel.code})",
                       style: Fontstyle.defult(
-                        12,
+                        13,
                         FontWeight.w500,
-                        ColorStyle.lightBlue,
+                        ColorStyle.Textblue,
                       ),
                     ),
 
@@ -61,39 +61,6 @@ class AssessmentTemplate extends StatelessWidget {
                 assessmentModel: assessment[index],
                 context: context,
               ),
-
-              // InkWell(
-              //   onTap: () {
-              //     showDialogAssessment(context, assessment[index]);
-              //   },
-              //   child: Container(
-              //     padding: const EdgeInsets.symmetric(
-              //       horizontal: 10,
-              //       vertical: 4,
-              //     ),
-              //     decoration: BoxDecoration(
-              //       color: ColorStyle.red,
-              //       borderRadius: BorderRadius.circular(12),
-
-              //       boxShadow: [
-              //         BoxShadow(
-              //           blurRadius: 1,
-              //           color: Colors.black26,
-              //           offset: Offset(0.5, 1),
-              //           spreadRadius: 0.5,
-              //         ),
-              //       ],
-              //     ),
-              //     child: Text(
-              //       "${DatetimeStyle.getHybridDate(rowAssessmentModel.startTime)} ->",
-              //       style: Fontstyle.defult(
-              //         10,
-              //         FontWeight.w600,
-              //         ColorStyle.light,
-              //       ),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         );
