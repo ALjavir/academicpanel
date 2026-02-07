@@ -50,7 +50,7 @@ class AnnouncementTemplate extends StatelessWidget {
                     Text(
                       "${item.rowCourseModel.name.capitalizeFirst!} (${item.rowCourseModel.code})",
                       style: Fontstyle.defult(
-                        12,
+                        13,
                         FontWeight.w500,
                         ColorStyle.lightBlue,
                       ),

@@ -49,7 +49,7 @@ class AssessmentTemplate extends StatelessWidget {
                       style: Fontstyle.defult(
                         13,
                         FontWeight.w500,
-                        ColorStyle.Textblue,
+                        ColorStyle.lightBlue,
                       ),
                     ),
 

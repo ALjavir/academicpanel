@@ -121,42 +121,35 @@ class HomePageController extends GetxController {
       if (todayClassScheduleListHome.listClassScheduleModel!.isEmpty) {
         DepartmentModel noCLassData;
 
-        if (loadAlldata.allDataDepartment?.rowNoclassModel == null ||
-            loadAlldata.allDataDepartment!.rowNoclassModel!.isEmpty) {
-          final fetchedData = await departmentController.fetchDepartmentData(
-            getNoCalss: true,
-          );
-          noCLassData = fetchedData;
+        final fetchedDataDep = await departmentController.fetchDepartmentData(
+          getNoCalss: true,
+        );
+        noCLassData = fetchedDataDep;
 
-          final now = DateTime.now();
+        final now = DateTime.now();
 
-          if (noCLassData.rowNoclassModel != null) {
-            for (var i in noCLassData.rowNoclassModel!) {
-              // Holiday Check
-              if (DatetimeStyle.isDateInRange(now, i.startDate!, i.endDate!)) {
-                todayClassScheduleListHome.noclassModel = NoclassModel(
-                  title: i.title!,
-                  startDate: i.startDate!,
-                  endDate: i.endDate!,
-                  type: i.type!,
-                );
-                todayClassScheduleListHome.listClassScheduleModel = [];
-                return todayClassScheduleListHome;
-              }
+        if (noCLassData.rowNoclassModel != null) {
+          for (var i in noCLassData.rowNoclassModel!) {
+            // Holiday Check
+            if (DatetimeStyle.isDateInRange(now, i.startDate!, i.endDate!)) {
+              todayClassScheduleListHome.noclassModel = NoclassModel(
+                title: i.title!,
+                startDate: i.startDate!,
+                endDate: i.endDate!,
+                type: i.type!,
+              );
+              todayClassScheduleListHome.listClassScheduleModel = [];
+              return todayClassScheduleListHome;
             }
           }
         }
+
         SectionsuperModel classScheduleData;
 
-        if (loadAlldata.allDataSection!.schedules!.isEmpty) {
-          final fetchedData = await courseController.fetchSectionData(
-            getClassSchedule: true,
-          );
-          classScheduleData = fetchedData;
-        } else {
-          classScheduleData = loadAlldata.allDataSection!;
-        }
-
+        final fetchedData = await courseController.fetchSectionData(
+          getClassSchedule: true,
+        );
+        classScheduleData = fetchedData;
         if (classScheduleData.schedules != null) {
           tempClassschedule = classScheduleData.schedules!;
         }
@@ -173,6 +166,12 @@ class HomePageController extends GetxController {
         );
       }
 
+      todayClassScheduleListHome.listClassScheduleModel!.sort((a, b) {
+        final aStart = a.rowClassscheduleModel.startTime;
+        final bStart = b.rowClassscheduleModel.startTime;
+        return aStart.compareTo(bStart);
+      });
+
       final currentMinutes = (now.hour * 60) + now.minute;
 
       todayClassScheduleListHome.listClassScheduleModel?.removeWhere((
@@ -185,20 +184,20 @@ class HomePageController extends GetxController {
         return classEndMinutes < currentMinutes;
       });
 
-      todayClassScheduleListHome.listClassScheduleModel?.removeWhere((
-        classItem,
-      ) {
-        if (classItem.rowClassscheduleModel.endTime.isEmpty) return false;
+      // todayClassScheduleListHome.listClassScheduleModel?.removeWhere((
+      //   classItem,
+      // ) {
+      //   if (classItem.rowClassscheduleModel.endTime.isEmpty) return false;
 
-        final parts = classItem.rowClassscheduleModel.endTime.split(':');
-        if (parts.length != 2) return false;
+      //   final parts = classItem.rowClassscheduleModel.endTime.split(':');
+      //   if (parts.length != 2) return false;
 
-        final endHour = int.parse(parts[0]);
-        final endMinute = int.parse(parts[1]);
-        final classEndMinutes = (endHour * 60) + endMinute;
+      //   final endHour = int.parse(parts[0]);
+      //   final endMinute = int.parse(parts[1]);
+      //   final classEndMinutes = (endHour * 60) + endMinute;
 
-        return classEndMinutes < currentMinutes;
-      });
+      //   return classEndMinutes < currentMinutes;
+      // });
 
       return todayClassScheduleListHome;
     } catch (e) {

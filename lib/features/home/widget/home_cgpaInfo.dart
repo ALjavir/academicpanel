@@ -47,11 +47,11 @@ class HomeCgpainfo extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: "CGPA  ",
+                        text: "CGPA ",
                         style: Fontstyle.defult(
-                          8,
-                          FontWeight.w600,
-                          ColorStyle.Textblue,
+                          10,
+                          FontWeight.w500,
+                          ColorStyle.lightBlue,
                         ),
                       ),
                     ],
@@ -136,8 +136,8 @@ class HomeCgpainfo extends StatelessWidget {
                           TextSpan(
                             text: "${label[index]}: ",
                             style: Fontstyle.defult(
-                              15,
-                              FontWeight.w500,
+                              14,
+                              FontWeight.w600,
                               ColorStyle.Textblue,
                             ),
                           ),

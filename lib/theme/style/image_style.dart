@@ -96,6 +96,10 @@ class ImageStyle {
     return 'lib/assets/image/resultTopBackground.jpg';
   }
 
+  static String accountTopBackground() {
+    return 'lib/assets/image/accountTopBackG.jpg';
+  }
+
   static String fall() {
     return 'lib/assets/image/fall.jpg';
   }
