@@ -5,8 +5,8 @@ import 'package:academicpanel/controller/department/department_controller.dart';
 import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/result/result_controller.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
-import 'package:academicpanel/model/Account/home_account_model.dart';
-import 'package:academicpanel/model/Account/row_account_model.dart';
+
+import 'package:academicpanel/model/AccountSuperModel/row_accountInt_model.dart';
 import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
@@ -210,107 +210,114 @@ class HomePageController extends GetxController {
   // C: ----------------------------------------------------------------------------AccountInfo----------------------------------------------------------------------------------
   Future<HomeAccountModel> fetchAccountInfo(UserModel userModel) async {
     try {
-      final department = userModel.department;
-      final semester = "Spring-26";
+      // final department = userModel.department;
+      // final semester = "Spring-26";
 
-      // 1. Reference to Parent (Semester Rules)
-      final accountDocRef = firebaseDatapath.accountData(department, semester);
-      // print("Account Doc Ref: ${accountDocRef.path}");
+      // // 1. Reference to Parent (Semester Rules)
+      // final accountDocRef = firebaseDatapath.accountData(department, semester);
+      // // print("Account Doc Ref: ${accountDocRef.path}");
 
-      // 2. Fetch Parent (Rules) and Child (Student Data)
-      final results = await Future.wait([
-        accountDocRef.get(),
-        accountDocRef.collection('student_id').doc(userModel.id).get(),
-      ]);
+      // // 2. Fetch Parent (Rules) and Child (Student Data)
+      // final results = await Future.wait([
+      //   accountDocRef.get(),
+      //   accountDocRef.collection('student_id').doc(userModel.id).get(),
+      // ]);
 
-      // 3. Process Data
-      final infoSnapshot = results[0];
-      final studentSnapshot = results[1];
+      // // 3. Process Data
+      // final infoSnapshot = results[0];
+      // final studentSnapshot = results[1];
 
-      if (!studentSnapshot.exists) {
-        return HomeAccountModel(
-          totalDue: 0,
-          totalPaid: 0,
-          paidPercentage: 0,
-          upcomingInstallment: null,
-          balance: studentSnapshot.data()?['balance'] ?? 0,
-        );
-      }
+      // if (!studentSnapshot.exists) {
+      //   return HomeAccountModel(
+      //     totalDue: 0,
+      //     totalPaid: 0,
+      //     paidPercentage: 0,
+      //     upcomingInstallment: null,
+      //     balance: studentSnapshot.data()?['balance'] ?? 0,
+      //   );
+      // }
 
-      final infoData = infoSnapshot.exists ? infoSnapshot.data() : {};
-      final studentAccountRawData = RowAccountModel.fromMap(
-        studentSnapshot.data()!,
-      );
-
-      // --- MATH SECTION ---
-
-      // print(
-      //   "this is ac totat: ${studentAccountRawData.ac_statementTotal} and paid total ${studentAccountRawData.paidTotal}",
+      // final infoData = infoSnapshot.exists ? infoSnapshot.data() : {};
+      // final studentAccountRawData = RowAccountModel.fromMap(
+      //   studentSnapshot.data()!,
       // );
 
-      final double dueWithWaver =
-          studentAccountRawData.ac_statementTotal -
-          (studentAccountRawData.ac_statementTotal *
-              (studentAccountRawData.waver_ / 100));
+      // // --- MATH SECTION ---
 
-      final double netPaidForTuition =
-          studentAccountRawData.paidTotal -
-          studentAccountRawData.totalFine +
-          (studentAccountRawData.balance);
+      // // print(
+      // //   "this is ac totat: ${studentAccountRawData.ac_statementTotal} and paid total ${studentAccountRawData.paidTotal}",
+      // // );
 
-      // --- INSTALLMENT CHECK ---
-      InstallmentModel? urgentInstallment;
+      // final double dueWithWaver =
+      //     studentAccountRawData.ac_statementTotal -
+      //     (studentAccountRawData.ac_statementTotal *
+      //         (studentAccountRawData.waver_ / 100));
 
-      // Fetch installments from Parent Document
-      // ... inside your function ...
+      // final double netPaidForTuition =
+      //     studentAccountRawData.paidTotal -
+      //     studentAccountRawData.totalFine +
+      //     (studentAccountRawData.balance);
 
-      final installmentsMap = infoData?['installment'] as Map<String, dynamic>?;
+      // // --- INSTALLMENT CHECK ---
+      // InstallmentModel? urgentInstallment;
 
-      if (installmentsMap != null) {
-        final now = DateTime.now();
+      // // Fetch installments from Parent Document
+      // // ... inside your function ...
 
-        for (var key in installmentsMap.keys) {
-          // 1. Create Model (Handles Timestamp conversion internally)
-          final instData = RowInstallmentModel.fromMap(
-            installmentsMap[key] as Map<String, dynamic>,
-          );
-          print(instData.deadline);
+      // final installmentsMap = infoData?['installment'] as Map<String, dynamic>?;
 
-          if (instData.deadline != null) {
-            final diffDays = instData.deadline!.difference(now).inDays;
+      // if (installmentsMap != null) {
+      //   final now = DateTime.now();
 
-            if (diffDays <= 14) {
-              final double targetAmount =
-                  dueWithWaver * (instData.amount_ / 100);
+      //   for (var key in installmentsMap.keys) {
+      //     // 1. Create Model (Handles Timestamp conversion internally)
+      //     final instData = RowInstallmentModel.fromMap(
+      //       installmentsMap[key] as Map<String, dynamic>,
+      //     );
+      //     print(instData.deadline);
 
-              // 5. Do I owe money?
-              if (netPaidForTuition < targetAmount) {
-                // Calculate the gap (How much more I need to pay to reach 50%)
-                double dueNow = targetAmount - netPaidForTuition;
+      //     if (instData.deadline != null) {
+      //       final diffDays = instData.deadline!.difference(now).inDays;
 
-                urgentInstallment = InstallmentModel(
-                  title: "$key",
+      //       if (diffDays <= 14) {
+      //         final double targetAmount =
+      //             dueWithWaver * (instData.amount_ / 100);
 
-                  dueDate: DateFormat('d MMMM').format(instData.deadline!),
-                  fine: instData.fine.toDouble(),
-                  amount: dueNow.toDouble(),
-                );
+      //         // 5. Do I owe money?
+      //         if (netPaidForTuition < targetAmount) {
+      //           // Calculate the gap (How much more I need to pay to reach 50%)
+      //           double dueNow = targetAmount - netPaidForTuition;
 
-                break;
-              }
-            }
-          }
-        }
-      }
+      //           urgentInstallment = InstallmentModel(
+      //             title: "$key",
 
+      //             dueDate: DateFormat('d MMMM').format(instData.deadline!),
+      //             fine: instData.fine.toDouble(),
+      //             amount: dueNow.toDouble(),
+      //           );
+
+      //           break;
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
+
+      // return HomeAccountModel(
+      //   totalDue: dueWithWaver.toDouble(),
+
+      //   totalPaid: netPaidForTuition.toDouble(),
+
+      //   paidPercentage: (netPaidForTuition / dueWithWaver).clamp(0.0, 1.0),
+      //   upcomingInstallment: urgentInstallment,
+      //   balance: studentAccountRawData.balance.toDouble(),
+      // );
       return HomeAccountModel(
-        totalDue: dueWithWaver.toDouble(),
-
-        totalPaid: netPaidForTuition.toDouble(),
-
-        paidPercentage: (netPaidForTuition / dueWithWaver).clamp(0.0, 1.0),
-        upcomingInstallment: urgentInstallment,
-        balance: studentAccountRawData.balance.toDouble(),
+        totalDue: 0,
+        totalPaid: 0,
+        paidPercentage: 0,
+        upcomingInstallment: null,
+        balance: 0,
       );
     } catch (e) {
       print("Error: $e");

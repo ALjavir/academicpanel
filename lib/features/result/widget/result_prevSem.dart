@@ -136,7 +136,7 @@ class _ResultPrevsemState extends State<ResultPrevsem> {
                   spacing: 4,
                   children: [
                     Text(
-                      "${rowPrevResult.name.capitalizeFirst}",
+                      "${rowPrevResult.rowCourseModel.name.capitalizeFirst}",
 
                       style: Fontstyle.defult(
                         15,
@@ -152,7 +152,7 @@ class _ResultPrevsemState extends State<ResultPrevsem> {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: "${rowPrevResult.code}",
+                              text: "${rowPrevResult.rowCourseModel.code}",
 
                               style: Fontstyle.defult(
                                 12,
@@ -176,7 +176,8 @@ class _ResultPrevsemState extends State<ResultPrevsem> {
                             ),
 
                             TextSpan(
-                              text: "${rowPrevResult.credit} Cr.",
+                              text:
+                                  "${rowPrevResult.rowCourseModel.credit} Cr.",
 
                               style: Fontstyle.defult(
                                 12,

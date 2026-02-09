@@ -14,7 +14,6 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 Future<void> main() async {
   await firebaseInitialize();
   Get.put(UserController(), permanent: true);
-
   Get.put(CourseController(), permanent: true);
   Get.put(DepartmentController(), permanent: true);
   Get.put(ResultController(), permanent: true);

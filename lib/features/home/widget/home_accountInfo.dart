@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:academicpanel/model/Account/home_account_model.dart';
+import 'package:academicpanel/model/AccountSuperModel/row_installment_model.dart';
+import 'package:academicpanel/model/pages/home_page_model.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
@@ -43,7 +44,7 @@ class HomeAccountinfo extends StatelessWidget {
   }
 
   // --- 1. THE INSTALLMENT CARD (Urgent) ---
-  Widget _buildInstallmentCard(InstallmentModel inst) {
+  Widget _buildInstallmentCard(RowInstallmentModel inst) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -68,9 +69,9 @@ class HomeAccountinfo extends StatelessWidget {
           spacing: 5,
           children: [
             Text(
-              inst.title == "1"
+              inst.code.endsWith('1') == "1"
                   ? "1st"
-                  : inst.title == "2"
+                  : inst.code.endsWith('2') == "2"
                   ? "2nd"
                   : "3rd",
               style: Fontstyle.defult(18, FontWeight.w600, ColorStyle.Textblue),
@@ -87,7 +88,7 @@ class HomeAccountinfo extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: "  ${inst.dueDate}",
+                    text: "  ${inst.deadline}",
                     style: Fontstyle.defult(
                       17,
                       FontWeight.w600,
@@ -113,7 +114,7 @@ class HomeAccountinfo extends StatelessWidget {
                       ),
                       TextSpan(
                         text: NumberFormat.decimalPattern().format(
-                          inst.amount.toInt(),
+                          inst.amountPercentage.toInt(),
                         ),
                         style: Fontstyle.defult(
                           17,

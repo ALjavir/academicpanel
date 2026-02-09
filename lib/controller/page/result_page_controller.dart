@@ -190,8 +190,6 @@ class ResultPageController extends GetxController {
       if (semester == '') {
         semester = resultModel.listPrevSem!.last;
       }
-      print("Inside the fetchPrevSemResultData function");
-      print("Previous Semester: $semester");
 
       return PrevSemResultData.value = PrevSemResultResultPage(
         prevSemester: semester,

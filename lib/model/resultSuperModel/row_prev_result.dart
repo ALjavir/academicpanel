@@ -1,14 +1,19 @@
+import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
+
 class RowPrevResult {
-  final String code;
-  final String name;
+  // final String code;
+  // final String name;
   final String grade;
-  final double credit;
+  // final double credit;
+  final RowCourseModel rowCourseModel;
 
   RowPrevResult({
-    required this.code,
-    required this.name,
     required this.grade,
-    required this.credit,
+    // required this.code,
+    // required this.name,
+
+    // required this.credit,
+    required this.rowCourseModel,
   });
 
   factory RowPrevResult.fromMap(Map<String, dynamic> map) {
@@ -20,10 +25,12 @@ class RowPrevResult {
     }
 
     return RowPrevResult(
-      code: checkTBA(map['code']),
-      name: checkTBA(map['name']),
       grade: checkTBA(map['grade']),
-      credit: (map['credit'] ?? 0).toDouble(),
+      rowCourseModel: RowCourseModel.fromMap(map),
+      // code: checkTBA(map['code']),
+      // name: checkTBA(map['name']),
+
+      // credit: (map['credit'] ?? 0).toDouble(),
     );
   }
 }
