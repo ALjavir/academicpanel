@@ -1,42 +1,116 @@
-//class AccountController extrends GetxController {
-// var accountData = {}.obs;
-// Future<void> getAccountData(String department, String semester) async {
-//   try {
-//     DocumentSnapshot<Map<String, dynamic>> snapshot =
-//         await fireBase_DataPath.accountData(department, semester).get();
-//     if (snapshot.exists) {
-//       accountData.value = snapshot.data() ?? {};
-//     } else {
-//       print('No account data found for $department - $semester');
-//     }
-//   } catch (e) {
-//     print('Error fetching account data: $e');
-//   }
-
-//}
-
 import 'package:academicpanel/controller/user/user_controller.dart';
+import 'package:academicpanel/model/AccountSuperModel/account_model.dart';
+import 'package:academicpanel/model/AccountSuperModel/row_ac_statement_model.dart';
+import 'package:academicpanel/model/AccountSuperModel/row_accountExt_model.dart';
+import 'package:academicpanel/model/AccountSuperModel/row_fine_model.dart';
+import 'package:academicpanel/model/AccountSuperModel/row_installment_model.dart';
+import 'package:academicpanel/model/AccountSuperModel/row_payment_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
-// class AccountController  extends GetxController {
-//     final firebaseDatapath = Get.put(FirebaseDatapath());
-//   final userController = Get.find<UserController>();
+class AccountController extends GetxController {
+  final firebaseDatapath = Get.put(FirebaseDatapath());
+  final userController = Get.find<UserController>();
 
-//   Future<void> getAccountData(String department, String semester, String student_id) async {
-//     try {
-//       DocumentSnapshot<Map<String, dynamic>> snapshot =
-//           await fireBase_DataPath.accountData(department, semester, student_id).get();
-//       if (snapshot.exists) {
-//         accountData.value = snapshot.data() ?? {};
-//       } else {
-//         print('No account data found for $department - $semester - $student_id');
-//       }
-//     } catch (e) {
-//       print('Error fetching account data: $e');
-//     }
-//   }
-  
-// }
+  Future<AccountModel> fetchAccountData() async {
+    try {
+      final userModel = userController.user.value;
+      if (userModel == null) throw Exception("User not logged in");
+      final studentId = userModel.id;
+      final department = userModel.department;
+      String current_sem = "";
+      final List<RowFineModel> rowFineModelList = [];
+      final List<RowAcStatementModel> rowAcSatementModelList = [];
+      final List<RowInstallmentModel> rowInstallmentModelList = [];
+      final List<RowPaymentModel> rowPaymentModelList = [];
+      RowAccountextModel? rowAccountextModel;
+      final deptSnapshot = await firebaseDatapath.accountData(department).get();
+      final deptData = deptSnapshot.data();
+      if (deptData != null) {
+        current_sem = deptData['current_sem']?.toString() ?? "";
+        final installmentMap = Map<String, dynamic>.from(
+          deptData['installment'] ?? {},
+        );
+        for (var v in installmentMap.values) {
+          rowInstallmentModelList.add(RowInstallmentModel.fromMap(v));
+        }
+        rowInstallmentModelList.sort((a, b) => b.code.compareTo(a.code));
+      }
+      print("This is in the fetchAccountData: ");
+      print(current_sem);
+      final studentSnapshot = await firebaseDatapath
+          .accountData(department)
+          .collection('student_id')
+          .doc(studentId)
+          .get();
+      if (studentSnapshot.exists && studentSnapshot.data() != null) {
+        rowAccountextModel = RowAccountextModel.fromMap(
+          studentSnapshot.data()!,
+        );
+      } else {
+        rowAccountextModel = RowAccountextModel(
+          balance: 0,
+          perCreditFee: 0,
+          waiver: 0,
+        );
+      }
+      print(rowAccountextModel.balance);
+      if (current_sem.isNotEmpty) {
+        final semSnapshot = await firebaseDatapath
+            .accountData(department)
+            .collection('student_id')
+            .doc(studentId)
+            .collection('semester')
+            .doc(current_sem)
+            .get();
+        final semData = semSnapshot.data();
+        if (semSnapshot.exists && semData != null) {
+          final fineMap = Map<String, dynamic>.from(semData['fine'] ?? {});
+          for (var v in fineMap.values) {
+            rowFineModelList.add(RowFineModel.fromMap(v));
+          }
+          print("rowFineModelList: ${rowFineModelList.length}");
+          final paymentList = Map<String, dynamic>.from(
+            semData['payment'] ?? [],
+          );
+          for (var v in paymentList.values) {
+            rowPaymentModelList.add(RowPaymentModel.fromMap(v));
+          }
+          print("paymentList: ${paymentList.length}");
+          final statementMap = Map<String, dynamic>.from(
+            semData['ac_statement'] ?? {},
+          );
+          for (var v in statementMap.values) {
+            rowAcSatementModelList.add(RowAcStatementModel.fromMap(v));
+          }
+          print("rowAcSatementModelList: ${rowAcSatementModelList.length}");
+        }
+      }
+
+      return AccountModel(
+        rowAcSatementModelList: rowAcSatementModelList,
+        rowInstallmentModelList: rowInstallmentModelList,
+        rowPaymentModelList: rowPaymentModelList,
+        rowAccountextModel: rowAccountextModel,
+        current_sem: current_sem,
+        rowFineModelList: rowFineModelList,
+      );
+    } catch (e) {
+      print('Error fetching account data: $e');
+      return AccountModel(
+        rowAcSatementModelList: [],
+        rowInstallmentModelList: [],
+        rowPaymentModelList: [],
+        rowAccountextModel: RowAccountextModel(
+          balance: 0,
+          perCreditFee: 0,
+          waiver: 0,
+        ),
+        current_sem: '',
+        rowFineModelList: [],
+      );
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
+import 'package:academicpanel/theme/style/tba_style.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 
@@ -29,15 +30,9 @@ class RowCgpaCrModel {
     for (var i in courses.values) {
       credit_enrolled += (i['credit'] ?? 0) as num;
     }
-    String checkTBA(dynamic value) {
-      if (value == null || (value is String && value.trim().isEmpty)) {
-        return 'TBA';
-      }
-      return value.toString();
-    }
 
     return RowCgpaCrModel(
-      comment: checkTBA(map['comment']),
+      comment: TbaStyle.checkTBA(map['comment']),
 
       credit_completed: (map['credit_completed'] ?? 0).toDouble(),
       target_credit: (map['target_credit'] ?? 0).toDouble(),

@@ -1,3 +1,4 @@
+import 'package:academicpanel/controller/account/account_controller.dart';
 import 'package:academicpanel/controller/course/course_controller.dart';
 import 'package:academicpanel/controller/department/department_controller.dart';
 import 'package:academicpanel/controller/result/result_controller.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
   await firebaseInitialize();
   Get.put(UserController(), permanent: true);
   Get.put(CourseController(), permanent: true);
+  Get.put(AccountController(), permanent: true);
   Get.put(DepartmentController(), permanent: true);
   Get.put(ResultController(), permanent: true);
   Get.put(RoutesController(), permanent: true);

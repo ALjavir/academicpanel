@@ -1,12 +1,13 @@
 import 'dart:core';
 
+import 'package:academicpanel/controller/account/account_controller.dart';
 import 'package:academicpanel/controller/course/course_controller.dart';
 import 'package:academicpanel/controller/department/department_controller.dart';
 import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/result/result_controller.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
+import 'package:academicpanel/model/AccountSuperModel/row_installment_model.dart';
 
-import 'package:academicpanel/model/AccountSuperModel/row_accountInt_model.dart';
 import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
@@ -26,6 +27,7 @@ import 'package:intl/intl.dart';
 class HomePageController extends GetxController {
   final userController = Get.find<UserController>();
   final courseController = Get.find<CourseController>();
+  final accountController = Get.find<AccountController>();
   final departmentController = Get.find<DepartmentController>();
   final resultController = Get.find<ResultController>();
   final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
@@ -210,115 +212,107 @@ class HomePageController extends GetxController {
   // C: ----------------------------------------------------------------------------AccountInfo----------------------------------------------------------------------------------
   Future<HomeAccountModel> fetchAccountInfo(UserModel userModel) async {
     try {
-      // final department = userModel.department;
-      // final semester = "Spring-26";
+      final fetchAccountData = await accountController.fetchAccountData();
 
-      // // 1. Reference to Parent (Semester Rules)
-      // final accountDocRef = firebaseDatapath.accountData(department, semester);
-      // // print("Account Doc Ref: ${accountDocRef.path}");
+      if (fetchAccountData.rowAcSatementModelList.isEmpty) {
+        return HomeAccountModel(
+          totalDue: 0,
+          totalPaid: 0,
+          paidPercentage: 0,
+          upcomingInstallment: null,
+          balance: fetchAccountData.rowAccountextModel.balance.toDouble(),
+        );
+      } else {
+        double ac_statementTotal = 0;
+        double paidTotal = 0;
+        double totalFine = 0;
 
-      // // 2. Fetch Parent (Rules) and Child (Student Data)
-      // final results = await Future.wait([
-      //   accountDocRef.get(),
-      //   accountDocRef.collection('student_id').doc(userModel.id).get(),
-      // ]);
+        // Calculate Totals
+        for (var i in fetchAccountData.rowAcSatementModelList) {
+          ac_statementTotal += i.amount;
+        }
+        for (var i in fetchAccountData.rowPaymentModelList) {
+          paidTotal += i.amount;
+        }
+        // FIX 2: Add to 'totalFine', not 'paidTotal'
+        for (var i in fetchAccountData.rowFineModelList) {
+          totalFine += i.amount;
+        }
 
-      // // 3. Process Data
-      // final infoSnapshot = results[0];
-      // final studentSnapshot = results[1];
+        // 1. Calculate Total Fee needed after Waiver
+        final double totalFeeAfterWaiver =
+            ac_statementTotal -
+            (ac_statementTotal *
+                (fetchAccountData.rowAccountextModel.waiver / 100));
 
-      // if (!studentSnapshot.exists) {
-      //   return HomeAccountModel(
-      //     totalDue: 0,
-      //     totalPaid: 0,
-      //     paidPercentage: 0,
-      //     upcomingInstallment: null,
-      //     balance: studentSnapshot.data()?['balance'] ?? 0,
-      //   );
-      // }
+        // 2. Calculate Real Tuition Payment (Money paid - Money lost to fines + Previous Balance)
+        // Note: This assumes 'balance' is positive for overpayment.
+        // If balance is negative (due), subtract it.
+        final double netPaidForTuition =
+            paidTotal -
+            totalFine +
+            (fetchAccountData.rowAccountextModel.balance);
 
-      // final infoData = infoSnapshot.exists ? infoSnapshot.data() : {};
-      // final studentAccountRawData = RowAccountModel.fromMap(
-      //   studentSnapshot.data()!,
-      // );
+        // --- INSTALLMENT CHECK ---
+        RowInstallmentModel? urgentInstallment;
 
-      // // --- MATH SECTION ---
+        // FIX 3: Check if list is NOT empty before accessing .first
+        if (fetchAccountData.rowInstallmentModelList.isNotEmpty) {
+          // Create a copy so we don't mess up the original list
+          final instList = List.from(fetchAccountData.rowInstallmentModelList);
+          final now = DateTime.now();
 
-      // // print(
-      // //   "this is ac totat: ${studentAccountRawData.ac_statementTotal} and paid total ${studentAccountRawData.paidTotal}",
-      // // );
+          // FIX 4: Compare full Dates, not just 'day'
+          // Remove deadlines that are essentially in the past (yesterday or before)
+          instList.removeWhere((element) => element.deadline.isBefore(now));
 
-      // final double dueWithWaver =
-      //     studentAccountRawData.ac_statementTotal -
-      //     (studentAccountRawData.ac_statementTotal *
-      //         (studentAccountRawData.waver_ / 100));
+          // Sort just in case they aren't in order
+          instList.sort((a, b) => a.deadline.compareTo(b.deadline));
 
-      // final double netPaidForTuition =
-      //     studentAccountRawData.paidTotal -
-      //     studentAccountRawData.totalFine +
-      //     (studentAccountRawData.balance);
+          if (instList.isNotEmpty) {
+            final firstInst = instList.first;
+            final diffDays = firstInst.deadline.difference(now).inDays;
 
-      // // --- INSTALLMENT CHECK ---
-      // InstallmentModel? urgentInstallment;
+            // If deadline is within 14 days
+            if (diffDays <= 14 && diffDays >= -1) {
+              // >= -1 handles "today" logic nicely
 
-      // // Fetch installments from Parent Document
-      // // ... inside your function ...
+              // Calculate how much TOTAL needs to be paid by this date (e.g., 50% of total fee)
+              final double targetAmount =
+                  totalFeeAfterWaiver * (firstInst.amountPercentage / 100);
 
-      // final installmentsMap = infoData?['installment'] as Map<String, dynamic>?;
+              // If we haven't reached that target yet
+              if (netPaidForTuition < targetAmount) {
+                final double amountLeftToPay = targetAmount - netPaidForTuition;
 
-      // if (installmentsMap != null) {
-      //   final now = DateTime.now();
+                urgentInstallment = RowInstallmentModel(
+                  fine: firstInst.fine.toDouble(),
+                  deadline: firstInst.deadline,
+                  // Warning: You are storing an AMOUNT in a field named 'amountPercentage'.
+                  // Ensure your UI knows this is $$$ not %.
+                  amountPercentage: firstInst.amountPercentage,
+                  code: firstInst.code,
+                  amount: amountLeftToPay,
+                );
+              }
+            }
+          }
+        }
 
-      //   for (var key in installmentsMap.keys) {
-      //     // 1. Create Model (Handles Timestamp conversion internally)
-      //     final instData = RowInstallmentModel.fromMap(
-      //       installmentsMap[key] as Map<String, dynamic>,
-      //     );
-      //     print(instData.deadline);
+        // Safe Percentage Calculation
+        double percent = 0.0;
+        if (totalFeeAfterWaiver > 0) {
+          percent = (netPaidForTuition / totalFeeAfterWaiver).clamp(0.0, 1.0);
+        }
 
-      //     if (instData.deadline != null) {
-      //       final diffDays = instData.deadline!.difference(now).inDays;
-
-      //       if (diffDays <= 14) {
-      //         final double targetAmount =
-      //             dueWithWaver * (instData.amount_ / 100);
-
-      //         // 5. Do I owe money?
-      //         if (netPaidForTuition < targetAmount) {
-      //           // Calculate the gap (How much more I need to pay to reach 50%)
-      //           double dueNow = targetAmount - netPaidForTuition;
-
-      //           urgentInstallment = InstallmentModel(
-      //             title: "$key",
-
-      //             dueDate: DateFormat('d MMMM').format(instData.deadline!),
-      //             fine: instData.fine.toDouble(),
-      //             amount: dueNow.toDouble(),
-      //           );
-
-      //           break;
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
-
-      // return HomeAccountModel(
-      //   totalDue: dueWithWaver.toDouble(),
-
-      //   totalPaid: netPaidForTuition.toDouble(),
-
-      //   paidPercentage: (netPaidForTuition / dueWithWaver).clamp(0.0, 1.0),
-      //   upcomingInstallment: urgentInstallment,
-      //   balance: studentAccountRawData.balance.toDouble(),
-      // );
-      return HomeAccountModel(
-        totalDue: 0,
-        totalPaid: 0,
-        paidPercentage: 0,
-        upcomingInstallment: null,
-        balance: 0,
-      );
+        return HomeAccountModel(
+          totalDue: totalFeeAfterWaiver, // Shows Total Billed Amount
+          totalPaid: netPaidForTuition, // Shows Effective Amount Paid
+          paidPercentage: percent,
+          upcomingInstallment: urgentInstallment,
+          balance: fetchAccountData.rowAccountextModel.balance.toDouble(),
+        );
+      }
     } catch (e) {
       print("Error: $e");
       return HomeAccountModel(

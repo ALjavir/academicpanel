@@ -1,6 +1,8 @@
+import 'package:academicpanel/controller/account/account_controller.dart';
 import 'package:academicpanel/controller/course/course_controller.dart';
 import 'package:academicpanel/controller/department/department_controller.dart';
 import 'package:academicpanel/controller/result/result_controller.dart';
+import 'package:academicpanel/model/AccountSuperModel/account_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
 import 'package:academicpanel/model/resultSuperModel/result_model.dart';
@@ -11,10 +13,12 @@ class LoadAlldata extends GetxController {
   final courseController = Get.find<CourseController>();
   final departmentController = Get.find<DepartmentController>();
   final resultController = Get.find<ResultController>();
+  final accountController = Get.find<AccountController>();
 
   SectionsuperModel? allDataSection;
   DepartmentModel? allDataDepartment;
   ResultModel? allDataResult;
+  AccountModel? allDataAccount;
 
   Future<void> mainLoadAllData() async {
     try {
@@ -51,6 +55,12 @@ class LoadAlldata extends GetxController {
       getPrevResult: true,
     );
     allDataResult = fetchedData;
+    update();
+  }
+
+  Future<void> loadAllAccountData() async {
+    final fetchedData = await accountController.fetchAccountData();
+    allDataAccount = fetchedData;
     update();
   }
 }

@@ -2,6 +2,7 @@
 
 import 'package:academicpanel/model/AccountSuperModel/row_installment_model.dart';
 import 'package:academicpanel/model/pages/home_page_model.dart';
+import 'package:academicpanel/theme/style/dateTime_style.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
@@ -53,88 +54,126 @@ class HomeAccountinfo extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Installment ",
+              "Installment",
               style: Fontstyle.defult(20, FontWeight.w600, ColorStyle.Textblue),
             ),
 
             Icon(Icons.whatshot, color: ColorStyle.red, size: 28),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Divider(color: ColorStyle.red),
-        ),
+        Divider(color: ColorStyle.red),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 5,
           children: [
-            Text(
-              inst.code.endsWith('1') == "1"
-                  ? "1st"
-                  : inst.code.endsWith('2') == "2"
-                  ? "2nd"
-                  : "3rd",
-              style: Fontstyle.defult(18, FontWeight.w600, ColorStyle.Textblue),
+            Row(
+              //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  inst.code.endsWith('1')
+                      ? "1st Inst."
+                      : inst.code.endsWith('2')
+                      ? "2nd Inst."
+                      : "3rd Inst.",
+                  style: Fontstyle.defult(
+                    16,
+                    FontWeight.w600,
+                    ColorStyle.Textblue,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Icon(
+                    Icons.brightness_1,
+                    size: 5,
+                    color: ColorStyle.red,
+                  ),
+                ),
+                Text(
+                  "${inst.amountPercentage.toInt()}\%",
+                  style: Fontstyle.defult(
+                    16,
+                    FontWeight.w600,
+                    ColorStyle.Textblue,
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 5),
-            RichText(
-              text: TextSpan(
+
+            const SizedBox(height: 1),
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Column(
+                spacing: 5,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  WidgetSpan(
-                    child: Icon(
-                      Icons.watch_later_outlined,
-                      size: 20,
-                      color: ColorStyle.red,
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Icon(
+                            Icons.watch_later_outlined,
+                            size: 16,
+                            color: ColorStyle.red,
+                          ),
+                        ),
+                        WidgetSpan(child: SizedBox(width: 2)),
+                        TextSpan(
+                          text:
+                              " ${DatetimeStyle.getHybridDate(inst.deadline)}",
+                          style: Fontstyle.defult(
+                            16,
+                            FontWeight.w600,
+                            ColorStyle.Textblue,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  TextSpan(
-                    text: "  ${inst.deadline}",
-                    style: Fontstyle.defult(
-                      17,
-                      FontWeight.w600,
-                      ColorStyle.Textblue,
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 2,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "৳",
+                              style: Fontstyle.defult(
+                                16,
+                                FontWeight.w600,
+                                ColorStyle.red,
+                              ),
+                            ),
+                            WidgetSpan(child: SizedBox(width: 6)),
+                            TextSpan(
+                              text: NumberFormat.decimalPattern().format(
+                                inst.amount.toInt(),
+                              ),
+                              style: Fontstyle.defult(
+                                16,
+                                FontWeight.w600,
+                                ColorStyle.Textblue,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      if (inst.fine > 0)
+                        Text(
+                          "+৳${inst.fine} fine applies",
+                          style: Fontstyle.defult(
+                            12,
+                            FontWeight.w500,
+                            ColorStyle.red,
+                          ),
+                        ),
+                    ],
                   ),
                 ],
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "৳   ",
-                        style: Fontstyle.defult(
-                          20,
-                          FontWeight.w600,
-                          ColorStyle.red,
-                        ),
-                      ),
-                      TextSpan(
-                        text: NumberFormat.decimalPattern().format(
-                          inst.amountPercentage.toInt(),
-                        ),
-                        style: Fontstyle.defult(
-                          17,
-                          FontWeight.w600,
-                          ColorStyle.Textblue,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                if (inst.fine > 0)
-                  Text(
-                    "+৳${inst.fine} fine applies",
-                    style: Fontstyle.defult(
-                      12,
-                      FontWeight.w500,
-                      ColorStyle.red,
-                    ),
-                  ),
-              ],
             ),
           ],
         ),

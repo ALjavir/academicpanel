@@ -1,3 +1,5 @@
+import 'package:academicpanel/theme/style/tba_style.dart';
+
 class RowAcademiccalendarModel {
   final String title;
   final String day;
@@ -12,18 +14,11 @@ class RowAcademiccalendarModel {
   });
 
   factory RowAcademiccalendarModel.fromMap(Map<String, dynamic> map) {
-    String checkTBA(dynamic value) {
-      if (value == null || (value is String && value.trim().isEmpty)) {
-        return 'TBA';
-      }
-      return value.toString();
-    }
-
     return RowAcademiccalendarModel(
-      title: checkTBA(map['title']),
-      day: checkTBA(map['day']),
-      type: checkTBA(map['type']),
-      date: checkTBA(map['date']),
+      title: TbaStyle.checkTBA(map['title']),
+      day: TbaStyle.checkTBA(map['day']),
+      type: TbaStyle.checkTBA(map['type']),
+      date: TbaStyle.checkTBA(map['date']),
     );
   }
 }

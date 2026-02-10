@@ -1,4 +1,5 @@
 import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
+import 'package:academicpanel/theme/style/tba_style.dart';
 
 class RowPrevResult {
   // final String code;
@@ -17,15 +18,8 @@ class RowPrevResult {
   });
 
   factory RowPrevResult.fromMap(Map<String, dynamic> map) {
-    String checkTBA(dynamic value) {
-      if (value == null || (value is String && value.trim().isEmpty)) {
-        return 'TBA';
-      }
-      return value.toString();
-    }
-
     return RowPrevResult(
-      grade: checkTBA(map['grade']),
+      grade: TbaStyle.checkTBA(map['grade']),
       rowCourseModel: RowCourseModel.fromMap(map),
       // code: checkTBA(map['code']),
       // name: checkTBA(map['name']),

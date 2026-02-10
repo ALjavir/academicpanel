@@ -1,3 +1,5 @@
+import 'package:academicpanel/theme/style/tba_style.dart';
+
 class RowClassscheduleModel {
   final String day;
   final String startTime;
@@ -15,18 +17,11 @@ class RowClassscheduleModel {
     Map<String, dynamic> map,
     String dayKey,
   ) {
-    String checkTBA(dynamic value) {
-      if (value == null || (value is String && value.trim().isEmpty)) {
-        return 'TBA';
-      }
-      return value.toString();
-    }
-
     return RowClassscheduleModel(
       day: dayKey,
-      room: checkTBA(map['room']),
-      startTime: checkTBA(map['startTime']),
-      endTime: checkTBA(map['endTime']),
+      room: TbaStyle.checkTBA(map['room']),
+      startTime: TbaStyle.checkTBA(map['startTime']),
+      endTime: TbaStyle.checkTBA(map['endTime']),
     );
   }
 }

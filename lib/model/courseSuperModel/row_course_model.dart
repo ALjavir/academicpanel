@@ -1,3 +1,5 @@
+import 'package:academicpanel/theme/style/tba_style.dart';
+
 class RowCourseModel {
   final String code;
   final String name;
@@ -9,16 +11,9 @@ class RowCourseModel {
     required this.credit,
   });
   factory RowCourseModel.fromMap(Map<String, dynamic> map) {
-    String checkTBA(dynamic value) {
-      if (value == null || (value is String && value.trim().isEmpty)) {
-        return 'TBA';
-      }
-      return value.toString();
-    }
-
     return RowCourseModel(
-      code: checkTBA(map['code']),
-      name: checkTBA(map['name']),
+      code: TbaStyle.checkTBA(map['code']),
+      name: TbaStyle.checkTBA(map['name']),
       credit: (map['credit'] ?? 0).toDouble(),
     );
   }
