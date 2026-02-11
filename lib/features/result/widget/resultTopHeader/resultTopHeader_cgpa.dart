@@ -136,22 +136,19 @@ class ResulttopheaderCgpa extends StatelessWidget {
             ),
 
             const SizedBox(height: 10),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: LinearPercentIndicator(
-                animationDuration: 1000,
-                animation: true,
-                curve: Curves.easeOut,
-                percent: cgpaProgress,
+            LinearPercentIndicator(
+              animationDuration: 1000,
+              animation: true,
+              curve: Curves.easeOut,
+              percent: cgpaProgress,
 
-                lineHeight: 15,
-                barRadius: const Radius.circular(10),
-                progressBorderColor: ColorStyle.red,
-                backgroundColor: Colors.white24,
-                center: Text(
-                  "${(cgpaProgress * 100).toStringAsFixed(1)}%",
-                  style: Fontstyle.defult(11, FontWeight.w700, Colors.white),
-                ),
+              lineHeight: 15,
+              barRadius: const Radius.circular(10),
+              progressBorderColor: ColorStyle.red,
+              backgroundColor: const Color.fromARGB(60, 99, 91, 91),
+              center: Text(
+                "${(cgpaProgress * 100).toStringAsFixed(1)}%",
+                style: Fontstyle.defult(11, FontWeight.w700, Colors.white),
               ),
             ),
           ],

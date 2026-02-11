@@ -30,7 +30,7 @@ class HomePageController extends GetxController {
   final accountController = Get.find<AccountController>();
   final departmentController = Get.find<DepartmentController>();
   final resultController = Get.find<ResultController>();
-  final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
+  final firebaseDatapath = Get.find<FirebaseDatapath>();
   final loadAlldata = Get.find<LoadAlldata>();
 
   HomeTodayClassSchedule todayClassScheduleListHome = HomeTodayClassSchedule();
@@ -227,14 +227,13 @@ class HomePageController extends GetxController {
         double paidTotal = 0;
         double totalFine = 0;
 
-        // Calculate Totals
         for (var i in fetchAccountData.rowAcSatementModelList) {
           ac_statementTotal += i.amount;
         }
         for (var i in fetchAccountData.rowPaymentModelList) {
           paidTotal += i.amount;
         }
-        // FIX 2: Add to 'totalFine', not 'paidTotal'
+
         for (var i in fetchAccountData.rowFineModelList) {
           totalFine += i.amount;
         }
@@ -245,9 +244,6 @@ class HomePageController extends GetxController {
             (ac_statementTotal *
                 (fetchAccountData.rowAccountextModel.waiver / 100));
 
-        // 2. Calculate Real Tuition Payment (Money paid - Money lost to fines + Previous Balance)
-        // Note: This assumes 'balance' is positive for overpayment.
-        // If balance is negative (due), subtract it.
         final double netPaidForTuition =
             paidTotal -
             totalFine +
@@ -256,17 +252,12 @@ class HomePageController extends GetxController {
         // --- INSTALLMENT CHECK ---
         RowInstallmentModel? urgentInstallment;
 
-        // FIX 3: Check if list is NOT empty before accessing .first
         if (fetchAccountData.rowInstallmentModelList.isNotEmpty) {
-          // Create a copy so we don't mess up the original list
           final instList = List.from(fetchAccountData.rowInstallmentModelList);
           final now = DateTime.now();
 
-          // FIX 4: Compare full Dates, not just 'day'
-          // Remove deadlines that are essentially in the past (yesterday or before)
           instList.removeWhere((element) => element.deadline.isBefore(now));
 
-          // Sort just in case they aren't in order
           instList.sort((a, b) => a.deadline.compareTo(b.deadline));
 
           if (instList.isNotEmpty) {
@@ -275,21 +266,16 @@ class HomePageController extends GetxController {
 
             // If deadline is within 14 days
             if (diffDays <= 14 && diffDays >= -1) {
-              // >= -1 handles "today" logic nicely
-
-              // Calculate how much TOTAL needs to be paid by this date (e.g., 50% of total fee)
               final double targetAmount =
                   totalFeeAfterWaiver * (firstInst.amountPercentage / 100);
 
-              // If we haven't reached that target yet
               if (netPaidForTuition < targetAmount) {
                 final double amountLeftToPay = targetAmount - netPaidForTuition;
 
                 urgentInstallment = RowInstallmentModel(
                   fine: firstInst.fine.toDouble(),
                   deadline: firstInst.deadline,
-                  // Warning: You are storing an AMOUNT in a field named 'amountPercentage'.
-                  // Ensure your UI knows this is $$$ not %.
+
                   amountPercentage: firstInst.amountPercentage,
                   code: firstInst.code,
                   amount: amountLeftToPay,

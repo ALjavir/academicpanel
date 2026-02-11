@@ -6,6 +6,7 @@ import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/features/splash_screen/splashs_page_main.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/network/api/firebase_initialize.dart';
+import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
 import 'package:academicpanel/utility/check_connection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -14,6 +15,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 Future<void> main() async {
   await firebaseInitialize();
+  Get.put(FirebaseDatapath(), permanent: true);
   Get.put(UserController(), permanent: true);
   Get.put(CourseController(), permanent: true);
   Get.put(AccountController(), permanent: true);

@@ -26,7 +26,7 @@ import 'package:path_provider/path_provider.dart';
 class SignupController extends GetxController {
   RxBool isLoading = false.obs;
   final LocalStoge localStoge = LocalStoge();
-  final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
+  final firebaseDatapath = Get.find<FirebaseDatapath>();
   final FirebaseAuth fireAuth = FirebaseAuth.instance;
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   var selectedImage = Rxn<File>();

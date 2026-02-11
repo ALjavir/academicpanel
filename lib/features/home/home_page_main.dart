@@ -38,14 +38,11 @@ class _HomePageMainState extends State<HomePageMain> {
       extendBodyBehindAppBar: true,
       appBar: CustomAppbar(),
       backgroundColor: ColorStyle.light,
-      // Keep your animation wrapper
       body: DiagonalReveal(
         duration: Duration(milliseconds: 300),
-        // 3. Use FutureBuilder to handle the async data
         child: FutureBuilder(
           future: homeFuture,
           builder: (context, snapshot) {
-            // CASE A: Still Loading
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: Loading(hight: 100));
             }

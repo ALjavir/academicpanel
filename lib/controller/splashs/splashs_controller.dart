@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 class SplashsController extends GetxController {
   final LocalStoge localStoge = LocalStoge();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final FirebaseDatapath firebaseDatapath = FirebaseDatapath();
+  final firebaseDatapath = Get.find<FirebaseDatapath>();
 
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   final userController = Get.find<UserController>();

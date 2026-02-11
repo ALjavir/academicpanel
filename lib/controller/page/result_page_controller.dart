@@ -37,10 +37,6 @@ class ResultPageController extends GetxController {
       fetchPrevSemResultData(''),
     ]);
 
-    for (var item in PrevSemResultData.value!.rowPrevResultList) {
-      print(item.grade);
-    }
-
     isLoading.value = false;
   }
 
