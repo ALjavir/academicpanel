@@ -187,6 +187,8 @@ class HomeAccountinfo extends StatelessWidget {
       spacing: 10,
       children: [
         CircularPercentIndicator(
+          animation: true,
+          animationDuration: 1000,
           radius: 55.0,
           lineWidth: 8.0,
           percent: homeAccountInfoModel.paidPercentage,

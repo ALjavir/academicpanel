@@ -1,5 +1,6 @@
 import 'package:academicpanel/controller/page/account_page_controller.dart';
-import 'package:academicpanel/features/account/widget/accountTopHeader.dart';
+import 'package:academicpanel/features/account/widget/accountTopHeader/accountTopHeaderAll.dart';
+import 'package:academicpanel/features/account/widget/accountTopHeader/accountTopHeaderMain.dart';
 import 'package:academicpanel/model/pages/account_page_model.dart';
 import 'package:academicpanel/navigation/appbar/custom_appbar.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
@@ -48,7 +49,7 @@ class _AccountPageMainState extends State<AccountPageMain> {
               child: Column(
                 spacing: 10,
                 children: [
-                  Accounttopheader(
+                  Accounttopheadermain(
                     accountPageModelTopHeader: data!.accountPageModelTopHeader,
                   ),
                   SizedBox(height: 100),

@@ -71,21 +71,21 @@ class AccountController extends GetxController {
           for (var v in fineMap.values) {
             rowFineModelList.add(RowFineModel.fromMap(v));
           }
-          print("rowFineModelList: ${rowFineModelList.length}");
+          // print("rowFineModelList: ${rowFineModelList.length}");
           final paymentList = Map<String, dynamic>.from(
             semData['payment'] ?? [],
           );
           for (var v in paymentList.values) {
             rowPaymentModelList.add(RowPaymentModel.fromMap(v));
           }
-          print("paymentList: ${paymentList.length}");
+          // print("paymentList: ${paymentList.length}");
           final statementMap = Map<String, dynamic>.from(
             semData['ac_statement'] ?? {},
           );
           for (var v in statementMap.values) {
             rowAcSatementModelList.add(RowAcStatementModel.fromMap(v));
           }
-          print("rowAcSatementModelList: ${rowAcSatementModelList.length}");
+          //print("rowAcSatementModelList: ${rowAcSatementModelList.length}");
         }
       }
 

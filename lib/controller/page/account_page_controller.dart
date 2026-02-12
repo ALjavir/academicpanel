@@ -59,9 +59,9 @@ class AccountPageController extends GetxController {
 
       final double waiverAmount = allDue * (waiverPer / 100);
 
-      final double totalFeeAfterWaiver = allDue - waiverAmount;
+      final double totalFeeAfterWaiver = allDue - waiverAmount - (balance);
 
-      final double netPaidForTuition = allPaid - totalFine + balance;
+      final double netPaidForTuition = allPaid - totalFine;
 
       return AccountPageModelTopHeader(
         balance: balance,

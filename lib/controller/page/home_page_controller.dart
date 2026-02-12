@@ -242,12 +242,10 @@ class HomePageController extends GetxController {
         final double totalFeeAfterWaiver =
             ac_statementTotal -
             (ac_statementTotal *
-                (fetchAccountData.rowAccountextModel.waiver / 100));
-
-        final double netPaidForTuition =
-            paidTotal -
-            totalFine +
+                (fetchAccountData.rowAccountextModel.waiver / 100)) -
             (fetchAccountData.rowAccountextModel.balance);
+
+        final double netPaidForTuition = paidTotal - totalFine;
 
         // --- INSTALLMENT CHECK ---
         RowInstallmentModel? urgentInstallment;
