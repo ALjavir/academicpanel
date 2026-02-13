@@ -1,5 +1,6 @@
 import 'package:academicpanel/model/pages/account_page_model.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
+import 'package:academicpanel/theme/style/dateTime_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,8 +18,31 @@ class Accounttopheadertotal extends StatelessWidget {
     return SizedBox(
       height: 200,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 10,
         children: [
+          //   if (accountPageModelTopHeader.totalDue.toInt()>0)
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: "Account Statement Of ${DatetimeStyle.getSemester()} ",
+                  style: Fontstyle.defult(
+                    18,
+                    FontWeight.w600,
+                    ColorStyle.light,
+                  ),
+                ),
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.bottom,
+                  child: Transform.rotate(
+                    angle: -0.5,
+                    child: const Icon(Icons.send, color: Colors.red, size: 26),
+                  ),
+                ),
+              ],
+            ),
+          ),
           CircularPercentIndicator(
             radius: 55.0,
             lineWidth: 8.0,
@@ -49,7 +73,7 @@ class Accounttopheadertotal extends StatelessWidget {
                   style: Fontstyle.defult(
                     12,
                     FontWeight.w600,
-                    ColorStyle.Textblue,
+                    ColorStyle.light,
                   ),
                 ),
               ],
@@ -102,7 +126,7 @@ class Accounttopheadertotal extends StatelessWidget {
         SizedBox(width: 8),
         Text(
           label,
-          style: Fontstyle.defult(15, FontWeight.w600, ColorStyle.Textblue),
+          style: Fontstyle.defult(15, FontWeight.w600, ColorStyle.light),
         ),
         Spacer(),
         RichText(
@@ -110,11 +134,7 @@ class Accounttopheadertotal extends StatelessWidget {
             children: [
               TextSpan(
                 text: NumberFormat.decimalPattern().format(amount),
-                style: Fontstyle.defult(
-                  14,
-                  FontWeight.bold,
-                  ColorStyle.Textblue,
-                ),
+                style: Fontstyle.defult(14, FontWeight.bold, ColorStyle.light),
               ),
               TextSpan(
                 text: "৳",

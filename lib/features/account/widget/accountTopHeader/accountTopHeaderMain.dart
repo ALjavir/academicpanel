@@ -15,7 +15,7 @@ class Accounttopheadermain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ThreedContainerhead(
-      padding: EdgeInsets.fromLTRB(10, 120, 10, 90),
+      padding: EdgeInsets.fromLTRB(10, 40, 10, 20),
       imagePath: ImageStyle.accountTopBackground(),
       child: Column(
         children: [
