@@ -1,6 +1,5 @@
 import 'package:academicpanel/model/pages/account_page_model.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
-import 'package:academicpanel/theme/style/dateTime_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -15,35 +14,19 @@ class Accounttopheadertotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 10,
-        children: [
-          //   if (accountPageModelTopHeader.totalDue.toInt()>0)
-          Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: "Account Statement Of ${DatetimeStyle.getSemester()} ",
-                  style: Fontstyle.defult(
-                    18,
-                    FontWeight.w600,
-                    ColorStyle.light,
-                  ),
-                ),
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.bottom,
-                  child: Transform.rotate(
-                    angle: -0.5,
-                    child: const Icon(Icons.send, color: Colors.red, size: 26),
-                  ),
-                ),
-              ],
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: 110,
+          height: 110,
+          decoration: BoxDecoration(
+            color: Colors.black38,
+            borderRadius: BorderRadius.circular(90),
           ),
-          CircularPercentIndicator(
+
+          child: CircularPercentIndicator(
             radius: 55.0,
             lineWidth: 8.0,
             animation: true,
@@ -58,7 +41,6 @@ class Accounttopheadertotal extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  // 2. FIX: (Paid / Due) * 100
                   accountPageModelTopHeader.totalDue == 0
                       ? "0%"
                       : "${((accountPageModelTopHeader.totalPaid / accountPageModelTopHeader.totalDue) * 100).toInt()}%",
@@ -71,74 +53,79 @@ class Accounttopheadertotal extends StatelessWidget {
                 Text(
                   "Paid",
                   style: Fontstyle.defult(
-                    12,
-                    FontWeight.w600,
+                    13,
+                    FontWeight.bold,
                     ColorStyle.light,
                   ),
                 ),
               ],
             ),
-            progressColor: const Color(0xff1F51FF),
+            progressColor: ColorStyle.pgCircleBarColor1,
             backgroundWidth: 1.5,
-            backgroundColor: const Color(0xffFF5F1F),
+            backgroundColor: ColorStyle.pgCircleBarColor2,
             circularStrokeCap: CircularStrokeCap.round,
           ),
-          Expanded(
-            child: Column(
-              spacing: 10,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _legendItem(
-                  color: Color(0xffFF5F1F),
-                  label: "Total Due",
-                  amount: accountPageModelTopHeader.totalDue.toInt(),
-                ),
-                _legendItem(
-                  // color: Colors.green,
-                  color: Color(0xff1F51FF),
-                  label: "Total Paid",
-                  amount: accountPageModelTopHeader.totalPaid.toInt(),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
 
-  Widget _legendItem({
-    required Color color,
-
-    required String label,
-    required int amount,
-  }) {
-    return Row(
-      children: [
         Container(
-          width: 4,
-          height: 16,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-        SizedBox(width: 8),
-        Text(
-          label,
-          style: Fontstyle.defult(15, FontWeight.w600, ColorStyle.light),
-        ),
-        Spacer(),
-        RichText(
-          text: TextSpan(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 2,
             children: [
-              TextSpan(
-                text: NumberFormat.decimalPattern().format(amount),
-                style: Fontstyle.defult(14, FontWeight.bold, ColorStyle.light),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    WidgetSpan(
+                      child: Container(
+                        width: 6,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: ColorStyle.pgCircleBarColor1,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ),
+                    TextSpan(
+                      text: " Total Fee Paid",
+                      style: Fontstyle.defult(
+                        16,
+                        FontWeight.bold,
+                        ColorStyle.light,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              TextSpan(
-                text: "৳",
-                style: Fontstyle.defult(16, FontWeight.bold, ColorStyle.red),
+
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text:
+                          "   ${NumberFormat.decimalPattern().format(accountPageModelTopHeader.totalPaid.toInt())}",
+                      style: Fontstyle.defult(
+                        18,
+                        FontWeight.w600,
+                        ColorStyle.light,
+                      ),
+                    ),
+                    TextSpan(
+                      text:
+                          " / ${NumberFormat.decimalPattern().format(accountPageModelTopHeader.totalDue)}",
+                      style: Fontstyle.defult(
+                        18,
+                        FontWeight.w500,
+                        Colors.white70,
+                      ),
+                    ),
+                    TextSpan(
+                      text: "৳",
+                      style: Fontstyle.defult(20, FontWeight.bold, Colors.red),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

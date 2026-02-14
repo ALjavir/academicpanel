@@ -227,13 +227,13 @@ class HomeAccountinfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _legendItem(
-                color: Color(0xffFF5F1F),
+                color: ColorStyle.pgCircleBarColor2,
                 label: "Total Due",
                 amount: homeAccountInfoModel.totalDue.toInt(),
               ),
               _legendItem(
                 // color: Colors.green,
-                color: Color(0xff1F51FF),
+                color: ColorStyle.pgCircleBarColor1,
                 label: "Total Paid",
                 amount: homeAccountInfoModel.totalPaid.toInt(),
               ),

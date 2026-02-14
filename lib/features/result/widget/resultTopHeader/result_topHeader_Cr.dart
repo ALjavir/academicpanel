@@ -122,38 +122,46 @@ class ResultTopheaderCr extends StatelessWidget {
         ),
 
         Center(
-          child: CircularPercentIndicator(
-            animationDuration: 1000,
-            animation: true,
-            radius: 55.0,
-            lineWidth: 8.0,
-            percent: completedPercent,
-            progressColor: Color(0xff1F51FF),
-            backgroundWidth: 1.5,
-            center: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "${(completedPercent * 100).toInt()}%",
-                  style: Fontstyle.defult(
-                    18,
-                    FontWeight.w600,
-                    ColorStyle.light,
-                  ),
-                ),
-                Text(
-                  "Done",
-                  style: Fontstyle.defult(
-                    13,
-                    FontWeight.bold,
-                    ColorStyle.light,
-                  ),
-                ),
-              ],
+          child: Container(
+            width: 110,
+            height: 110,
+            decoration: BoxDecoration(
+              color: Colors.black38,
+              borderRadius: BorderRadius.circular(90),
             ),
+            child: CircularPercentIndicator(
+              animationDuration: 1000,
+              animation: true,
+              radius: 55.0,
+              lineWidth: 8.0,
+              percent: completedPercent,
+              progressColor: ColorStyle.pgCircleBarColor1,
+              backgroundWidth: 1.5,
+              center: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${(completedPercent * 100).toInt()}%",
+                    style: Fontstyle.defult(
+                      18,
+                      FontWeight.w600,
+                      ColorStyle.light,
+                    ),
+                  ),
+                  Text(
+                    "Done",
+                    style: Fontstyle.defult(
+                      13,
+                      FontWeight.bold,
+                      ColorStyle.light,
+                    ),
+                  ),
+                ],
+              ),
 
-            backgroundColor: Color(0xffFF5F1F),
-            circularStrokeCap: CircularStrokeCap.round,
+              backgroundColor: ColorStyle.pgCircleBarColor2,
+              circularStrokeCap: CircularStrokeCap.round,
+            ),
           ),
         ),
       ],

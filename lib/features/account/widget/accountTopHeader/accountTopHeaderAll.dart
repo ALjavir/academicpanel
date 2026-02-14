@@ -1,4 +1,6 @@
 import 'package:academicpanel/model/pages/account_page_model.dart';
+import 'package:academicpanel/theme/style/color_style.dart';
+import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -12,105 +14,97 @@ class Accounttopheaderall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<SegmentItem> items = [
-      SegmentItem(
+    List<_LayerItem> items = [
+      _LayerItem(
         "Total Fee",
         accountPageModelTopHeader.due,
         Colors.grey.shade300,
-      ), // Background Base
-      SegmentItem(
+        isDark: true,
+      ), // The full tuition
+      _LayerItem(
         "Waiver",
         accountPageModelTopHeader.waiver,
         Colors.orangeAccent,
       ),
-      SegmentItem("Paid", accountPageModelTopHeader.paid, Colors.green),
-      SegmentItem(
+      _LayerItem("Paid", accountPageModelTopHeader.paid, Colors.green),
+      _LayerItem(
         "Balance",
-        accountPageModelTopHeader.balance,
-        accountPageModelTopHeader.balance < 0 ? Colors.redAccent : Colors.teal,
-      ),
+        accountPageModelTopHeader.balance.abs(),
+        accountPageModelTopHeader.balance < 0 ? ColorStyle.red : Colors.teal,
+      ), // Red if Due, Teal if Surplus
     ];
 
-    // 2. SORT: Largest Absolute Value first (Bottom layer) -> Smallest last (Top layer)
-    items.sort((a, b) => b.amount.abs().compareTo(a.amount.abs()));
+    // 2. CRITICAL: Sort by Size (Largest -> Smallest)
+    // This ensures the biggest bar is at the bottom (Stack index 0)
+    // and the smallest is at the top, so nothing gets hidden.
+    items.sort((a, b) => b.amount.compareTo(a.amount));
 
-    // 3. Determine Max Value (The bottom layer defines the scale)
-    double maxValue = items.first.amount.abs();
+    // 3. Determine the Scale (The largest bar is 100%)
+    double maxValue = items.first.amount;
     if (maxValue == 0) maxValue = 1;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        // --- THE STACKED BAR ---
+        // The Stack Container
         SizedBox(
-          height: 30, // Adjust height as needed
+          height: 30, // Fixed height for the single compact bar
           child: Stack(
             children: items.map((item) {
-              double percent = (item.amount.abs() / maxValue).clamp(0.0, 1.0);
+              // Calculate width percentage (0.0 to 1.0)
+              final double percent =
+                  (item.amount.abs() / accountPageModelTopHeader.totalDue)
+                      .clamp(0.0, 1.0);
 
-              return Center(
-                child: LinearPercentIndicator(
-                  animation: true,
-                  animationDuration: 1000,
-                  lineHeight: 20.0, // Height of the bar
-                  percent: percent,
-                  barRadius: const Radius.circular(10),
-                  progressColor: item.color,
-                  // IMPORTANT: Only the bottom layer needs a background color.
-                  // Upper layers must be transparent to show the bar below them.
-                  backgroundColor: Colors.transparent,
-                  padding: EdgeInsets.zero, // Remove default padding
+              // If amount is 0, don't show it
+              if (percent == 0) return const SizedBox();
+
+              return FractionallySizedBox(
+                widthFactor: percent, // Takes up X% of the width
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: item.color,
+                    borderRadius: BorderRadius.circular(8), // Rounded edges
+                    boxShadow: [
+                      // Optional: Tiny shadow to separate layers visually
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 2,
+                        offset: Offset(0, 1),
+                      ),
+                    ],
+                  ),
+                  alignment:
+                      Alignment.centerRight, // Align text to the end of the bar
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    // Format: "Label: 500"
+                    "${item.label}: ${percent * 100}",
+                    maxLines: 1,
+                    overflow: TextOverflow
+                        .visible, // Allow text to stick out if needed
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      // Smart Color: Dark text for light bars (Total), White for dark bars
+                      color: item.isDark ? Colors.black54 : Colors.white,
+                    ),
+                  ),
                 ),
               );
             }).toList(),
           ),
-        ),
-
-        const SizedBox(height: 10),
-
-        // --- THE LEGEND (Color Key) ---
-        // Since bars are stacked, we need a legend to tell them apart
-        Wrap(
-          spacing: 12,
-          runSpacing: 4,
-          children: items.map((item) {
-            // Only show items that actually have a value > 0
-            if (item.amount.abs() < 1) return const SizedBox();
-
-            return Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: item.color,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  "${item.label}: ${item.amount.toInt()}",
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            );
-          }).toList(),
         ),
       ],
     );
   }
 }
 
-class SegmentItem {
+class _LayerItem {
   final String label;
-
   final double amount;
-
   final Color color;
+  final bool isDark;
 
-  SegmentItem(this.label, this.amount, this.color);
+  _LayerItem(this.label, this.amount, this.color, {this.isDark = false});
 }
