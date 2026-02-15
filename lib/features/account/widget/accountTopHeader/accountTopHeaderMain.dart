@@ -22,7 +22,7 @@ class Accounttopheadermain extends StatelessWidget {
       imagePath: ImageStyle.accountTopBackground(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 10,
+        spacing: 15,
         children: [
           Text.rich(
             TextSpan(

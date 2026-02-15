@@ -1,8 +1,13 @@
 import 'package:academicpanel/model/pages/account_page_model.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
+
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
+
+import 'dart:math';
+import 'dart:ui' as ui;
+
+import 'package:intl/intl.dart';
 
 class Accounttopheaderall extends StatelessWidget {
   final AccountPageModelTopHeader accountPageModelTopHeader;
@@ -14,82 +19,96 @@ class Accounttopheaderall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<_LayerItem> items = [
-      _LayerItem(
-        "Total Fee",
-        accountPageModelTopHeader.due,
-        Colors.grey.shade300,
-        isDark: true,
-      ), // The full tuition
-      _LayerItem(
-        "Waiver",
-        accountPageModelTopHeader.waiver,
-        Colors.orangeAccent,
-      ),
-      _LayerItem("Paid", accountPageModelTopHeader.paid, Colors.green),
-      _LayerItem(
-        "Balance",
-        accountPageModelTopHeader.balance.abs(),
-        accountPageModelTopHeader.balance < 0 ? ColorStyle.red : Colors.teal,
-      ), // Red if Due, Teal if Surplus
+    List<_ChartItem> items = [
+      _ChartItem("Paid", accountPageModelTopHeader.paid, Colors.green),
+      _ChartItem("Waiver", accountPageModelTopHeader.waiver, Colors.amber),
+      _ChartItem("Balance", accountPageModelTopHeader.balance, Colors.indigo),
+      _ChartItem("Fine", accountPageModelTopHeader.fine, Colors.white),
+      _ChartItem("Due", accountPageModelTopHeader.due, Colors.red),
     ];
 
-    // 2. CRITICAL: Sort by Size (Largest -> Smallest)
-    // This ensures the biggest bar is at the bottom (Stack index 0)
-    // and the smallest is at the top, so nothing gets hidden.
-    items.sort((a, b) => b.amount.compareTo(a.amount));
+    double chartTotal = items.fold(0, (sum, item) => sum + item.amount.abs());
+    if (chartTotal == 0) chartTotal = 1;
 
-    // 3. Determine the Scale (The largest bar is 100%)
-    double maxValue = items.first.amount;
-    if (maxValue == 0) maxValue = 1;
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return Row(
       children: [
-        // The Stack Container
         SizedBox(
-          height: 30, // Fixed height for the single compact bar
-          child: Stack(
+          width: 140,
+          height: 140,
+          child: CustomPaint(
+            painter: _DonutPainter(items: items, total: chartTotal),
+          ),
+        ),
+
+        const SizedBox(width: 20),
+
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: items.map((item) {
-              // Calculate width percentage (0.0 to 1.0)
-              final double percent =
-                  (item.amount.abs() / accountPageModelTopHeader.totalDue)
-                      .clamp(0.0, 1.0);
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      spacing: 8,
+                      children: [
+                        Container(
+                          width: 12,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            color: item.color,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
 
-              // If amount is 0, don't show it
-              if (percent == 0) return const SizedBox();
-
-              return FractionallySizedBox(
-                widthFactor: percent, // Takes up X% of the width
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: item.color,
-                    borderRadius: BorderRadius.circular(8), // Rounded edges
-                    boxShadow: [
-                      // Optional: Tiny shadow to separate layers visually
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 2,
-                        offset: Offset(0, 1),
-                      ),
-                    ],
-                  ),
-                  alignment:
-                      Alignment.centerRight, // Align text to the end of the bar
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    // Format: "Label: 500"
-                    "${item.label}: ${percent * 100}",
-                    maxLines: 1,
-                    overflow: TextOverflow
-                        .visible, // Allow text to stick out if needed
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      // Smart Color: Dark text for light bars (Total), White for dark bars
-                      color: item.isDark ? Colors.black54 : Colors.white,
+                        Text(
+                          item.label,
+                          style: Fontstyle.defult(
+                            14,
+                            FontWeight.w600,
+                            ColorStyle.light,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          if (item.label == 'Due' || item.label == 'Fine')
+                            TextSpan(
+                              text: "-",
+                              style: Fontstyle.defult(
+                                14,
+                                FontWeight.w600,
+                                ColorStyle.light,
+                              ),
+                            ),
+
+                          TextSpan(
+                            text: NumberFormat.decimalPattern().format(
+                              item.amount.toInt().abs(),
+                            ),
+
+                            style: Fontstyle.defult(
+                              14,
+                              FontWeight.w600,
+                              ColorStyle.light,
+                            ),
+                          ),
+                          TextSpan(
+                            text: " ৳",
+                            style: Fontstyle.defult(
+                              14,
+                              FontWeight.bold,
+                              Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               );
             }).toList(),
@@ -100,11 +119,86 @@ class Accounttopheaderall extends StatelessWidget {
   }
 }
 
-class _LayerItem {
+// --- THE PAINTER (Draws the Arcs & Percentages) ---
+class _DonutPainter extends CustomPainter {
+  final List<_ChartItem> items;
+  final double total;
+
+  _DonutPainter({required this.items, required this.total});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = min(size.width / 2, size.height / 2);
+    final strokeWidth = radius * 0.45; // Thickness of the ring
+
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth;
+
+    double startAngle = -pi / 2; // Start at 12 o'clock
+
+    for (var item in items) {
+      if (item.amount.abs() <= 0) continue;
+
+      // Calculate Slice Size
+      final sweepAngle = (item.amount.abs() / total) * 2 * pi;
+
+      // Draw Arc
+      paint.color = item.color;
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: radius - (strokeWidth / 2)),
+        startAngle,
+        sweepAngle,
+        false,
+        paint,
+      );
+
+      final double percentVal = (item.amount.abs() / total);
+
+      if (percentVal > 0.05) {
+        _drawText(canvas, center, radius, startAngle, sweepAngle, percentVal);
+      }
+
+      startAngle += sweepAngle;
+    }
+  }
+
+  void _drawText(
+    Canvas canvas,
+    Offset center,
+    double radius,
+    double startAngle,
+    double sweepAngle,
+    double percentVal,
+  ) {
+    final midAngle = startAngle + (sweepAngle / 2);
+
+    // Position text in the middle of the ring
+    final textOffset = Offset(
+      center.dx + (radius * 0.78) * cos(midAngle) - 10, // 0.78 adjusts depth
+      center.dy + (radius * 0.78) * sin(midAngle) - 6,
+    );
+
+    final textPainter = TextPainter(
+      text: TextSpan(
+        text: "${(percentVal * 100).toInt()}%",
+        style: Fontstyle.defult(10, FontWeight.bold, Colors.white),
+      ),
+      textDirection: ui.TextDirection.ltr,
+    );
+
+    textPainter.layout();
+    textPainter.paint(canvas, textOffset);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+class _ChartItem {
   final String label;
   final double amount;
   final Color color;
-  final bool isDark;
-
-  _LayerItem(this.label, this.amount, this.color, {this.isDark = false});
+  _ChartItem(this.label, this.amount, this.color);
 }

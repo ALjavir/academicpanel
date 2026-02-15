@@ -3,7 +3,7 @@ import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class Accounttopheadertotal extends StatelessWidget {
   final AccountPageModelTopHeader accountPageModelTopHeader;
@@ -14,120 +14,140 @@ class Accounttopheadertotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.center,
+    final remaining =
+        accountPageModelTopHeader.totalPaid -
+        accountPageModelTopHeader.totalDue;
+    return Column(
+      spacing: 8,
       children: [
-        Container(
-          width: 110,
-          height: 110,
-          decoration: BoxDecoration(
-            color: Colors.black38,
-            borderRadius: BorderRadius.circular(90),
-          ),
-
-          child: CircularPercentIndicator(
-            radius: 55.0,
-            lineWidth: 8.0,
-            animation: true,
-            animationDuration: 1000,
-            percent: accountPageModelTopHeader.totalDue == 0
-                ? 0.0
-                : (accountPageModelTopHeader.totalPaid /
-                          accountPageModelTopHeader.totalDue)
-                      .clamp(0.0, 1.0),
-
-            center: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              spacing: 4,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  accountPageModelTopHeader.totalDue == 0
-                      ? "0%"
-                      : "${((accountPageModelTopHeader.totalPaid / accountPageModelTopHeader.totalDue) * 100).toInt()}%",
-                  style: Fontstyle.defult(
-                    18,
-                    FontWeight.w600,
-                    ColorStyle.light,
-                  ),
-                ),
-                Text(
-                  "Paid",
-                  style: Fontstyle.defult(
-                    13,
-                    FontWeight.bold,
-                    ColorStyle.light,
-                  ),
+                Icon(Icons.task_alt_rounded, color: Colors.red, size: 18),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 4,
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Total Paid",
+                            style: Fontstyle.defult(
+                              14,
+                              FontWeight.bold,
+                              ColorStyle.light,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text:
+                                "${NumberFormat.decimalPattern().format(accountPageModelTopHeader.totalPaid.toInt())}",
+                            style: Fontstyle.defult(
+                              18,
+                              FontWeight.w600,
+                              ColorStyle.light,
+                            ),
+                          ),
+                          TextSpan(
+                            text:
+                                " / ${NumberFormat.decimalPattern().format(accountPageModelTopHeader.totalDue)}",
+                            style: Fontstyle.defult(
+                              18,
+                              FontWeight.w500,
+                              Colors.white70,
+                            ),
+                          ),
+                          TextSpan(
+                            text: " ৳",
+                            style: Fontstyle.defult(
+                              20,
+                              FontWeight.bold,
+                              Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            progressColor: ColorStyle.pgCircleBarColor1,
-            backgroundWidth: 1.5,
-            backgroundColor: ColorStyle.pgCircleBarColor2,
-            circularStrokeCap: CircularStrokeCap.round,
-          ),
-        ),
+            Row(
+              spacing: 4,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                // Icon(Icons.cancel_outlined, color: Colors.red, size: 18),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
 
-        Container(
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 2,
-            children: [
-              Text.rich(
-                TextSpan(
                   children: [
-                    WidgetSpan(
-                      child: Container(
-                        width: 6,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          color: ColorStyle.pgCircleBarColor1,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: NumberFormat.decimalPattern().format(
+                              remaining.toInt().abs(),
+                            ),
+                            style: Fontstyle.defult(
+                              18,
+                              FontWeight.w600,
+                              ColorStyle.light,
+                            ),
+                          ),
+
+                          TextSpan(
+                            text: " ৳",
+                            style: Fontstyle.defult(
+                              18,
+                              FontWeight.bold,
+                              Colors.red,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    TextSpan(
-                      text: " Total Fee Paid",
+                    Text(
+                      "Remaining Due",
                       style: Fontstyle.defult(
-                        16,
+                        14,
                         FontWeight.bold,
                         ColorStyle.light,
                       ),
                     ),
                   ],
                 ),
-              ),
+              ],
+            ),
+          ],
+        ),
+        LinearPercentIndicator(
+          animationDuration: 1000,
+          animation: true,
+          curve: Curves.easeOut,
+          percent:
+              (accountPageModelTopHeader.totalPaid /
+                      accountPageModelTopHeader.totalDue)
+                  .clamp(0.0, 1.0),
 
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text:
-                          "   ${NumberFormat.decimalPattern().format(accountPageModelTopHeader.totalPaid.toInt())}",
-                      style: Fontstyle.defult(
-                        18,
-                        FontWeight.w600,
-                        ColorStyle.light,
-                      ),
-                    ),
-                    TextSpan(
-                      text:
-                          " / ${NumberFormat.decimalPattern().format(accountPageModelTopHeader.totalDue)}",
-                      style: Fontstyle.defult(
-                        18,
-                        FontWeight.w500,
-                        Colors.white70,
-                      ),
-                    ),
-                    TextSpan(
-                      text: "৳",
-                      style: Fontstyle.defult(20, FontWeight.bold, Colors.red),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          lineHeight: 15,
+          barRadius: const Radius.circular(10),
+          progressColor: Colors.red,
+
+          backgroundColor: Colors.white10,
+
+          center: Text(
+            "${((accountPageModelTopHeader.totalPaid / accountPageModelTopHeader.totalDue) * 100).toInt()}%",
+            style: Fontstyle.defult(11, FontWeight.w700, Colors.white),
           ),
         ),
       ],

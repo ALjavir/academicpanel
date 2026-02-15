@@ -122,10 +122,12 @@ class ResulttopheaderCgpa extends StatelessWidget {
 
           lineHeight: 15,
           barRadius: const Radius.circular(10),
-          progressBorderColor: ColorStyle.pgCircleBarColor2,
-          backgroundColor: const Color.fromARGB(60, 99, 91, 91),
+          progressColor: Colors.red,
+
+          backgroundColor: Colors.white10,
+
           center: Text(
-            "${(cgpaProgress * 100).toStringAsFixed(1)}%",
+            "${(cgpaProgress * 100).toInt()}%",
             style: Fontstyle.defult(11, FontWeight.w700, Colors.white),
           ),
         ),

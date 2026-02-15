@@ -33,6 +33,7 @@ class AccountPageController extends GetxController {
           paid: 0,
           totalDue: 0,
           totalPaid: 0,
+          fine: 0,
         ),
       );
     }
@@ -45,7 +46,7 @@ class AccountPageController extends GetxController {
 
       double allPaid = 0;
       double allDue = 0;
-      double totalFine = 0;
+      double allFine = 0;
 
       for (var i in fetchAccountData.rowAcSatementModelList) {
         allDue += i.amount;
@@ -54,14 +55,14 @@ class AccountPageController extends GetxController {
         allPaid += i.amount;
       }
       for (var i in fetchAccountData.rowFineModelList) {
-        totalFine += i.amount;
+        allFine += i.amount;
       }
 
       final double waiverAmount = allDue * (waiverPer / 100);
 
       final double totalFeeAfterWaiver = allDue - waiverAmount - (balance);
 
-      final double netPaidForTuition = allPaid - totalFine;
+      final double netPaidForTuition = allPaid - allFine;
 
       return AccountPageModelTopHeader(
         balance: balance,
@@ -70,6 +71,7 @@ class AccountPageController extends GetxController {
         paid: allPaid,
         totalDue: totalFeeAfterWaiver,
         totalPaid: netPaidForTuition,
+        fine: allFine,
       );
     } catch (e) {
       return AccountPageModelTopHeader(
@@ -79,6 +81,7 @@ class AccountPageController extends GetxController {
         paid: 0,
         totalDue: 0,
         totalPaid: 0,
+        fine: 0,
       );
     }
   }

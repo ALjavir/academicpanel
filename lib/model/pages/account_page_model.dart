@@ -9,6 +9,7 @@ class AccountPageModelTopHeader {
   final double waiver;
   final double paid;
   final double balance;
+  final double fine;
   final double totalDue;
   final double totalPaid;
 
@@ -19,5 +20,6 @@ class AccountPageModelTopHeader {
     required this.balance,
     required this.totalDue,
     required this.totalPaid,
+    required this.fine,
   });
 }
