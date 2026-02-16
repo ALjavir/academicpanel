@@ -31,13 +31,10 @@ class DatetimeStyle {
     if (absDiff.inDays > 7) {
       return DateFormat('d MMM').format(d);
     }
-    // final String weekday = DateFormat(
-    //   'E',
-    // ).format(DateTime(d.year, d.month, d.day));
-    // // final String weekday = DateFormat('E').format(d);
+
     if (absDiff.inDays >= 1) {
       if (isFuture) {
-        return "In ${absDiff.inDays}d";
+        return "${absDiff.inDays}d left";
       } else {
         return "${absDiff.inDays}d ago";
       }

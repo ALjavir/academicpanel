@@ -1,11 +1,14 @@
 import 'package:academicpanel/controller/account/account_controller.dart';
 import 'package:academicpanel/model/AccountSuperModel/account_model.dart';
+import 'package:academicpanel/model/AccountSuperModel/row_installment_model.dart';
 import 'package:academicpanel/model/pages/account_page_model.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/state_manager.dart';
 
 class AccountPageController extends GetxController {
   final accountController = Get.find<AccountController>();
+  double totalDue = 0;
+  double totalPaid = 0;
   late AccountModel fetchAccountData;
 
   // @override
@@ -23,6 +26,7 @@ class AccountPageController extends GetxController {
       fetchAccountData = await accountController.fetchAccountData();
       return AccountPageModel(
         accountPageModelTopHeader: await fetchAccountPageHeader(),
+        accountPageModelInstallment: await fetchAccountPageInstallment(),
       );
     } catch (e) {
       return AccountPageModel(
@@ -35,6 +39,7 @@ class AccountPageController extends GetxController {
           totalPaid: 0,
           fine: 0,
         ),
+        accountPageModelInstallment: [],
       );
     }
   }
@@ -60,17 +65,17 @@ class AccountPageController extends GetxController {
 
       final double waiverAmount = allDue * (waiverPer / 100);
 
-      final double totalFeeAfterWaiver = allDue - waiverAmount - (balance);
+      totalDue = allDue - waiverAmount - (balance);
 
-      final double netPaidForTuition = allPaid - allFine;
+      totalPaid = allPaid - allFine;
 
       return AccountPageModelTopHeader(
         balance: balance,
         due: allDue,
         waiver: waiverAmount,
         paid: allPaid,
-        totalDue: totalFeeAfterWaiver,
-        totalPaid: netPaidForTuition,
+        totalDue: totalDue,
+        totalPaid: totalPaid,
         fine: allFine,
       );
     } catch (e) {
@@ -83,6 +88,47 @@ class AccountPageController extends GetxController {
         totalPaid: 0,
         fine: 0,
       );
+    }
+  }
+
+  Future<List<AccountPageModelInstallment>>
+  fetchAccountPageInstallment() async {
+    try {
+      final List<AccountPageModelInstallment> accountPageModelInstallmentList =
+          [];
+      final List<RowInstallmentModel> installmentList =
+          fetchAccountData.rowInstallmentModelList;
+
+      for (var i in installmentList) {
+        // print(
+        //   "${i.code} --------------------------------- ${i.amountPercentage}",
+        // );
+        final data;
+        final now = DateTime.now();
+        final diffDays = i.deadline.difference(now).inDays;
+
+        if (diffDays <= 14 && diffDays >= -1) {
+          data = AccountPageModelInstallment(
+            isActivate: true,
+            installmentList: i,
+            totalDue: totalDue,
+            totalPaid: totalPaid,
+          );
+        } else {
+          data = AccountPageModelInstallment(
+            isActivate: false,
+            installmentList: i,
+            totalDue: totalDue,
+            totalPaid: totalPaid,
+          );
+        }
+        accountPageModelInstallmentList.add(data);
+      }
+      accountPageModelInstallmentList.reversed;
+      return accountPageModelInstallmentList;
+      //accountPageModelInstallmentList.add(i);
+    } catch (e) {
+      return [];
     }
   }
 }

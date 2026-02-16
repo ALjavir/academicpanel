@@ -32,6 +32,10 @@ class ImageStyle {
     return 'lib/assets/icon/sort.png';
   }
 
+  static String installmentIcon() {
+    return 'lib/assets/icon/installment.png';
+  }
+
   static String holidays() {
     return 'lib/assets/icon/holidays.png';
   }

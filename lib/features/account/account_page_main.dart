@@ -1,4 +1,5 @@
 import 'package:academicpanel/controller/page/account_page_controller.dart';
+import 'package:academicpanel/features/account/widget/accountInstallment.dart';
 import 'package:academicpanel/features/account/widget/accountTopHeader/accountTopHeaderMain.dart';
 import 'package:academicpanel/model/pages/account_page_model.dart';
 import 'package:academicpanel/navigation/appbar/custom_appbar.dart';
@@ -50,6 +51,10 @@ class _AccountPageMainState extends State<AccountPageMain> {
                 children: [
                   Accounttopheadermain(
                     accountPageModelTopHeader: data!.accountPageModelTopHeader,
+                  ),
+                  Accountinstallment(
+                    accountPageModelInstallment:
+                        data.accountPageModelInstallment,
                   ),
                   SizedBox(height: 100),
                 ],

@@ -38,8 +38,7 @@ class AccountController extends GetxController {
         }
         rowInstallmentModelList.sort((a, b) => b.code.compareTo(a.code));
       }
-      print("This is in the fetchAccountData: ");
-      print(current_sem);
+
       final studentSnapshot = await firebaseDatapath
           .accountData(department)
           .collection('student_id')
@@ -56,7 +55,7 @@ class AccountController extends GetxController {
           waiver: 0,
         );
       }
-      print(rowAccountextModel.balance);
+
       if (current_sem.isNotEmpty) {
         final semSnapshot = await firebaseDatapath
             .accountData(department)
@@ -71,21 +70,20 @@ class AccountController extends GetxController {
           for (var v in fineMap.values) {
             rowFineModelList.add(RowFineModel.fromMap(v));
           }
-          // print("rowFineModelList: ${rowFineModelList.length}");
+
           final paymentList = Map<String, dynamic>.from(
             semData['payment'] ?? [],
           );
           for (var v in paymentList.values) {
             rowPaymentModelList.add(RowPaymentModel.fromMap(v));
           }
-          // print("paymentList: ${paymentList.length}");
+
           final statementMap = Map<String, dynamic>.from(
             semData['ac_statement'] ?? {},
           );
           for (var v in statementMap.values) {
             rowAcSatementModelList.add(RowAcStatementModel.fromMap(v));
           }
-          //print("rowAcSatementModelList: ${rowAcSatementModelList.length}");
         }
       }
 

@@ -76,7 +76,7 @@ class _ResultPrevsemState extends State<ResultPrevsem> {
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Text(
-                        "No reminder yet!!!",
+                        "No result yet!!!",
                         style: Fontstyle.defult(
                           18,
                           FontWeight.w600,
