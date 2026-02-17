@@ -114,16 +114,16 @@ class HomeAccountinfo extends StatelessWidget {
                         WidgetSpan(
                           child: Icon(
                             Icons.watch_later_outlined,
-                            size: 16,
+                            size: 14,
                             color: ColorStyle.red,
                           ),
                         ),
-                        WidgetSpan(child: SizedBox(width: 2)),
+
                         TextSpan(
                           text:
                               " ${DatetimeStyle.getHybridDate(inst.deadline)}",
                           style: Fontstyle.defult(
-                            16,
+                            14,
                             FontWeight.w600,
                             ColorStyle.Textblue,
                           ),
@@ -131,47 +131,55 @@ class HomeAccountinfo extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 2,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    // spacing: 2,
                     children: [
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "৳",
-                              style: Fontstyle.defult(
-                                16,
-                                FontWeight.w600,
-                                ColorStyle.red,
-                              ),
-                            ),
-                            WidgetSpan(child: SizedBox(width: 6)),
-                            TextSpan(
-                              text: NumberFormat.decimalPattern().format(
-                                inst.amount.toInt(),
-                              ),
-                              style: Fontstyle.defult(
-                                16,
-                                FontWeight.w600,
-                                ColorStyle.Textblue,
-                              ),
-                            ),
-                          ],
+                      Text(
+                        "PAY NOW: ",
+                        style: Fontstyle.defult(
+                          14,
+                          FontWeight.w700,
+                          ColorStyle.red,
+                        ),
+                      ),
+                      Text(
+                        "${NumberFormat.decimalPattern().format(inst.amount.toInt())} ৳",
+                        style: Fontstyle.defult(
+                          16,
+                          FontWeight.w600,
+                          ColorStyle.Textblue,
                         ),
                       ),
 
-                      if (inst.fine > 0)
-                        Text(
-                          "+৳${inst.fine} fine applies",
-                          style: Fontstyle.defult(
-                            12,
-                            FontWeight.w500,
-                            ColorStyle.red,
-                          ),
-                        ),
+                      // RichText(
+                      //   text: TextSpan(
+                      //     children: [
+                      //       TextSpan(
+                      //         text: "PAY NOW",
+
+                      //       ),
+                      //       WidgetSpan(child: SizedBox(width: 6)),
+                      //       TextSpan(
+                      //         text: NumberFormat.decimalPattern().format(
+                      //           inst.amount.toInt(),
+                      //         ),
+
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
+                  if (inst.fine > 0)
+                    Text(
+                      "+৳${inst.fine} fine applies",
+                      style: Fontstyle.defult(
+                        12,
+                        FontWeight.w500,
+                        ColorStyle.red,
+                      ),
+                    ),
                 ],
               ),
             ),

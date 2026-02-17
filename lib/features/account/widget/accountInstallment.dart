@@ -89,7 +89,8 @@ class Accountinstallment extends StatelessWidget {
                   final isLast =
                       index == accountPageModelInstallment.length - 1;
                   final amount =
-                      item.totalDue / item.installmentList.amountPercentage;
+                      item.totalDue *
+                      (item.installmentList.amountPercentage / 100);
                   return IntrinsicHeight(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,22 +102,49 @@ class Accountinstallment extends StatelessWidget {
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            spacing: 4,
+
                             children: [
                               // Title (Message)
-                              Text(
-                                item.installmentList.code.endsWith('1')
-                                    ? "1st Installment"
-                                    : item.installmentList.code.endsWith('2')
-                                    ? "2nd Installment"
-                                    : "3rd Installment",
-                                style: Fontstyle.defult(
-                                  18,
-                                  FontWeight.w600,
-                                  ColorStyle.Textblue,
-                                ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    item.installmentList.code.endsWith('1')
+                                        ? "1st Installment"
+                                        : item.installmentList.code.endsWith(
+                                            '2',
+                                          )
+                                        ? "2nd Installment"
+                                        : "3rd Installment",
+                                    style: Fontstyle.defult(
+                                      18,
+                                      FontWeight.w600,
+                                      ColorStyle.Textblue,
+                                    ),
+                                  ),
+                                  if (item.isActivate)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: ColorStyle.red,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        "${(DatetimeStyle.getHybridDate(dayLeft: 14, item.installmentList.deadline))}",
+                                        style: Fontstyle.defult(
+                                          10,
+                                          FontWeight.w600,
+                                          ColorStyle.light,
+                                        ),
+                                      ),
+                                    ),
+                                ],
                               ),
-
+                              const SizedBox(height: 4),
                               Row(
                                 spacing: 4,
                                 children: [
@@ -127,7 +155,7 @@ class Accountinstallment extends StatelessWidget {
                                   ),
                                   Text(
                                     DateFormat(
-                                      'd MMM',
+                                      'd MMM, EEE',
                                     ).format(item.installmentList.deadline),
                                     style: Fontstyle.defult(
                                       16,
@@ -135,44 +163,24 @@ class Accountinstallment extends StatelessWidget {
                                       ColorStyle.Textblue,
                                     ),
                                   ),
-
-                                  if (item.isActivate) ...[
-                                    Icon(
-                                      Icons.brightness_1,
-                                      size: 6,
-                                      color: ColorStyle.red,
-                                    ),
-                                    Text(
-                                      "${DatetimeStyle.getHybridDate(item.installmentList.deadline)}",
-                                      style: Fontstyle.defult(
-                                        16,
-                                        FontWeight.w500,
-                                        ColorStyle.Textblue,
-                                      ),
-                                    ),
-                                  ],
                                 ],
                               ),
+                              const SizedBox(height: 4),
                               Row(
                                 spacing: 4,
                                 children: [
-                                  //Text(data),
                                   Text(
-                                    amount.toString(),
+                                    "৳",
                                     style: Fontstyle.defult(
-                                      16,
-                                      FontWeight.w500,
-                                      ColorStyle.Textblue,
+                                      20,
+                                      FontWeight.w600,
+                                      ColorStyle.red,
                                     ),
                                   ),
 
-                                  Icon(
-                                    Icons.brightness_1,
-                                    size: 6,
-                                    color: ColorStyle.red,
-                                  ),
                                   Text(
-                                    "${DatetimeStyle.getHybridDate(item.installmentList.deadline)}",
+                                    " ${amount.toString()} (${item.installmentList.amountPercentage.toInt()}%)",
+
                                     style: Fontstyle.defult(
                                       16,
                                       FontWeight.w500,
@@ -181,31 +189,25 @@ class Accountinstallment extends StatelessWidget {
                                   ),
                                 ],
                               ),
+                              Expanded(
+                                child: Text(
+                                  "*Fine ${item.installmentList.fine.toString()}TK will be add after the due date",
 
+                                  style: Fontstyle.defult(
+                                    12,
+                                    FontWeight.w500,
+                                    ColorStyle.red,
+                                  ),
+                                ),
+                              ),
+                              Row(spacing: 4, children: [
+                                  
+                                ],
+                              ),
                               const SizedBox(height: 16),
                             ],
                           ),
                         ),
-
-                        if (item.isActivate)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: ColorStyle.red,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              "Active",
-                              style: Fontstyle.defult(
-                                10,
-                                FontWeight.w600,
-                                ColorStyle.light,
-                              ),
-                            ),
-                          ),
                       ],
                     ),
                   );

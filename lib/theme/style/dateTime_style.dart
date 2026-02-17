@@ -23,12 +23,12 @@ class DatetimeStyle {
         (t.isAtSameMomentAs(e) || t.isBefore(e));
   }
 
-  static String getHybridDate(DateTime d) {
+  static String getHybridDate(DateTime d, {int dayLeft = 7}) {
     final diff = now.difference(d);
     final isFuture = diff.isNegative;
     final absDiff = diff.abs();
 
-    if (absDiff.inDays > 7) {
+    if (absDiff.inDays > dayLeft) {
       return DateFormat('d MMM').format(d);
     }
 
@@ -40,7 +40,7 @@ class DatetimeStyle {
       }
     }
     if (absDiff.inHours > 0) {
-      return isFuture ? "In ${absDiff.inHours}h" : "${absDiff.inHours}h ago";
+      return isFuture ? "${absDiff.inHours}h left" : "${absDiff.inHours}h ago";
     }
     final minutes = absDiff.inMinutes;
     if (minutes == 0) return "Just now";

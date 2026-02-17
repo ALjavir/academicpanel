@@ -3,12 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RowFineModel {
   final String code;
-  final String name;
+  final double totalpaid;
   final DateTime created_at;
   final double amount;
   RowFineModel({
     required this.code,
-    required this.name,
+    required this.totalpaid,
     required this.created_at,
     required this.amount,
   });
@@ -16,7 +16,7 @@ class RowFineModel {
   factory RowFineModel.fromMap(Map<String, dynamic> map) {
     return RowFineModel(
       code: TbaStyle.checkTBA(map['code']),
-      name: TbaStyle.checkTBA(map['name']),
+      totalpaid: (map['total_paid'] ?? 0).toDouble(),
       created_at: (map['created_at'] as Timestamp?)?.toDate() ?? DateTime.now(),
       amount: (map['amount'] ?? 0).toDouble(),
     );
