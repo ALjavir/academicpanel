@@ -1,3 +1,4 @@
+import 'package:academicpanel/model/AccountSuperModel/row_fine_model.dart';
 import 'package:academicpanel/model/AccountSuperModel/row_installment_model.dart';
 
 class AccountPageModel {
@@ -30,14 +31,16 @@ class AccountPageModelTopHeader {
 }
 
 class AccountPageModelInstallment {
-  final bool isActivate;
+  final String state;
   final double totalDue;
   final double totalPaid;
-  final RowInstallmentModel installmentList;
+  final RowInstallmentModel installment;
+  final RowFineModel? fineModel;
   AccountPageModelInstallment({
-    required this.isActivate,
-    required this.installmentList,
+    required this.state,
+    required this.installment,
     required this.totalDue,
     required this.totalPaid,
+    this.fineModel,
   });
 }

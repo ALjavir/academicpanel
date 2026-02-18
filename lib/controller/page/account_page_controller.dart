@@ -1,5 +1,6 @@
 import 'package:academicpanel/controller/account/account_controller.dart';
 import 'package:academicpanel/model/AccountSuperModel/account_model.dart';
+import 'package:academicpanel/model/AccountSuperModel/row_fine_model.dart';
 import 'package:academicpanel/model/AccountSuperModel/row_installment_model.dart';
 import 'package:academicpanel/model/pages/account_page_model.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -98,35 +99,45 @@ class AccountPageController extends GetxController {
           [];
       final List<RowInstallmentModel> installmentList =
           fetchAccountData.rowInstallmentModelList;
-
+      final List<RowFineModel> fineList = fetchAccountData.rowFineModelList;
       for (var i in installmentList) {
         // print(
         //   "${i.code} --------------------------------- ${i.amountPercentage}",
         // );
-        final data;
+        String state;
+        RowFineModel? subData;
+        final finalData;
         final now = DateTime.now();
         final diffDays = i.deadline.difference(now).inDays;
 
-        if (diffDays <= 14 && diffDays >= -1) {
-          data = AccountPageModelInstallment(
-            isActivate: true,
-            installmentList: i,
-            totalDue: totalDue,
-            totalPaid: totalPaid,
-          );
-        } else {
-          data = AccountPageModelInstallment(
-            isActivate: false,
-            installmentList: i,
-            totalDue: totalDue,
-            totalPaid: totalPaid,
-          );
+        for (var j in fineList) {
+          // print("this is i.code: ${i.code} and this is j.code ${j.code}");
+          if (i.code == j.code) {
+            subData = j;
+          } else {
+            subData = null;
+          }
         }
-        accountPageModelInstallmentList.add(data);
+
+        if (i.deadline.isBefore(now)) {
+          state = "past";
+        } else if (diffDays <= 14 && diffDays >= -1) {
+          state = 'present';
+        } else {
+          state = 'future';
+        }
+
+        finalData = AccountPageModelInstallment(
+          installment: i,
+          state: state,
+          totalDue: totalDue,
+          totalPaid: totalPaid,
+          fineModel: subData,
+        );
+        accountPageModelInstallmentList.add(finalData);
       }
-      accountPageModelInstallmentList.reversed;
-      return accountPageModelInstallmentList;
-      //accountPageModelInstallmentList.add(i);
+
+      return accountPageModelInstallmentList.reversed.toList();
     } catch (e) {
       return [];
     }

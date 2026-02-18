@@ -44,7 +44,7 @@ class DatetimeStyle {
     }
     final minutes = absDiff.inMinutes;
     if (minutes == 0) return "Just now";
-    return isFuture ? "In ${minutes}m" : "${minutes}m ago";
+    return isFuture ? "${minutes}m left" : "${minutes}m ago";
   }
 
   static String getSemester() {

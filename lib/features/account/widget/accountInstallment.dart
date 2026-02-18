@@ -88,9 +88,17 @@ class Accountinstallment extends StatelessWidget {
                   final item = accountPageModelInstallment[index];
                   final isLast =
                       index == accountPageModelInstallment.length - 1;
-                  final amount =
-                      item.totalDue *
-                      (item.installmentList.amountPercentage / 100);
+                  // final amount =
+                  //     item.totalDue * (item.installment.amountPercentage / 100);
+                  final name;
+                  if (item.installment.code.endsWith('1')) {
+                    name = "1st Installment";
+                  } else if (item.installment.code.endsWith('2')) {
+                    name = "2nd Installment";
+                  } else {
+                    name = "3rd Installment";
+                  }
+
                   return IntrinsicHeight(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,106 +112,149 @@ class Accountinstallment extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
 
                             children: [
-                              // Title (Message)
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    item.installmentList.code.endsWith('1')
-                                        ? "1st Installment"
-                                        : item.installmentList.code.endsWith(
-                                            '2',
-                                          )
-                                        ? "2nd Installment"
-                                        : "3rd Installment",
-                                    style: Fontstyle.defult(
-                                      18,
-                                      FontWeight.w600,
-                                      ColorStyle.Textblue,
-                                    ),
-                                  ),
-                                  if (item.isActivate)
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: ColorStyle.red,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        "${(DatetimeStyle.getHybridDate(dayLeft: 14, item.installmentList.deadline))}",
-                                        style: Fontstyle.defult(
-                                          10,
-                                          FontWeight.w600,
-                                          ColorStyle.light,
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              Row(
-                                spacing: 4,
-                                children: [
-                                  const Icon(
-                                    Icons.calendar_month_outlined,
-                                    color: ColorStyle.red,
-                                    size: 16,
-                                  ),
-                                  Text(
-                                    DateFormat(
-                                      'd MMM, EEE',
-                                    ).format(item.installmentList.deadline),
-                                    style: Fontstyle.defult(
-                                      16,
-                                      FontWeight.w500,
-                                      ColorStyle.Textblue,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              Row(
-                                spacing: 4,
-                                children: [
-                                  Text(
-                                    "৳",
-                                    style: Fontstyle.defult(
-                                      20,
-                                      FontWeight.w600,
-                                      ColorStyle.red,
-                                    ),
-                                  ),
+                              if (item.state == 'past')
+                                pastInst(item, name)
+                              else if (item.state == 'present')
+                                presentInst(item, name)
+                              else
+                                futureInst(item, name),
 
-                                  Text(
-                                    " ${amount.toString()} (${item.installmentList.amountPercentage.toInt()}%)",
+                              // Row(
+                              //   mainAxisAlignment:
+                              //       MainAxisAlignment.spaceBetween,
+                              //   children: [
+                              //     Text(
+                              //       item.installment.code.endsWith('1')
+                              //           ? "1st Installment"
+                              //           : item.installment.code.endsWith('2')
+                              //           ? "2nd Installment"
+                              //           : "3rd Installment",
+                              //       style: Fontstyle.defult(
+                              //         18,
+                              //         FontWeight.w600,
+                              //         ColorStyle.Textblue,
+                              //       ),
+                              //     ),
 
-                                    style: Fontstyle.defult(
-                                      16,
-                                      FontWeight.w500,
-                                      ColorStyle.Textblue,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Text(
-                                  "*Fine ${item.installmentList.fine.toString()}TK will be add after the due date",
+                              //     Container(
+                              //       padding: const EdgeInsets.symmetric(
+                              //         horizontal: 10,
+                              //         vertical: 4,
+                              //       ),
+                              //       decoration: BoxDecoration(
+                              //         color: ColorStyle.red,
+                              //         borderRadius: BorderRadius.circular(12),
+                              //       ),
+                              //       child: Text(
+                              //         "${(DatetimeStyle.getHybridDate(dayLeft: 14, item.installment.deadline))}",
+                              //         style: Fontstyle.defult(
+                              //           10,
+                              //           FontWeight.w600,
+                              //           ColorStyle.light,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // const SizedBox(height: 4),
+                              // Row(
+                              //   spacing: 4,
+                              //   children: [
+                              //     const Icon(
+                              //       Icons.calendar_month_outlined,
+                              //       color: ColorStyle.red,
+                              //       size: 16,
+                              //     ),
+                              //     Text(
+                              //       DateFormat(
+                              //         'd MMM, EEE',
+                              //       ).format(item.installment.deadline),
+                              //       style: Fontstyle.defult(
+                              //         16,
+                              //         FontWeight.w500,
+                              //         ColorStyle.Textblue,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // const SizedBox(height: 4),
+                              // if (fineDue != 0) ...[
+                              //   Row(
+                              //     children: [
+                              //       Icon(
+                              //         Icons.cancel,
+                              //         size: 20,
+                              //         color: ColorStyle.red,
+                              //       ),
+                              //       const SizedBox(height: 4),
+                              //       Text(
+                              //         "OVERDUE: ",
+                              //         style: Fontstyle.defult(
+                              //           16,
+                              //           FontWeight.bold,
+                              //           ColorStyle.Textblue,
+                              //         ),
+                              //       ),
+                              //       Text(
+                              //         "${fineDue.toString()}৳",
+                              //         style: Fontstyle.defult(
+                              //           16,
+                              //           FontWeight.bold,
+                              //           ColorStyle.red,
+                              //         ),
+                              //       ),
+                              //     ],
+                              //   ),
+                              //   Expanded(
+                              //     child: Text(
+                              //       "*Fine ${item.installment.fine.toString()}TK is added",
+                              //       style: Fontstyle.defult(
+                              //         12,
+                              //         FontWeight.w500,
+                              //         ColorStyle.red,
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ],
 
-                                  style: Fontstyle.defult(
-                                    12,
-                                    FontWeight.w500,
-                                    ColorStyle.red,
-                                  ),
-                                ),
-                              ),
-                              Row(spacing: 4, children: [
-                                  
-                                ],
-                              ),
+                              // Row(
+                              //   spacing: 4,
+                              //   children: [
+                              //     Text(
+                              //       "৳",
+                              //       style: Fontstyle.defult(
+                              //         20,
+                              //         FontWeight.w600,
+                              //         ColorStyle.red,
+                              //       ),
+                              //     ),
+
+                              //     Text(
+                              //       " ${amount.toString()} (${item.installment.amountPercentage.toInt()}%)",
+
+                              //       style: Fontstyle.defult(
+                              //         16,
+                              //         FontWeight.w500,
+                              //         ColorStyle.Textblue,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // Expanded(
+                              //   child: Text(
+                              //     "*Fine ${item.installment.fine.toString()}TK will be add after the due date",
+
+                              //     style: Fontstyle.defult(
+                              //       12,
+                              //       FontWeight.w500,
+                              //       ColorStyle.red,
+                              //     ),
+                              //   ),
+                              // ),
+                              // Row(spacing: 4, children: [
+
+                              //   ],
+                              // ),
                               const SizedBox(height: 16),
                             ],
                           ),
@@ -216,6 +267,273 @@ class Accountinstallment extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget pastInst(AccountPageModelInstallment item, String name) {
+    final double targetAmount =
+        item.totalDue * (item.installment.amountPercentage / 100);
+
+    final double remainingDue = targetAmount - item.totalPaid;
+
+    final double fineAmount = item.installment.fine;
+    final bool hasFine = fineAmount > 0;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: name,
+                style: Fontstyle.defult(
+                  18,
+                  FontWeight.w600,
+                  ColorStyle.Textblue,
+                ),
+              ),
+              TextSpan(
+                text: " (${item.installment.amountPercentage.toInt()}%)",
+                style: Fontstyle.defult(
+                  16,
+                  FontWeight.w600,
+                  ColorStyle.lightBlue,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 6),
+        Row(
+          spacing: 4,
+          children: [
+            const Icon(
+              Icons.calendar_month_outlined,
+              color: ColorStyle.red,
+              size: 18,
+            ),
+            Text(
+              DateFormat('d MMM').format(item.installment.deadline),
+              style: Fontstyle.defult(16, FontWeight.bold, ColorStyle.Textblue),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        if (remainingDue > 0) ...[
+          Row(
+            children: [
+              Icon(Icons.cancel_outlined, size: 18, color: ColorStyle.red),
+              const SizedBox(width: 2),
+              Text(
+                "OVERDUE: ",
+                style: Fontstyle.defult(
+                  15,
+                  FontWeight.bold,
+                  ColorStyle.Textblue,
+                ),
+              ),
+              Text(
+                "${remainingDue.toStringAsFixed(0)}৳",
+                style: Fontstyle.defult(16, FontWeight.bold, ColorStyle.red),
+              ),
+            ],
+          ),
+
+          if (hasFine)
+            Padding(
+              padding: const EdgeInsets.only(top: 2.0, left: 20.0),
+              child: Text(
+                "*Fine ${fineAmount.toStringAsFixed(0)}TK is added",
+                style: Fontstyle.defult(12, FontWeight.w500, ColorStyle.red),
+              ),
+            ),
+        ] else ...[
+          Row(
+            children: [
+              const Icon(
+                Icons.check_circle,
+                size: 20,
+                color: Colors.green,
+              ), // Changed icon to checkmark
+              const SizedBox(width: 2),
+              Text(
+                "PAID",
+                style: Fontstyle.defult(
+                  16,
+                  FontWeight.bold,
+                  ColorStyle.Textblue,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget presentInst(AccountPageModelInstallment item, String name) {
+    final double targetAmount =
+        item.totalDue * (item.installment.amountPercentage / 100);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: name,
+                    style: Fontstyle.defult(
+                      18,
+                      FontWeight.w600,
+                      ColorStyle.Textblue,
+                    ),
+                  ),
+                  TextSpan(
+                    text: " (${item.installment.amountPercentage.toInt()}%)",
+                    style: Fontstyle.defult(
+                      16,
+                      FontWeight.w600,
+                      ColorStyle.lightBlue,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: ColorStyle.red,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                "${(DatetimeStyle.getHybridDate(dayLeft: 14, item.installment.deadline))}",
+                style: Fontstyle.defult(10, FontWeight.w600, ColorStyle.light),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        Row(
+          spacing: 4,
+          children: [
+            const Icon(
+              Icons.calendar_month_outlined,
+              color: ColorStyle.red,
+              size: 18,
+            ),
+            Text(
+              DateFormat('d MMM').format(item.installment.deadline),
+              style: Fontstyle.defult(16, FontWeight.bold, ColorStyle.Textblue),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Row(
+          spacing: 4,
+          children: [
+            const Icon(
+              Icons.monetization_on_outlined,
+              color: ColorStyle.red,
+              size: 18,
+            ),
+
+            Text(
+              "${item.totalPaid.toString()}",
+              style: Fontstyle.defult(16, FontWeight.bold, ColorStyle.red),
+            ),
+            Text(
+              " / ${targetAmount.toString()}৳",
+              style: Fontstyle.defult(
+                16,
+                FontWeight.bold,
+                ColorStyle.lightBlue,
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 2.0, left: 20.0),
+          child: Text(
+            "*Fine ${item.installment.fine.toString()}TK wiil be add if overdue",
+            style: Fontstyle.defult(12, FontWeight.w500, ColorStyle.red),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget futureInst(AccountPageModelInstallment item, String name) {
+    final double targetAmount =
+        item.totalDue * (item.installment.amountPercentage / 100);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: name,
+                style: Fontstyle.defult(
+                  18,
+                  FontWeight.w600,
+                  ColorStyle.Textblue,
+                ),
+              ),
+              TextSpan(
+                text: " (${item.installment.amountPercentage.toInt()}%)",
+                style: Fontstyle.defult(
+                  16,
+                  FontWeight.w600,
+                  ColorStyle.lightBlue,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 6),
+        Row(
+          spacing: 4,
+          children: [
+            const Icon(
+              Icons.calendar_month_outlined,
+              color: ColorStyle.red,
+              size: 18,
+            ),
+            Text(
+              DateFormat('d MMM').format(item.installment.deadline),
+              style: Fontstyle.defult(16, FontWeight.bold, ColorStyle.Textblue),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Row(
+          spacing: 4,
+          children: [
+            const Icon(
+              Icons.monetization_on_outlined,
+              color: ColorStyle.red,
+              size: 18,
+            ),
+
+            Text(
+              "${targetAmount.toString()}৳",
+              style: Fontstyle.defult(16, FontWeight.bold, ColorStyle.red),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 2.0, left: 20.0),
+          child: Text(
+            "*Fine ${item.installment.fine.toString()}TK wiil be add if overdue",
+            style: Fontstyle.defult(12, FontWeight.w500, ColorStyle.red),
+          ),
+        ),
+      ],
     );
   }
 }
