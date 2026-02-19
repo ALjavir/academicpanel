@@ -12,22 +12,13 @@ class AccountPageController extends GetxController {
   late double totalDue;
   late AccountModel fetchAccountData;
 
-  // @override
-  // Future<void> onInit() async {
-  //   super.onInit();
-
-  //    await Future.wait([
-
-  //   ]);
-
-  // }
-
   Future<AccountPageModel> mainAccountPageController() async {
     try {
       fetchAccountData = await accountController.fetchAccountData();
       return AccountPageModel(
         accountPageModelTopHeader: await fetchAccountPageHeader(),
         accountPageModelInstallment: await fetchAccountPageInstallment(),
+        accountPageModelFullStatement: await fetchAccountPageFullStatement(),
       );
     } catch (e) {
       return AccountPageModel(
@@ -41,6 +32,14 @@ class AccountPageController extends GetxController {
           fine: 0,
         ),
         accountPageModelInstallment: [],
+        accountPageModelFullStatement: AccountPageModelFullStatement(
+          installmentList: [],
+          accountStatementList: [],
+          fineList: [],
+          paymentList: [],
+          balance: 0,
+          remaing: 0,
+        ),
       );
     }
   }
@@ -148,6 +147,26 @@ class AccountPageController extends GetxController {
       return accountPageModelInstallmentList.reversed.toList();
     } catch (e) {
       return [];
+    }
+  }
+
+  Future<AccountPageModelFullStatement> fetchAccountPageFullStatement() async {
+    try {
+      final double balance = fetchAccountData.rowAccountextModel.balance;
+      final double waiver = fetchAccountData.rowAccountextModel.waiver;
+      final double perCredit = fetchAccountData.rowAccountextModel.perCreditFee;
+      final 
+    } catch (e) {
+      return AccountPageModelFullStatement(
+        installmentList: [],
+        accountStatementList: [],
+        fineList: [],
+        paymentList: [],
+        balance: 0,
+        remaing: 0,
+        waiver: 0,
+        perCredit: 0,
+      );
     }
   }
 }
