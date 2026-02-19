@@ -24,7 +24,8 @@ class DatetimeStyle {
   }
 
   static String getHybridDate(DateTime d, {int dayLeft = 7}) {
-    final diff = now.difference(d);
+    final fixDate = DateTime(d.year, d.month, d.day, 23, 59, 59);
+    final diff = now.difference(fixDate);
     final isFuture = diff.isNegative;
     final absDiff = diff.abs();
 
@@ -39,11 +40,14 @@ class DatetimeStyle {
         return "${absDiff.inDays}d ago";
       }
     }
+
     if (absDiff.inHours > 0) {
       return isFuture ? "${absDiff.inHours}h left" : "${absDiff.inHours}h ago";
     }
+
     final minutes = absDiff.inMinutes;
     if (minutes == 0) return "Just now";
+
     return isFuture ? "${minutes}m left" : "${minutes}m ago";
   }
 

@@ -118,143 +118,6 @@ class Accountinstallment extends StatelessWidget {
                                 presentInst(item, name)
                               else
                                 futureInst(item, name),
-
-                              // Row(
-                              //   mainAxisAlignment:
-                              //       MainAxisAlignment.spaceBetween,
-                              //   children: [
-                              //     Text(
-                              //       item.installment.code.endsWith('1')
-                              //           ? "1st Installment"
-                              //           : item.installment.code.endsWith('2')
-                              //           ? "2nd Installment"
-                              //           : "3rd Installment",
-                              //       style: Fontstyle.defult(
-                              //         18,
-                              //         FontWeight.w600,
-                              //         ColorStyle.Textblue,
-                              //       ),
-                              //     ),
-
-                              //     Container(
-                              //       padding: const EdgeInsets.symmetric(
-                              //         horizontal: 10,
-                              //         vertical: 4,
-                              //       ),
-                              //       decoration: BoxDecoration(
-                              //         color: ColorStyle.red,
-                              //         borderRadius: BorderRadius.circular(12),
-                              //       ),
-                              //       child: Text(
-                              //         "${(DatetimeStyle.getHybridDate(dayLeft: 14, item.installment.deadline))}",
-                              //         style: Fontstyle.defult(
-                              //           10,
-                              //           FontWeight.w600,
-                              //           ColorStyle.light,
-                              //         ),
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
-                              // const SizedBox(height: 4),
-                              // Row(
-                              //   spacing: 4,
-                              //   children: [
-                              //     const Icon(
-                              //       Icons.calendar_month_outlined,
-                              //       color: ColorStyle.red,
-                              //       size: 16,
-                              //     ),
-                              //     Text(
-                              //       DateFormat(
-                              //         'd MMM, EEE',
-                              //       ).format(item.installment.deadline),
-                              //       style: Fontstyle.defult(
-                              //         16,
-                              //         FontWeight.w500,
-                              //         ColorStyle.Textblue,
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
-                              // const SizedBox(height: 4),
-                              // if (fineDue != 0) ...[
-                              //   Row(
-                              //     children: [
-                              //       Icon(
-                              //         Icons.cancel,
-                              //         size: 20,
-                              //         color: ColorStyle.red,
-                              //       ),
-                              //       const SizedBox(height: 4),
-                              //       Text(
-                              //         "OVERDUE: ",
-                              //         style: Fontstyle.defult(
-                              //           16,
-                              //           FontWeight.bold,
-                              //           ColorStyle.Textblue,
-                              //         ),
-                              //       ),
-                              //       Text(
-                              //         "${fineDue.toString()}৳",
-                              //         style: Fontstyle.defult(
-                              //           16,
-                              //           FontWeight.bold,
-                              //           ColorStyle.red,
-                              //         ),
-                              //       ),
-                              //     ],
-                              //   ),
-                              //   Expanded(
-                              //     child: Text(
-                              //       "*Fine ${item.installment.fine.toString()}TK is added",
-                              //       style: Fontstyle.defult(
-                              //         12,
-                              //         FontWeight.w500,
-                              //         ColorStyle.red,
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ],
-
-                              // Row(
-                              //   spacing: 4,
-                              //   children: [
-                              //     Text(
-                              //       "৳",
-                              //       style: Fontstyle.defult(
-                              //         20,
-                              //         FontWeight.w600,
-                              //         ColorStyle.red,
-                              //       ),
-                              //     ),
-
-                              //     Text(
-                              //       " ${amount.toString()} (${item.installment.amountPercentage.toInt()}%)",
-
-                              //       style: Fontstyle.defult(
-                              //         16,
-                              //         FontWeight.w500,
-                              //         ColorStyle.Textblue,
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
-                              // Expanded(
-                              //   child: Text(
-                              //     "*Fine ${item.installment.fine.toString()}TK will be add after the due date",
-
-                              //     style: Fontstyle.defult(
-                              //       12,
-                              //       FontWeight.w500,
-                              //       ColorStyle.red,
-                              //     ),
-                              //   ),
-                              // ),
-                              // Row(spacing: 4, children: [
-
-                              //   ],
-                              // ),
                               const SizedBox(height: 16),
                             ],
                           ),
@@ -278,7 +141,7 @@ class Accountinstallment extends StatelessWidget {
 
     final double fineAmount = item.installment.fine;
     final bool hasFine = fineAmount > 0;
-
+    final double fixFine = item.fineModel?.amount ?? 0.0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -320,7 +183,26 @@ class Accountinstallment extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 4),
-        if (remainingDue > 0) ...[
+        if (fixFine > 0) ...[
+          Row(
+            children: [
+              Icon(Icons.cancel_outlined, size: 18, color: ColorStyle.red),
+              const SizedBox(width: 2),
+              Text(
+                "OVERDUE: ",
+                style: Fontstyle.defult(
+                  15,
+                  FontWeight.bold,
+                  ColorStyle.Textblue,
+                ),
+              ),
+              Text(
+                "${item.fineModel!.amount.toStringAsFixed(0)}৳",
+                style: Fontstyle.defult(16, FontWeight.bold, ColorStyle.red),
+              ),
+            ],
+          ),
+        ] else if (remainingDue > 0) ...[
           Row(
             children: [
               Icon(Icons.cancel_outlined, size: 18, color: ColorStyle.red),
@@ -344,7 +226,7 @@ class Accountinstallment extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 2.0, left: 20.0),
               child: Text(
-                "*Fine ${fineAmount.toStringAsFixed(0)}TK is added",
+                "*Fine ${fineAmount.toStringAsFixed(0)}TK will be add soon",
                 style: Fontstyle.defult(12, FontWeight.w500, ColorStyle.red),
               ),
             ),

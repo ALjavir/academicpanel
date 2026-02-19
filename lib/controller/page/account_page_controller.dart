@@ -2,14 +2,14 @@ import 'package:academicpanel/controller/account/account_controller.dart';
 import 'package:academicpanel/model/AccountSuperModel/account_model.dart';
 import 'package:academicpanel/model/AccountSuperModel/row_fine_model.dart';
 import 'package:academicpanel/model/AccountSuperModel/row_installment_model.dart';
+import 'package:academicpanel/model/AccountSuperModel/row_payment_model.dart';
 import 'package:academicpanel/model/pages/account_page_model.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/state_manager.dart';
 
 class AccountPageController extends GetxController {
   final accountController = Get.find<AccountController>();
-  double totalDue = 0;
-  double totalPaid = 0;
+  late double totalDue;
   late AccountModel fetchAccountData;
 
   // @override
@@ -50,6 +50,7 @@ class AccountPageController extends GetxController {
       final double balance = fetchAccountData.rowAccountextModel.balance;
       final double waiverPer = fetchAccountData.rowAccountextModel.waiver;
 
+      final double totalPaid;
       double allPaid = 0;
       double allDue = 0;
       double allFine = 0;
@@ -97,43 +98,50 @@ class AccountPageController extends GetxController {
     try {
       final List<AccountPageModelInstallment> accountPageModelInstallmentList =
           [];
+
       final List<RowInstallmentModel> installmentList =
           fetchAccountData.rowInstallmentModelList;
       final List<RowFineModel> fineList = fetchAccountData.rowFineModelList;
+      final List<RowPaymentModel> paymentList =
+          fetchAccountData.rowPaymentModelList;
+
+      final now = DateTime.now();
+
       for (var i in installmentList) {
-        // print(
-        //   "${i.code} --------------------------------- ${i.amountPercentage}",
-        // );
+        double totalPaid = 0.0;
         String state;
         RowFineModel? subData;
-        final finalData;
-        final now = DateTime.now();
-        final diffDays = i.deadline.difference(now).inDays;
 
         for (var j in fineList) {
-          // print("this is i.code: ${i.code} and this is j.code ${j.code}");
           if (i.code == j.code) {
             subData = j;
           } else {
-            subData = null;
+            for (var j in paymentList) {
+              if (j.createdAt.isBefore(i.deadline) ||
+                  j.createdAt.isAtSameMomentAs(i.deadline)) {
+                totalPaid += j.amount;
+              }
+            }
           }
         }
 
-        if (i.deadline.isBefore(now)) {
+        final diffDays = i.deadline.difference(now).inDays;
+
+        if (i.deadline.isBefore(now) && diffDays < 0) {
           state = "past";
-        } else if (diffDays <= 14 && diffDays >= -1) {
+        } else if (diffDays <= 14 && diffDays >= 0) {
           state = 'present';
         } else {
           state = 'future';
         }
-
-        finalData = AccountPageModelInstallment(
+        final finalData = AccountPageModelInstallment(
           installment: i,
           state: state,
           totalDue: totalDue,
           totalPaid: totalPaid,
           fineModel: subData,
         );
+
         accountPageModelInstallmentList.add(finalData);
       }
 
