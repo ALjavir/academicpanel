@@ -19,4 +19,6 @@ class RowAcStatementModel {
       rowCourseModel: .fromMap(map),
     );
   }
+
+  get accountStatement => null;
 }

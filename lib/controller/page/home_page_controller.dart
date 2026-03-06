@@ -243,9 +243,10 @@ class HomePageController extends GetxController {
             ac_statementTotal -
             (ac_statementTotal *
                 (fetchAccountData.rowAccountextModel.waiver / 100)) -
-            (fetchAccountData.rowAccountextModel.balance);
+            (fetchAccountData.rowAccountextModel.balance) -
+            totalFine;
 
-        final double netPaidForTuition = paidTotal - totalFine;
+        //final double netPaidForTuition = paidTotal - totalFine;
 
         // --- INSTALLMENT CHECK ---
         RowInstallmentModel? urgentInstallment;
@@ -263,12 +264,12 @@ class HomePageController extends GetxController {
             final diffDays = firstInst.deadline.difference(now).inDays;
 
             // If deadline is within 14 days
-            if (diffDays <= 14 && diffDays >= -1) {
+            if (diffDays <= 14 && diffDays >= 0) {
               final double targetAmount =
                   totalFeeAfterWaiver * (firstInst.amountPercentage / 100);
 
-              if (netPaidForTuition < targetAmount) {
-                final double amountLeftToPay = targetAmount - netPaidForTuition;
+              if (paidTotal < targetAmount) {
+                final double amountLeftToPay = targetAmount - paidTotal;
 
                 urgentInstallment = RowInstallmentModel(
                   fine: firstInst.fine.toDouble(),
@@ -286,12 +287,12 @@ class HomePageController extends GetxController {
         // Safe Percentage Calculation
         double percent = 0.0;
         if (totalFeeAfterWaiver > 0) {
-          percent = (netPaidForTuition / totalFeeAfterWaiver).clamp(0.0, 1.0);
+          percent = (paidTotal / totalFeeAfterWaiver).clamp(0.0, 1.0);
         }
 
         return HomeAccountModel(
           totalDue: totalFeeAfterWaiver, // Shows Total Billed Amount
-          totalPaid: netPaidForTuition, // Shows Effective Amount Paid
+          totalPaid: paidTotal, // Shows Effective Amount Paid
           paidPercentage: percent,
           upcomingInstallment: urgentInstallment,
           balance: fetchAccountData.rowAccountextModel.balance.toDouble(),

@@ -73,35 +73,57 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
           Divider(color: ColorStyle.red),
 
           if (noClass != null)
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              // spacing: 10,
-              children: [
-                ClipRect(
-                  child: SizedBox(
-                    height: 120,
-                    width: double.maxFinite,
-                    child: Transform.scale(
-                      scale: 2,
-                      child: LottieBuilder.asset(
-                        ImageStyle.upCommingClassaAimatedIcon(),
-                        frameRate: FrameRate.max,
-                        fit: BoxFit.contain,
-                      ),
+            SizedBox(
+              width: double.maxFinite,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                // spacing: 10,
+                children: [
+                  Image.asset(
+                    noClass.type.toLowerCase() == 'test'
+                        ? ImageStyle.exam()
+                        : ImageStyle.holidays(),
+                    scale: 5,
+                  ),
+                  Text(
+                    noClass.title,
+                    style: Fontstyle.defult(
+                      18,
+                      FontWeight.bold,
+                      ColorStyle.Textblue,
                     ),
                   ),
-                ),
-
-                Text(
-                  noClass.title.capitalizeFirst!,
-                  style: Fontstyle.defult(
-                    18,
-                    FontWeight.bold,
-                    ColorStyle.Textblue,
-                  ),
-                ),
-              ],
+                ],
+              ),
             )
+          // Column(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   // spacing: 10,
+          //   children: [
+          //     ClipRect(
+          //       child: SizedBox(
+          //         height: 120,
+          //         width: double.maxFinite,
+          //         child: Transform.scale(
+          //           scale: 2,
+          //           child: LottieBuilder.asset(
+          //             ImageStyle.upCommingClassaAimatedIcon(),
+          //             frameRate: FrameRate.max,
+          //             fit: BoxFit.contain,
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //     Text(
+          //       noClass.title.capitalizeFirst!,
+          //       style: Fontstyle.defult(
+          //         18,
+          //         FontWeight.bold,
+          //         ColorStyle.Textblue,
+          //       ),
+          //     ),
+          //   ],
+          // )
           else if (classList!.isEmpty)
             Column(
               mainAxisAlignment: MainAxisAlignment.center,

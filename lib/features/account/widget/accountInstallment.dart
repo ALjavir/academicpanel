@@ -134,14 +134,8 @@ class Accountinstallment extends StatelessWidget {
   }
 
   Widget pastInst(AccountPageModelInstallment item, String name) {
-    final double targetAmount =
-        item.totalDue * (item.installment.amountPercentage / 100);
-
-    final double remainingDue = targetAmount - item.totalPaid;
-
-    final double fineAmount = item.installment.fine;
-    final bool hasFine = fineAmount > 0;
-    final double fixFine = item.fineModel?.amount ?? 0.0;
+    final double remainingDue = item.fineModel.paid - item.fineModel.target;
+    final double fineAmount = item.fineModel.amount;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -183,64 +177,70 @@ class Accountinstallment extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 4),
-        if (fixFine > 0) ...[
-          Row(
+        if (remainingDue < 0 && item.fineModel.code.isNotEmpty) ...[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.cancel_outlined, size: 18, color: ColorStyle.red),
-              const SizedBox(width: 2),
-              Text(
-                "OVERDUE: ",
-                style: Fontstyle.defult(
-                  15,
-                  FontWeight.bold,
-                  ColorStyle.Textblue,
-                ),
-              ),
-              Text(
-                "${item.fineModel!.amount.toStringAsFixed(0)}৳",
-                style: Fontstyle.defult(16, FontWeight.bold, ColorStyle.red),
-              ),
-            ],
-          ),
-        ] else if (remainingDue > 0) ...[
-          Row(
-            children: [
-              Icon(Icons.cancel_outlined, size: 18, color: ColorStyle.red),
-              const SizedBox(width: 2),
-              Text(
-                "OVERDUE: ",
-                style: Fontstyle.defult(
-                  15,
-                  FontWeight.bold,
-                  ColorStyle.Textblue,
-                ),
-              ),
-              Text(
-                "${remainingDue.toStringAsFixed(0)}৳",
-                style: Fontstyle.defult(16, FontWeight.bold, ColorStyle.red),
-              ),
-            ],
-          ),
+              Row(
+                children: [
+                  Icon(Icons.cancel_outlined, size: 18, color: ColorStyle.red),
+                  const SizedBox(width: 2),
+                  Text(
+                    "OVERDUE: ",
+                    style: Fontstyle.defult(
+                      15,
+                      FontWeight.bold,
+                      ColorStyle.Textblue,
+                    ),
+                  ),
+                  Text(
+                    "${NumberFormat.decimalPattern().format(remainingDue)}৳",
 
-          if (hasFine)
-            Padding(
-              padding: const EdgeInsets.only(top: 2.0, left: 20.0),
-              child: Text(
-                "*Fine ${fineAmount.toStringAsFixed(0)}TK will be add soon",
-                style: Fontstyle.defult(12, FontWeight.w500, ColorStyle.red),
+                    style: Fontstyle.defult(
+                      16,
+                      FontWeight.bold,
+                      ColorStyle.red,
+                    ),
+                  ),
+                ],
               ),
-            ),
-        ] else ...[
+              Padding(
+                padding: const EdgeInsets.only(top: 2.0, left: 20.0),
+                child: Text(
+                  "*Fine ${fineAmount.toStringAsFixed(0)}TK added",
+                  style: Fontstyle.defult(12, FontWeight.w500, ColorStyle.red),
+                ),
+              ),
+            ],
+          ),
+        ] else if (remainingDue >= 0 && item.fineModel.code.isNotEmpty) ...[
           Row(
+            spacing: 2,
             children: [
-              const Icon(
-                Icons.check_circle,
-                size: 20,
-                color: Colors.green,
-              ), // Changed icon to checkmark
-              const SizedBox(width: 2),
+              const Icon(Icons.check_circle, size: 20, color: Colors.green),
+
               Text(
                 "PAID",
+                style: Fontstyle.defult(
+                  16,
+                  FontWeight.bold,
+                  ColorStyle.Textblue,
+                ),
+              ),
+            ],
+          ),
+        ] else ...[
+          Row(
+            spacing: 2,
+            children: [
+              const Icon(
+                Icons.update_rounded,
+                size: 20,
+                color: ColorStyle.red,
+              ), // Changed icon to checkmark
+
+              Text(
+                "Will update soon...",
                 style: Fontstyle.defult(
                   16,
                   FontWeight.bold,
@@ -325,11 +325,12 @@ class Accountinstallment extends StatelessWidget {
             ),
 
             Text(
-              "${item.totalPaid.toString()}",
+              "${NumberFormat.decimalPattern().format(item.totalPaid)}",
+
               style: Fontstyle.defult(16, FontWeight.bold, ColorStyle.red),
             ),
             Text(
-              " / ${targetAmount.toString()}৳",
+              "/ ${NumberFormat.decimalPattern().format(targetAmount)}৳",
               style: Fontstyle.defult(
                 16,
                 FontWeight.bold,

@@ -20,7 +20,7 @@ class Accounttopheaderall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<_ChartItem> items = [
-      _ChartItem("Paid", accountPageModelTopHeader.paid, Colors.green),
+      _ChartItem("Paid", accountPageModelTopHeader.totalPaid, Colors.green),
       _ChartItem("Waiver", accountPageModelTopHeader.waiver, Colors.amber),
       _ChartItem("Balance", accountPageModelTopHeader.balance, Colors.indigo),
       _ChartItem("Fine", accountPageModelTopHeader.fine, Colors.white),
