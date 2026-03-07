@@ -1,4 +1,6 @@
 import 'package:academicpanel/controller/account/account_controller.dart';
+import 'package:academicpanel/controller/auth/signin_controller.dart';
+import 'package:academicpanel/controller/auth/signup_controller.dart';
 import 'package:academicpanel/controller/course/course_controller.dart';
 import 'package:academicpanel/controller/department/department_controller.dart';
 import 'package:academicpanel/controller/result/result_controller.dart';
@@ -15,17 +17,18 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 Future<void> main() async {
   await firebaseInitialize();
-  Get.put(FirebaseDatapath(), permanent: true);
-  Get.put(UserController(), permanent: true);
-  Get.put(CourseController(), permanent: true);
-  Get.put(AccountController(), permanent: true);
-  Get.put(DepartmentController(), permanent: true);
-  Get.put(ResultController(), permanent: true);
-  Get.put(RoutesController(), permanent: true);
+  Get.lazyPut(() => FirebaseDatapath(), fenix: true);
+  Get.lazyPut(() => UserController(), fenix: true);
+  Get.lazyPut(() => SignupController(), fenix: true);
+  Get.lazyPut(() => SigninController(), fenix: true);
+  Get.lazyPut(() => AccountController(), fenix: true);
+  Get.lazyPut(() => CourseController(), fenix: true);
+  Get.lazyPut(() => DepartmentController(), fenix: true);
+  Get.lazyPut(() => ResultController(), fenix: true);
+  Get.lazyPut(() => RoutesController(), fenix: true);
   Get.put(CheckConnection(), permanent: true);
 
   //Future.wait([result(), result1(), result2(), result3(), result4()]);
-
   //await uploadmix();
 
   runApp(const MyApp());

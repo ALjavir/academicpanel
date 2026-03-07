@@ -1,5 +1,6 @@
 import 'package:academicpanel/model/Auth/signin_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
+import 'package:academicpanel/network/save_data/local_stroge/local_stoge.dart';
 import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +9,7 @@ import 'package:get/state_manager.dart';
 
 class SigninController extends GetxController {
   RxBool isLoading = false.obs;
-  final _secureStorage = const FlutterSecureStorage();
+  final localStoge = LocalStoge();
 
   Future<User?> mainFunction(
     SigninModel signinModel,
@@ -28,19 +29,19 @@ class SigninController extends GetxController {
 
       // 2) Decide role (or fetch from server—see note below)
       isLoading.value = true;
-      final role = isStudent ? 'students' : 'faculty';
       final id = signinModel.id;
-      final department = await fetchDepartment(id, isStudent);
+      final roleId = isStudent ? 'student_id' : 'faculty_id';
+      final department = await fetchDepartment(id, roleId);
 
-      // 4) Persist minimal session info (write in parallel)
-      await Future.wait([
-        _secureStorage.write(key: 'uid', value: user.uid),
-        _secureStorage.write(key: 'id', value: id),
-        _secureStorage.write(key: 'role', value: role),
-        _secureStorage.write(key: 'department', value: department),
-      ]);
+      try {
+        localStoge.writeDataLocal(department, roleId, id);
+      } catch (e) {
+        print(e);
+        errorSnackbar(title: "Error while Data saving", subtitle: e.toString());
+      }
+
       isLoading.value = false;
-      routesController.splasS(); // keeping your function name
+      routesController.splasS();
       return user;
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
@@ -101,36 +102,30 @@ class SigninController extends GetxController {
     }
   }
 
-  Future<String> fetchDepartment(String id, bool isStudent) async {
-    final role = isStudent ? 'students' : 'faculty';
+  Future<String> fetchDepartment(String id, String roleId) async {
+    // final role = isStudent ? 'students' : 'faculty';
     // Assuming your subcollection containing user documents is named 'student_id' or 'faculty_id'
-    final roleId = isStudent ? 'student_id' : 'faculty_id';
 
     final firestore = FirebaseFirestore.instance;
 
     // 1. Get all department documents inside the main role collection (e.g., 'cse', 'eee', 'bba')
-    final departmentsSnap = await firestore.collection(role).get();
+    final departmentsSnap = await firestore.collection("profile").get();
 
-    // --- START ADDED DEBUGGING CODE ---
-    final departmentIds = departmentsSnap.docs.map((doc) => doc.id).toList();
-    print('---Departments Retrieved for $role: $departmentIds');
-    // --- END ADDED DEBUGGING CODE ---
+    // final departmentIds = departmentsSnap.docs.map((doc) => doc.id).toList();
+    // print('---Departments Retrieved for $roleId: $departmentIds');
 
     for (var doc in departmentsSnap.docs) {
       final departmentName = doc.id;
 
-      // 2. Construct the full path to the user's document:
       // /role/departmentName/roleId/uid
       final userDoc = await firestore
-          .collection(role)
+          .collection('profile')
           .doc(departmentName)
-          .collection(
-            roleId,
-          ) // This is the collection of user documents (e.g., 'student_id')
+          .collection(roleId)
           .doc(id)
           .get();
 
-      print('---Checking $role department: $departmentName for user: $id');
+      print('---Checking $roleId department: $departmentName for user: $id');
       if (userDoc.exists) {
         return departmentName;
       }

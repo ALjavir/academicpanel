@@ -1,4 +1,5 @@
 import 'package:academicpanel/controller/page/account_page_controller.dart';
+import 'package:academicpanel/features/account/widget/accountFullStatement.dart';
 import 'package:academicpanel/features/account/widget/accountInstallment.dart';
 import 'package:academicpanel/features/account/widget/accountTopHeader/accountTopHeaderMain.dart';
 import 'package:academicpanel/model/pages/account_page_model.dart';
@@ -55,6 +56,10 @@ class _AccountPageMainState extends State<AccountPageMain> {
                   Accountinstallment(
                     accountPageModelInstallment:
                         data.accountPageModelInstallment,
+                  ),
+                  Accountfullstatement(
+                    accountPageModelFullStatement:
+                        data.accountPageModelFullStatement,
                   ),
                   SizedBox(height: 100),
                 ],

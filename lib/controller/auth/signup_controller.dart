@@ -46,8 +46,8 @@ class SignupController extends GetxController {
     RoutesController routesController,
   ) async {
     String roleId = isStudent ? 'student_id' : 'faculty_id';
-    String department = signupmodel.department;
     String id = signupmodel.id;
+    final department = await fetchDepartment(id, roleId);
 
     isLoading.value =
         true; // show loading--------------------------------------
@@ -141,9 +141,40 @@ class SignupController extends GetxController {
     isLoading.value = false;
   }
 
+  //---------------------------------------------------Find department--------------------
+  Future<String> fetchDepartment(String id, String roleId) async {
+    final firestore = FirebaseFirestore.instance;
+    final departmentsSnap = await firestore.collection("profile").get();
+
+    // final departmentIds = departmentsSnap.docs.map((doc) => doc.id).toList();
+    // print('---Departments Retrieved for $roleId: $departmentIds');
+
+    for (var doc in departmentsSnap.docs) {
+      final departmentName = doc.id;
+
+      // /role/departmentName/roleId/uid
+      final userDoc = await firestore
+          .collection('profile')
+          .doc(departmentName)
+          .collection(roleId)
+          .doc(id)
+          .get();
+
+      print('---Checking $roleId department: $departmentName for user: $id');
+      if (userDoc.exists) {
+        return departmentName;
+      }
+    }
+    isLoading.value = false;
+    return 'no department';
+  }
+
   //---------------------------------------------------Find user in dataBase--------------------
   Future<bool> userExist(String department, String roleID, String id) async {
     try {
+      if (department == 'no department') {
+        return false;
+      }
       final userDocRef = await firebaseDatapath.userData(
         department,
         roleID,
@@ -309,7 +340,7 @@ class SignupController extends GetxController {
       // Proceed without image
     }
 
-    print(signupmodel.image);
+    // print(signupmodel.image);
     //save data in 3 places(fire-store, local, fire-auth)-----------------------
     // final userDocRef = fireStore.collection('profile').doc(department)
     //     .collection(roleId)

@@ -10,7 +10,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 class SplashsController extends GetxController {
-  final LocalStoge localStoge = LocalStoge();
+  final localStoge = LocalStoge();
+
   final FirebaseAuth auth = FirebaseAuth.instance;
   final firebaseDatapath = Get.find<FirebaseDatapath>();
 
@@ -24,11 +25,16 @@ class SplashsController extends GetxController {
     //final user = auth.currentUser;
 
     // Read secure storage in parallel
+
+    // 1. Get the list of Futures from your storage
     final results = await localStoge.readDataLocal();
-    final storedDept = await results[1];
-    final storedRoleId = await results[0];
-    final storedId = await results[2];
-    // print('---$storedUid--------------$storedRole------------$storedDept');
+    final String? storedRoleId = await results[0];
+    final String? storedDept = await results[1];
+    final String? storedId = await results[2];
+    for (var i in results) {
+      print("My extracted data: $i");
+    }
+    print('---$storedDept--------------$storedRoleId------------$storedId');
 
     // Determine subcollection name once
 

@@ -28,26 +28,20 @@ class _SplashsPageMainState extends State<SplashsPageMain> {
   @override
   void initState() {
     super.initState();
-    // Start the sequence as soon as the app launches
+
     _startAppSequence();
   }
 
   Future<void> _startAppSequence() async {
-    // 1. Start Animation Timer (Minimum 3 seconds)
-    final animationTimer = Future.delayed(const Duration(seconds: 3));
+    final animationTimer = Future.delayed(const Duration(seconds: 4));
 
-    // 2. Start Data Check (Returns the result, doesn't navigate yet)
-    // We use a separate variable to store the result of the future
     bool isUserValid = false;
 
     final dataFetch = Future(() async {
       await checkConnection.checkConnection();
-      // Store the result (true/false) in our variable
       isUserValid = await splashController.mainFunction();
     });
 
-    // 3. Wait for BOTH to finish
-    // This guarantees at least 3 seconds have passed
     await Future.wait([animationTimer, dataFetch]);
     isLoading = splashController.isLoading;
     if (isUserValid) {
@@ -62,9 +56,7 @@ class _SplashsPageMainState extends State<SplashsPageMain> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorStyle.light,
-      // backgroundColor: Colors.transparent,
       body: Obx(() {
-        //  final isLoading = isLoading.value;
         return Center(
           child: Column(
             spacing: 0,
@@ -73,25 +65,21 @@ class _SplashsPageMainState extends State<SplashsPageMain> {
               Expanded(
                 flex: 1,
                 child: DiagonalReveal(
-                  // <--- WRAP IT HERE
-                  duration: const Duration(seconds: 3), // Adjust speed
+                  duration: const Duration(seconds: 3),
                   child: ThreeDLogo(
                     assetName: ImageStyle.logo(),
                     height: MediaQuery.of(context).size.height * 0.45,
                   ),
                 ),
               ),
-
               Expanded(flex: 0, child: SizedBox()),
               isLoading.value ? Loading(hight: 90) : const SizedBox(height: 90),
-
-              // Inside your Column or Stack
               BlurryTypewriterText(
                 text: 'Presidency University',
-                style: Fontstyle.splashS(32), // Your existing style
+                style: Fontstyle.splashS(32),
                 // Customization
-                duration: const Duration(seconds: 3), // Slower = more cinematic
-                blurStrength: 0.1, // Higher = more "misty" start
+                duration: const Duration(seconds: 3),
+                blurStrength: 0.1,
               ),
               SizedBox(height: 20),
             ],
