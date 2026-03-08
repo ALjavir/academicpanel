@@ -175,11 +175,9 @@ class SignupController extends GetxController {
       if (department == 'no department') {
         return false;
       }
-      final userDocRef = await firebaseDatapath.userData(
-        department,
-        roleID,
-        id,
-      );
+
+      final userDocRef = firebaseDatapath.userData(department, roleID, id);
+
       final result = await userDocRef.get();
 
       if (result.exists) {
@@ -189,9 +187,8 @@ class SignupController extends GetxController {
           title: "Error",
           subtitle: "$id does not exist in $department department",
         );
+        return false;
       }
-
-      return false;
     } catch (e) {
       errorSnackbar(title: "Error", e: e);
 
@@ -321,6 +318,7 @@ class SignupController extends GetxController {
 
     final uid = cred.user!.uid;
     signupmodel.uid = uid;
+    signupmodel.department = department;
 
     try {
       // Upload image if selected

@@ -1,11 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:academicpanel/controller/page/schedule_page_contoller.dart';
-import 'package:academicpanel/features/schedule/widget/topheader/schedule_classSchedule.dart';
+import 'package:academicpanel/features/schedule/widget/schedule_classSchedule.dart';
+
 import 'package:academicpanel/theme/template/animation/threeD_containerHead.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
-import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -20,47 +20,48 @@ class ScheduleCalanderview extends StatefulWidget {
 }
 
 class _ScheduleCalanderviewState extends State<ScheduleCalanderview> {
+  final Rx<DateTime> selectedDate = DateTime.now().obs;
   final focusedDate = DateTime.now().obs;
   final days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'];
 
   // Change this line:
-  String get dayKey => days[focusedDate.value.weekday - 1];
+  //String get dayKey => days[focusedDate.value.weekday - 1];
 
   late ScrollController _scrollController;
-  late List<DateTime> _dates;
-  late String _bgImage;
+  // late List<DateTime> _dates;
+  // late String _bgImage;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _setupCalendar();
+    // _setupCalendar();
 
     // // 5. Scroll to today automatically
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToDate(focusedDate.value);
+      _scrollToDate(selectedDate.value);
     });
   }
 
-  void _setupCalendar() {
-    final now = DateTime.now();
+  // void _setupCalendar() {
+  //   final now = DateTime.now();
 
-    // 2. Simple Image Logic
-    if (now.month <= 4) {
-      _bgImage = ImageStyle.spring();
-    } else if (now.month <= 8) {
-      _bgImage = ImageStyle.summer();
-    } else {
-      _bgImage = ImageStyle.fall();
-    }
+  //   // 2. Simple Image Logic
+  //   if (now.month <= 4) {
+  //     _bgImage = ImageStyle.spring();
+  //   } else if (now.month <= 8) {
+  //     _bgImage = ImageStyle.summer();
+  //   } else {
+  //     _bgImage = ImageStyle.fall();
+  //   }
 
-    int lastDay = DateTime(now.year, now.month + 1, 0).day;
+  //   int lastDay = DateTime(now.year, now.month + 1, 0).day;
 
-    // Generate list: [Jan 1, Jan 2, ... Jan 31]
-    _dates = List.generate(lastDay, (index) {
-      return DateTime(now.year, now.month, index + 1);
-    });
-  }
+  //   // Generate list: [Jan 1, Jan 2, ... Jan 31]
+  //   _dates = List.generate(lastDay, (index) {
+  //     return DateTime(now.year, now.month, index + 1);
+  //   });
+  // }
 
   void _scrollToDate(DateTime date) {
     int index = date.day - 1;
@@ -80,8 +81,6 @@ class _ScheduleCalanderviewState extends State<ScheduleCalanderview> {
     }
   }
 
-  final Rx<DateTime> selectedDate = DateTime.now().obs;
-
   @override
   Widget build(BuildContext context) {
     final controller = widget.schedulePageContoller;
@@ -92,7 +91,7 @@ class _ScheduleCalanderviewState extends State<ScheduleCalanderview> {
       children: [
         ThreedContainerhead(
           padding: const EdgeInsets.symmetric(vertical: 30),
-          imagePath: _bgImage,
+          imagePath: controller.schedulePageTopHeader.value.image,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 15,
@@ -102,28 +101,30 @@ class _ScheduleCalanderviewState extends State<ScheduleCalanderview> {
                   horizontal: 20,
                   vertical: 10,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      DateFormat('d, MMMM').format(selectedDate.value),
-                      style: Fontstyle.defult(
-                        22,
-                        FontWeight.bold,
-                        ColorStyle.light,
+                child: Obx(() {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        DateFormat('d, MMMM').format(selectedDate.value),
+                        style: Fontstyle.defult(
+                          22,
+                          FontWeight.bold,
+                          ColorStyle.light,
+                        ),
                       ),
-                    ),
-                    Text(
-                      DateFormat('EEEE').format(selectedDate.value),
-                      style: Fontstyle.defult(
-                        18,
-                        FontWeight.w600,
-                        ColorStyle.light,
+                      Text(
+                        DateFormat('EEEE').format(selectedDate.value),
+                        style: Fontstyle.defult(
+                          18,
+                          FontWeight.w600,
+                          ColorStyle.light,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  );
+                }),
               ),
 
               // Horizontal List
@@ -132,27 +133,28 @@ class _ScheduleCalanderviewState extends State<ScheduleCalanderview> {
                 child: ListView.builder(
                   controller: _scrollController,
                   scrollDirection: Axis.horizontal,
-                  itemCount: _dates.length,
+                  itemCount:
+                      controller.schedulePageTopHeader.value.curentMonth.length,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemBuilder: (context, index) {
-                    final date = _dates[index];
+                    final date = controller
+                        .schedulePageTopHeader
+                        .value
+                        .curentMonth[index];
                     String dayShort = DateFormat(
                       'EEEE',
                     ).format(date).toLowerCase().substring(0, 2);
                     bool hasEvent = widget
                         .schedulePageContoller
-                        .classSchedulePageSchedule
+                        .schedulePageTopHeader
                         .value
                         .days
                         .contains(dayShort);
                     return GestureDetector(
                       onTap: () {
                         selectedDate.value = date;
-                        focusedDate.value = date;
                         _scrollToDate(date);
-                        controller.fetchclassScheduleCalander(
-                          focusedDate.value,
-                        );
+                        controller.fetchClassSchedule(selectedDate.value);
                       },
                       child: Obx(() {
                         final isSelected =
@@ -236,7 +238,9 @@ class _ScheduleCalanderviewState extends State<ScheduleCalanderview> {
                   Container(height: 20, width: 2, color: ColorStyle.red),
                 ],
               ),
-              ScheduleClassschedule(schedulePageContoller: controller),
+              ScheduleClassschedule(
+                schedulePageContoller: widget.schedulePageContoller,
+              ),
             ],
           ),
         ),

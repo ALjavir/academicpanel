@@ -2,12 +2,23 @@ import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/noClass_model.dart';
 
-class ClassSchedulePageSchedule {
+class SchedulePageTopHeader {
   final List<String> days;
-  final List<ClassscheduleModel> classSchedule;
+  List<DateTime> curentMonth;
+  String image;
+  SchedulePageTopHeader({
+    required this.days,
+    required this.curentMonth,
+    required this.image,
+  });
+}
+
+class ClassSchedulePageSchedule {
+  //final List<String> days;
+  List<ClassscheduleModel> classSchedule;
   NoclassModel? noClass;
   ClassSchedulePageSchedule({
-    required this.days,
+    //required this.days,
     required this.classSchedule,
     this.noClass,
   });

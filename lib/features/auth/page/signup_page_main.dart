@@ -2,7 +2,6 @@ import 'package:academicpanel/controller/auth/signup_controller.dart';
 import 'package:academicpanel/features/auth/widget/auth_headertext.dart';
 import 'package:academicpanel/features/auth/widget/auth_image.dart';
 import 'package:academicpanel/features/auth/widget/custom_button.dart';
-import 'package:academicpanel/features/auth/widget/custom_dropdown_button_auth.dart';
 import 'package:academicpanel/features/auth/widget/custom_textfield.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
@@ -227,13 +226,13 @@ class _SignupPageMainState extends State<SignupPageMain> {
                       maxline: 2,
                       lebalText: "Address",
                     ),
-                    CustomDropdownbuttonAuth(
-                      initialValue: selectedDepartment,
-                      onChanged: (value) {
-                        //print("Selected Department: $value");
-                        selectedDepartment = value;
-                      },
-                    ),
+                    // CustomDropdownbuttonAuth(
+                    //   initialValue: selectedDepartment,
+                    //   onChanged: (value) {
+                    //     //print("Selected Department: $value");
+                    //     selectedDepartment = value;
+                    //   },
+                    // ),
                     AuthImage(),
                   ],
                 ),
@@ -254,21 +253,24 @@ class _SignupPageMainState extends State<SignupPageMain> {
                                     textConLastName.text.isEmpty ||
                                     textContEmail.text.isEmpty ||
                                     textContPass.text.isEmpty ||
-                                    textContID.text.isEmpty ||
-                                    selectedDepartment.toString().isEmpty) {
+                                    textContID.text.isEmpty
+                                //  selectedDepartment.toString().isEmpty
+                                ) {
                                   errorSnackbar(
                                     title: 'Sorry!!!',
                                     subtitle:
-                                        'Name, Email, Password and Department is required',
+                                        'Name, Email and Password is required',
                                   );
-                                } else if (selectedDepartment.toString() ==
-                                    'invalid') {
-                                  errorSnackbar(
-                                    title: 'Sorry!!!',
-                                    subtitle:
-                                        'No department name $selectedDepartment}',
-                                  );
-                                } else {
+                                }
+                                // else if (selectedDepartment.toString() ==
+                                //     'invalid') {
+                                //   errorSnackbar(
+                                //     title: 'Sorry!!!',
+                                //     subtitle:
+                                //         'No department name $selectedDepartment}',
+                                //   );
+                                // }
+                                else {
                                   final user = UserModel(
                                     firstName: textConFirstName.text.trim(),
                                     lastName: textConLastName.text.trim(),

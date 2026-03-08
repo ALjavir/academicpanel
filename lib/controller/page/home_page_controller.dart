@@ -31,7 +31,8 @@ class HomePageController extends GetxController {
   final departmentController = Get.find<DepartmentController>();
   final resultController = Get.find<ResultController>();
   final firebaseDatapath = Get.find<FirebaseDatapath>();
-  final loadAlldata = Get.find<LoadAlldata>();
+
+  // final loadAlldata = Get.find<LoadAlldata>();
 
   HomeTodayClassSchedule todayClassScheduleListHome = HomeTodayClassSchedule();
 
@@ -315,14 +316,8 @@ class HomePageController extends GetxController {
     try {
       ResultModel resultModel;
 
-      if (loadAlldata.allDataResult?.rowCgpaCrModel == null) {
-        final fetchedData = await resultController.fetchResultData(
-          getCGPA: true,
-        );
-        resultModel = fetchedData;
-      } else {
-        resultModel = loadAlldata.allDataResult!;
-      }
+      final fetchedData = await resultController.fetchResultData(getCGPA: true);
+      resultModel = fetchedData;
 
       return resultModel.rowCgpaCrModel!;
     } catch (e) {
@@ -343,14 +338,10 @@ class HomePageController extends GetxController {
     try {
       SectionsuperModel announcementData;
 
-      if (loadAlldata.allDataSection!.announcements!.isEmpty) {
-        final fetchedData = await courseController.fetchSectionData(
-          getAnnouncement: true,
-        );
-        announcementData = fetchedData;
-      } else {
-        announcementData = loadAlldata.allDataSection!;
-      }
+      final fetchedData = await courseController.fetchSectionData(
+        getAnnouncement: true,
+      );
+      announcementData = fetchedData;
 
       if (announcementData.announcements != null) {
         final announcementList = announcementData.announcements!;
@@ -374,14 +365,10 @@ class HomePageController extends GetxController {
 
       SectionsuperModel assessmentData;
 
-      if (loadAlldata.allDataSection!.assessment!.isEmpty) {
-        final fetchedData = await courseController.fetchSectionData(
-          getAssessment: true,
-        );
-        assessmentData = fetchedData;
-      } else {
-        assessmentData = loadAlldata.allDataSection!;
-      }
+      final fetchedData = await courseController.fetchSectionData(
+        getAssessment: true,
+      );
+      assessmentData = fetchedData;
 
       // print(
       //   "this is the assment list----------------------: ${assessmentData.announcements}",

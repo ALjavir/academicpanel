@@ -17,7 +17,7 @@ class SplashsController extends GetxController {
 
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   final userController = Get.find<UserController>();
-  final loadAlldata = Get.put(LoadAlldata());
+  //final loadAlldata = Get.put(LoadAlldata());
 
   RxBool isLoading = true.obs;
 
@@ -69,7 +69,7 @@ class SplashsController extends GetxController {
       final userModel = UserModel.fromJson(data);
       userController.user.value = userModel;
 
-      await loadAlldata.mainLoadAllData();
+      //await loadAlldata.mainLoadAllData();
 
       // Everything OK → go home
       isLoading.value = false;

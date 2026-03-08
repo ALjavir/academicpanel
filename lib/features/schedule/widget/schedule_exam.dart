@@ -170,6 +170,7 @@ class _ScheduleExamState extends State<ScheduleExam> {
                             child: Row(
                               spacing: 10,
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                               children: [
                                 DotlineTemplate(
@@ -268,7 +269,7 @@ class _ScheduleExamState extends State<ScheduleExam> {
                                     ],
                                   ),
                                 ),
-                                const SizedBox(width: 10),
+                                //   const SizedBox(width: 10),
                                 showFullInfoAssessment(
                                   assessmentModel: currentExams[listIndex],
                                   context: context,

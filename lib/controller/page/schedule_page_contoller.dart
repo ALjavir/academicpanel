@@ -3,6 +3,7 @@ import 'package:academicpanel/controller/department/department_controller.dart';
 
 import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
+import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
@@ -10,6 +11,7 @@ import 'package:academicpanel/model/departmentSuperModel/noClass_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
 import 'package:academicpanel/model/pages/schedule_page_model.dart';
 import 'package:academicpanel/theme/style/dateTime_style.dart';
+import 'package:academicpanel/theme/style/image_style.dart';
 
 import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -17,14 +19,31 @@ import 'package:get/state_manager.dart';
 
 class SchedulePageContoller extends GetxController {
   final userController = Get.find<UserController>();
-  final loadAlldata = Get.find<LoadAlldata>();
+  // final loadAlldata = Get.find<LoadAlldata>();
   final courseController = Get.find<CourseController>();
   final departmentController = Get.find<DepartmentController>();
 
   RxBool isLoading = true.obs;
 
-  final Rx<ClassSchedulePageSchedule> classSchedulePageSchedule =
-      ClassSchedulePageSchedule(days: [], classSchedule: []).obs;
+  RxBool isLoadingClassSchdule = true.obs;
+
+  final Rx<SchedulePageTopHeader> schedulePageTopHeader = SchedulePageTopHeader(
+    days: [],
+    image: '',
+    curentMonth: [],
+  ).obs;
+
+  final Rx<ClassSchedulePageSchedule> classSchedulePage =
+      ClassSchedulePageSchedule(
+        classSchedule: [],
+        noClass: NoclassModel(
+          title: '',
+          startDate: DateTime.now(),
+          endDate: DateTime.now(),
+          type: "",
+        ),
+      ).obs;
+
   final RxList<RowAcademiccalendarModel> academicCalendarData =
       <RowAcademiccalendarModel>[].obs;
 
@@ -42,7 +61,8 @@ class SchedulePageContoller extends GetxController {
     isLoading.value = true;
     final focusedDate = DateTime.now().obs;
     await Future.wait([
-      fetchclassScheduleCalander(focusedDate.value),
+      fetchScheduleTopHeader(focusedDate.value),
+      fetchClassSchedule(focusedDate.value),
       fetchAssessment(sortBy: 'incomplete'),
       fetchExamPageSchedule(),
     ]);
@@ -51,84 +71,90 @@ class SchedulePageContoller extends GetxController {
   }
 
   // A: --------------------------------------------------------------------------Class Schedule Calander----------------------------------------------------------------------
-  Future<ClassSchedulePageSchedule> fetchclassScheduleCalander(
-    DateTime date,
-  ) async {
-    final userModel = userController.user.value;
-    final model = classSchedulePageSchedule.value;
-    model.noClass = null;
-    final days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'];
+  Future<SchedulePageTopHeader> fetchScheduleTopHeader(DateTime date) async {
+    // final userModel = userController.user.value;
+    final model = schedulePageTopHeader.value;
+    // model.noClass = null;
+    // final days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'];
 
-    String dayKey = days[date.weekday - 1];
+    // String dayKey = days[date.weekday - 1];
 
-    if (userModel?.current_course?.isEmpty ?? true) {
-      return model;
-    }
+    // if (userModel?.current_course?.isEmpty ?? true) {
+    //   return model;
+    // }
     try {
       SectionsuperModel? classScheduleData;
 
-      if (classSchedulePageSchedule.value.classSchedule.isEmpty) {
-        DepartmentModel noCLassData;
+      List<String> tempList = [];
 
-        if (loadAlldata.allDataDepartment?.rowNoclassModel == null ||
-            loadAlldata.allDataDepartment!.rowNoclassModel!.isEmpty) {
-          final fetchedData = await departmentController.fetchDepartmentData(
-            getNoCalss: true,
-          );
-          noCLassData = fetchedData;
+      // if (classSchedulePageSchedule.value.classSchedule.isEmpty) {
+      //   //DepartmentModel noCLassData;
 
-          if (noCLassData.rowNoclassModel != null) {
-            for (var i in noCLassData.rowNoclassModel!) {
-              // Holiday Check
-              if (DatetimeStyle.isDateInRange(date, i.startDate!, i.endDate!)) {
-                classSchedulePageSchedule.value.noClass = NoclassModel(
-                  title: i.title!,
-                  startDate: i.startDate!,
-                  endDate: i.endDate!,
-                  type: i.type!,
-                );
+      //   // final fetchedData = await departmentController.fetchDepartmentData(
+      //   //   getNoCalss: true,
+      //   // );
+      //  // noCLassData = fetchedData;
 
-                classSchedulePageSchedule.refresh();
-                return classSchedulePageSchedule.value;
-              }
-            }
-          }
-        }
-      }
-      if (loadAlldata.allDataSection?.schedules == null ||
-          loadAlldata.allDataSection!.schedules!.isEmpty) {
-        classScheduleData = await courseController.fetchSectionData(
-          getClassSchedule: true,
-        );
-        loadAlldata.allDataSection = classScheduleData;
+      //   // if (noCLassData.rowNoclassModel != null) {
+      //   //   for (var i in noCLassData.rowNoclassModel!) {
+      //   //     // Holiday Check
+      //   //     if (DatetimeStyle.isDateInRange(date, i.startDate!, i.endDate!)) {
+      //   //       classSchedulePageSchedule.value.noClass = NoclassModel(
+      //   //         title: i.title!,
+      //   //         startDate: i.startDate!,
+      //   //         endDate: i.endDate!,
+      //   //         type: i.type!,
+      //   //       );
+
+      //   //       classSchedulePageSchedule.refresh();
+      //   //       return classSchedulePageSchedule.value;
+      //   //     }
+      //   //   }
+      //   // }
+      // }
+
+      // 2. Simple Image Logic
+      if (date.month <= 4) {
+        model.image = ImageStyle.spring();
+      } else if (date.month <= 8) {
+        model.image = ImageStyle.summer();
       } else {
-        classScheduleData = loadAlldata.allDataSection!;
+        model.image = ImageStyle.fall();
       }
 
-      model.classSchedule.clear();
-      bool shouldPopulateDays = model.days.isEmpty;
+      int lastDay = DateTime(date.year, date.month + 1, 0).day;
+
+      // Generate list: [Jan 1, Jan 2, ... Jan 31]
+      model.curentMonth = List.generate(lastDay, (index) {
+        return DateTime(date.year, date.month, index + 1);
+      });
+
+      classScheduleData = await courseController.fetchSectionData(
+        getClassSchedule: true,
+      );
+      // loadAlldata.allDataSection = classScheduleData;
+
+      // model.classSchedule.clear();
+      //bool shouldPopulateDays = model.days.isEmpty;
 
       if (classScheduleData.schedules != null) {
         for (var i in classScheduleData.schedules!) {
-          if (shouldPopulateDays) {
-            model.days.add(i.rowClassscheduleModel.day);
-          }
+          // if (shouldPopulateDays) {
+          //   model.days.add(i.rowClassscheduleModel.day);
+          // }
 
-          if (i.rowClassscheduleModel.day == dayKey) {
-            model.classSchedule.add(i);
-          }
+          tempList.add(i.rowClassscheduleModel.day);
         }
+        model.days.addAll(tempList.toSet().toList());
 
         // Sort days only once
-        if (shouldPopulateDays) {
-          model.days.sort();
-        }
+        // if (shouldPopulateDays) {
+        //   model.days.sort();
+        // }
       }
 
-      print("Selected day: $dayKey");
-      print("Classes found: ${model.classSchedule.length}");
+      // print("Selected day: ${model.days}");
 
-      classSchedulePageSchedule.refresh();
       return model;
     } catch (e) {
       errorSnackbar(title: "class Schedule Data Fetching Error", e: e);
@@ -136,24 +162,93 @@ class SchedulePageContoller extends GetxController {
     }
   }
 
+  // A: --------------------------------------------------------------------------Class Schedule Calander----------------------------------------------------------------------
+  Future<ClassSchedulePageSchedule> fetchClassSchedule(DateTime date) async {
+    final model = classSchedulePage.value;
+    try {
+      isLoadingClassSchdule.value = true;
+
+      // 1. Reset the model for the new date to prevent leftover data
+      model.noClass = null;
+      model.classSchedule = [];
+
+      // --- STEP 1: CHECK FOR HOLIDAYS ---
+      final fetchedDataDep = await departmentController.fetchDepartmentData(
+        getNoCalss: true,
+      );
+      bool isHolidayFound = false; // Our simple switch!
+
+      if (fetchedDataDep.rowNoclassModel != null) {
+        for (var i in fetchedDataDep.rowNoclassModel!) {
+          // Safe check to prevent that Null Check Error you saw earlier!
+          if (i.startDate != null && i.endDate != null) {
+            if (DatetimeStyle.isDateInRange(date, i.startDate!, i.endDate!)) {
+              // We found a holiday!
+              model.noClass = NoclassModel(
+                title: i.title ?? "Holiday",
+                startDate: i.startDate!,
+                endDate: i.endDate!,
+                type: i.type ?? "No Class",
+              );
+
+              isHolidayFound = true; // Flip the switch
+              break; // EXIT THE LOOP IMMEDIATELY! No need to check other dates.
+            }
+          }
+        }
+      }
+
+      // --- STEP 2: FETCH CLASSES (ONLY IF NOT A HOLIDAY) ---
+      // If we flipped the switch to true, we skip this entirely and just return the holiday.
+      if (!isHolidayFound) {
+        final fetchedData = await courseController.fetchSectionData(
+          getClassSchedule: true,
+        );
+
+        if (fetchedData.schedules != null) {
+          final days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'];
+          String dayKey = days[date.weekday - 1];
+
+          for (var tempca in fetchedData.schedules!) {
+            if (tempca.rowClassscheduleModel.day == dayKey) {
+              model.classSchedule.add(tempca); // Just use standard add()
+            }
+          }
+
+          model.classSchedule.sort(
+            (a, b) => a.rowClassscheduleModel.endTime.compareTo(
+              b.rowClassscheduleModel.endTime,
+            ),
+          );
+          // model.classSchedule.sort((a, b) {
+          //   final aStart = a.rowClassscheduleModel.startTime;
+          //   final bStart = b.rowClassscheduleModel.startTime;
+          //   return aStart.compareTo(bStart);
+          // });
+        }
+      }
+
+      // --- STEP 3: FINISH AND RETURN ---
+      classSchedulePage.refresh(); // Tell the UI to update
+      isLoadingClassSchdule.value = false;
+      return model;
+    } catch (e) {
+      errorSnackbar(title: "Class Schedule Data Fetching Error", e: e);
+      isLoadingClassSchdule.value = false;
+      return model;
+    }
+  }
+
   // B: --------------------------------------------------------------------------Academic Calendar----------------------------------------------------------------------
   Future<List<RowAcademiccalendarModel>> fetchAcademicCalendar() async {
     try {
-      if (loadAlldata.allDataDepartment?.academiccalendarModel == null ||
-          loadAlldata.allDataDepartment!.academiccalendarModel!.isEmpty) {
-        final fetchData = await departmentController.fetchDepartmentData(
-          getAcademicCalendar: true,
-        );
+      final fetchData = await departmentController.fetchDepartmentData(
+        getAcademicCalendar: true,
+      );
 
-        academicCalendarData.clear();
-        academicCalendarData.addAll(fetchData.academiccalendarModel ?? []);
-      } else {
-        // print("Data found in Cache (loadAlldata). Using it.");
-        academicCalendarData.clear();
-        academicCalendarData.addAll(
-          loadAlldata.allDataDepartment!.academiccalendarModel!,
-        );
-      }
+      academicCalendarData.clear();
+      academicCalendarData.addAll(fetchData.academiccalendarModel ?? []);
+
       return academicCalendarData;
     } catch (e) {
       errorSnackbar(title: "Academic Calendar data Fetching Error", e: e);
@@ -171,15 +266,10 @@ class SchedulePageContoller extends GetxController {
 
       SectionsuperModel assessmentData;
 
-      if (loadAlldata.allDataSection?.assessment == null ||
-          loadAlldata.allDataSection!.assessment!.isEmpty) {
-        final fetchedData = await courseController.fetchSectionData(
-          getAssessment: true,
-        );
-        assessmentData = fetchedData;
-      } else {
-        assessmentData = loadAlldata.allDataSection!;
-      }
+      final fetchedData = await courseController.fetchSectionData(
+        getAssessment: true,
+      );
+      assessmentData = fetchedData;
 
       // 3. Process Data
       if (assessmentData.assessment != null) {
@@ -262,15 +352,11 @@ class SchedulePageContoller extends GetxController {
     try {
       SectionsuperModel assessmentData;
 
-      if (loadAlldata.allDataSection?.assessment == null ||
-          loadAlldata.allDataSection!.assessment!.isEmpty) {
-        final fetchedData = await courseController.fetchSectionData(
-          getAssessment: true,
-        );
-        assessmentData = fetchedData;
-      } else {
-        assessmentData = loadAlldata.allDataSection!;
-      }
+      final fetchedData = await courseController.fetchSectionData(
+        getAssessment: true,
+      );
+      assessmentData = fetchedData;
+
       for (var i in assessmentData.assessment!) {
         if (i.rowAssessmentModel.assessment.toLowerCase() == 'mid') {
           examPageSchedule.value.midExam.add(i);

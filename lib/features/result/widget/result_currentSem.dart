@@ -167,12 +167,18 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             spacing: 2,
                             children: [
-                              Text(
-                                "${currentResult.rowCourseModel.name.capitalizeFirst}",
-                                style: Fontstyle.defult(
-                                  18,
-                                  FontWeight.w600,
-                                  ColorStyle.Textblue,
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                child: Text(
+                                  "${currentResult.rowCourseModel.name.capitalizeFirst}",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: true,
+                                  style: Fontstyle.defult(
+                                    18,
+                                    FontWeight.w600,
+                                    ColorStyle.Textblue,
+                                  ),
                                 ),
                               ),
                               RichText(

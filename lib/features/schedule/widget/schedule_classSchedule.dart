@@ -1,9 +1,12 @@
+// ignore_for_file: dead_code
+
 import 'package:academicpanel/controller/page/schedule_page_contoller.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
+import 'package:academicpanel/utility/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get/state_manager.dart';
@@ -38,12 +41,13 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
     return ThreeDContainel(
       redious: 10,
       child: Obx(() {
-        final scheduleList =
-            controller.classSchedulePageSchedule.value.classSchedule;
-        final noClass = controller.classSchedulePageSchedule.value.noClass;
+        final scheduleList = controller.classSchedulePage.value.classSchedule;
+        final noClass = controller.classSchedulePage.value.noClass;
 
         // 3. Now the condition is reactive!
-        if (noClass != null)
+        if (controller.isLoadingClassSchdule == true)
+          return Loading(hight: 80);
+        else if (noClass != null)
           return SizedBox(
             width: double.maxFinite,
             child: Padding(
@@ -104,21 +108,10 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
             padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount:
-                controller.classSchedulePageSchedule.value.classSchedule.length,
+            itemCount: scheduleList.length,
             itemBuilder: (context, index) {
-              final item = controller
-                  .classSchedulePageSchedule
-                  .value
-                  .classSchedule[index];
-              final isLast =
-                  index ==
-                  controller
-                          .classSchedulePageSchedule
-                          .value
-                          .classSchedule
-                          .length -
-                      1;
+              final item = scheduleList[index];
+              final isLast = index == scheduleList.length - 1;
 
               return IntrinsicHeight(
                 child: Row(

@@ -4,7 +4,6 @@ import 'package:academicpanel/network/save_data/local_stroge/local_stoge.dart';
 import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/state_manager.dart';
 
 class SigninController extends GetxController {
@@ -103,12 +102,8 @@ class SigninController extends GetxController {
   }
 
   Future<String> fetchDepartment(String id, String roleId) async {
-    // final role = isStudent ? 'students' : 'faculty';
-    // Assuming your subcollection containing user documents is named 'student_id' or 'faculty_id'
-
     final firestore = FirebaseFirestore.instance;
 
-    // 1. Get all department documents inside the main role collection (e.g., 'cse', 'eee', 'bba')
     final departmentsSnap = await firestore.collection("profile").get();
 
     // final departmentIds = departmentsSnap.docs.map((doc) => doc.id).toList();

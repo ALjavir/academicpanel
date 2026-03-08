@@ -15,7 +15,7 @@ import 'package:get/state_manager.dart';
 
 class ResultPageController extends GetxController {
   final resultController = Get.find<ResultController>();
-  final loadAlldata = Get.find<LoadAlldata>();
+  //final loadAlldata = Get.find<LoadAlldata>();
   final userController = Get.find<UserController>();
   final courseController = Get.find<CourseController>();
   RxBool isLoading = true.obs;
@@ -44,14 +44,9 @@ class ResultPageController extends GetxController {
   Future<RowCgpaCrModel> fetchCGPAinfo() async {
     try {
       ResultModel resultModel;
-      if (loadAlldata.allDataResult?.rowCgpaCrModel == null) {
-        final fetchedData = await resultController.fetchResultData(
-          getCGPA: true,
-        );
-        resultModel = fetchedData;
-      } else {
-        resultModel = loadAlldata.allDataResult!;
-      }
+
+      final fetchedData = await resultController.fetchResultData(getCGPA: true);
+      resultModel = fetchedData;
 
       return rowCgpaModelData.value = resultModel.rowCgpaCrModel!;
     } catch (e) {
@@ -72,14 +67,11 @@ class ResultPageController extends GetxController {
   Future<List<CurrentSemResultModel>> fetchListCurrentSemResult() async {
     try {
       SectionsuperModel assessmentData;
-      if (loadAlldata.allDataSection!.assessment!.isEmpty) {
-        final fetchedData = await courseController.fetchSectionData(
-          getAssessment: true,
-        );
-        assessmentData = fetchedData;
-      } else {
-        assessmentData = loadAlldata.allDataSection!;
-      }
+
+      final fetchedData = await courseController.fetchSectionData(
+        getAssessment: true,
+      );
+      assessmentData = fetchedData;
 
       Map<String, List<AssessmentModel>> groupedDataTemp = {};
       for (var item in assessmentData.assessment!) {

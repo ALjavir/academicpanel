@@ -6,7 +6,7 @@ class UserModel {
   final String id;
   final String firstName;
   final String lastName;
-  final String department;
+  String department;
   final int? phone;
   final String? address;
   final String password;
