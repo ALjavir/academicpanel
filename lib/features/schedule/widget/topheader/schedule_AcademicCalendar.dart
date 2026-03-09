@@ -6,10 +6,13 @@ import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_mo
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
+import 'package:academicpanel/utility/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void scheduleAcademicCalendar(
   BuildContext context,
+  RxBool isLoadingClassSchdule,
   List<RowAcademiccalendarModel> events,
 ) {
   showDialog(
@@ -17,82 +20,98 @@ void scheduleAcademicCalendar(
     builder: (context) {
       return StatefulBuilder(
         builder: (context, setState) {
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                blendMode: BlendMode.srcOver,
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: ColorStyle.light),
-                    borderRadius: BorderRadius.circular(10),
-                    color: ColorStyle.glassWhite,
-                  ),
+          if (isLoadingClassSchdule == true) {
+            return Center(child: Loading(hight: 80));
+          } else if (events.isEmpty) {
+            return Center(
+              child: Text(
+                "No Data Found",
 
-                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min, // Use minimum height needed
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        spacing: 10,
-                        children: [
-                          Image.asset(
-                            ImageStyle.navSchedule(),
-                            scale: 18,
-                            color: ColorStyle.light,
-                          ),
+                style: Fontstyle.defult(
+                  18,
+                  FontWeight.bold,
+                  ColorStyle.Textblue,
+                ),
+              ),
+            );
+          } else
+            return Padding(
+              padding: const EdgeInsets.all(16),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                  blendMode: BlendMode.srcOver,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: ColorStyle.light),
+                      borderRadius: BorderRadius.circular(10),
+                      color: ColorStyle.glassWhite,
+                    ),
+
+                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    child: Column(
+                      mainAxisSize:
+                          MainAxisSize.min, // Use minimum height needed
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          spacing: 10,
+                          children: [
+                            Image.asset(
+                              ImageStyle.navSchedule(),
+                              scale: 18,
+                              color: ColorStyle.light,
+                            ),
+                            Text(
+                              "Academic Calendar",
+                              style: Fontstyle.defult(
+                                22,
+                                FontWeight.bold,
+                                ColorStyle.light,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(color: ColorStyle.light, thickness: 1),
+
+                        // --- The List ---
+                        // Wrapped in Expanded so it scrolls properly inside the constraints
+                        if (events.length == 0)
                           Text(
-                            "Academic Calendar ",
+                            "No data found!!!",
                             style: Fontstyle.defult(
                               22,
-                              FontWeight.bold,
+                              FontWeight.w600,
                               ColorStyle.light,
                             ),
+                          )
+                        else
+                          Expanded(
+                            child: ListView.builder(
+                              padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                              shrinkWrap: true, // Okay inside Column+Expanded
+                              // REMOVED: physics: NeverScrollableScrollPhysics(), (We want it to scroll!)
+                              itemCount: events.length,
+                              itemBuilder: (context, index) {
+                                final event = events[index];
+                                return TimelineTile(
+                                  date: event.date,
+                                  day: event.day,
+                                  title: event.title,
+                                  type: event.type,
+                                  isLast: index == events.length - 1,
+                                );
+                              },
+                            ),
                           ),
-                        ],
-                      ),
-                      Divider(color: ColorStyle.light, thickness: 1),
-
-                      // --- The List ---
-                      // Wrapped in Expanded so it scrolls properly inside the constraints
-                      if (events.length == 0)
-                        Text(
-                          "No data found!!!",
-                          style: Fontstyle.defult(
-                            22,
-                            FontWeight.w600,
-                            ColorStyle.light,
-                          ),
-                        )
-                      else
-                        Expanded(
-                          child: ListView.builder(
-                            padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
-                            shrinkWrap: true, // Okay inside Column+Expanded
-                            // REMOVED: physics: NeverScrollableScrollPhysics(), (We want it to scroll!)
-                            itemCount: events.length,
-                            itemBuilder: (context, index) {
-                              final event = events[index];
-                              return TimelineTile(
-                                date: event.date,
-                                day: event.day,
-                                title: event.title,
-                                type: event.type,
-                                isLast: index == events.length - 1,
-                              );
-                            },
-                          ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
+            );
         },
       );
     },
@@ -205,25 +224,19 @@ class TimelineTile extends StatelessWidget {
 
           // 3. The Content Card
           Expanded(
-            child: Container(
-              // padding: const EdgeInsets.only(bottom: 30),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: Fontstyle.defult(
-                        16,
-                        FontWeight.w600,
-                        ColorStyle.light,
-                      ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    title,
+                    style: Fontstyle.defult(
+                      16,
+                      FontWeight.w600,
+                      ColorStyle.light,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],

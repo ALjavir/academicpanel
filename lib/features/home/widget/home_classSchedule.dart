@@ -129,176 +129,182 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
           else
             IntrinsicHeight(
               child: Center(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // ================== LEFT SIDE (Main Class) ==================
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        spacing: 12,
-                        children: [
-                          Text(
-                            "${classList[0].rowCourseModel.name.capitalizeFirst!} - (${classList[0].rowCourseModel.code})",
-                            style: Fontstyle.defult(
-                              16.5,
-                              FontWeight.w600,
-                              ColorStyle.Textblue,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.watch_later_outlined,
-                                color: ColorStyle.red,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                "${formatTime12Hour(classList[0].rowClassscheduleModel.startTime)} - ${formatTime12Hour(classList[0].rowClassscheduleModel.endTime)}",
-                                style: Fontstyle.defult(
-                                  14.5,
-                                  FontWeight.w600,
-                                  ColorStyle.Textblue,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.location_on_outlined,
-                                color: ColorStyle.red,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                widget
-                                    .todayClass
-                                    .listClassScheduleModel![0]
-                                    .rowClassscheduleModel
-                                    .room,
-                                style: Fontstyle.defult(
-                                  14.5,
-                                  FontWeight.w600,
-                                  ColorStyle.Textblue,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Icon(
-                                Icons.person_outline,
-                                color: Colors.red[900],
-                                size: 20,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                widget
-                                    .todayClass
-                                    .listClassScheduleModel![0]
-                                    .instructor
-                                    .capitalizeFirst!,
-                                style: Fontstyle.defult(
-                                  14.5,
-                                  FontWeight.w600,
-                                  ColorStyle.Textblue,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // ================== RIGHT SIDE (Dynamic) ==================
-
-                    // 2. FIX: Use "Collection If". No need for ternary operators or SizedBox.shrink
-                    if (classList.length > 1) ...[
-                      // The Divider
-                      Container(
-                        width: 2,
-                        color: Colors.grey.shade300,
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                      ),
-
-                      // The List
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // ================== LEFT SIDE (Main Class) ==================
                       Expanded(
-                        flex: 2,
+                        flex: 3,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing:
+                              12, // Note: 'spacing' requires Flutter 3.27+ on Columns
                           children: [
-                            // Loop starting from index 1
-                            for (
-                              int i = 1;
-                              i <
+                            Text(
+                              "${classList[0].rowCourseModel.name.capitalizeFirst!} - (${classList[0].rowCourseModel.code})",
+                              style: Fontstyle.defult(
+                                16.5,
+                                FontWeight.w600,
+                                ColorStyle.Textblue,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.watch_later_outlined,
+                                  color: ColorStyle.red,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  "${formatTime12Hour(classList[0].rowClassscheduleModel.startTime)} - ${formatTime12Hour(classList[0].rowClassscheduleModel.endTime)}",
+                                  style: Fontstyle.defult(
+                                    14.5,
+                                    FontWeight.w600,
+                                    ColorStyle.Textblue,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on_outlined,
+                                  color: ColorStyle.red,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
                                   widget
                                       .todayClass
-                                      .listClassScheduleModel!
-                                      .length;
-                              i++
-                            ) ...[
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 12.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Transform.translate(
-                                      offset: const Offset(-14, 4),
-                                      child: Container(
-                                        width: 10,
-                                        height: 10,
-                                        decoration: BoxDecoration(
-                                          color: Colors.red[900],
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 2,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            widget
-                                                .todayClass
-                                                .listClassScheduleModel![i]
-                                                .rowCourseModel
-                                                .name
-                                                .capitalizeFirst!,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Fontstyle.defult(
-                                              12,
-                                              FontWeight.w600,
-                                              ColorStyle.lightBlue,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 2),
-                                          Text(
-                                            "${formatTime12Hour(classList[i].rowClassscheduleModel.startTime)} - ${formatTime12Hour(classList[i].rowClassscheduleModel.endTime)}",
-                                            style: Fontstyle.defult(
-                                              12,
-                                              FontWeight.w500,
-                                              ColorStyle.lightBlue,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                      .listClassScheduleModel![0]
+                                      .rowClassscheduleModel
+                                      .room,
+                                  style: Fontstyle.defult(
+                                    14.5,
+                                    FontWeight.w600,
+                                    ColorStyle.Textblue,
+                                  ),
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 16),
+                                Icon(
+                                  Icons.person_outline,
+                                  color: Colors.red[900],
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  widget
+                                      .todayClass
+                                      .listClassScheduleModel![0]
+                                      .instructor
+                                      .capitalizeFirst!,
+                                  style: Fontstyle.defult(
+                                    14.5,
+                                    FontWeight.w600,
+                                    ColorStyle.Textblue,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
-                    ], // End of "if length > 1" block
-                  ],
+
+                      // ================== RIGHT SIDE (Dynamic) ==================
+                      if (classList.length > 1) ...[
+                        // The Divider
+                        Container(
+                          width: 2,
+                          color: Colors.grey.shade300,
+
+                          margin: const EdgeInsets.only(
+                            left: 8,
+                            right: 8,
+                            top: 4,
+                          ),
+                        ),
+
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              for (
+                                int i = 1;
+                                i <
+                                    widget
+                                        .todayClass
+                                        .listClassScheduleModel!
+                                        .length;
+                                i++
+                              )
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 12.0),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Transform.translate(
+                                        offset: const Offset(-13, 4),
+                                        child: Container(
+                                          width: 8,
+                                          height: 8,
+                                          decoration: BoxDecoration(
+                                            color: ColorStyle.light,
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                              color: ColorStyle.red,
+                                              width: 1.5,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              widget
+                                                  .todayClass
+                                                  .listClassScheduleModel![i]
+                                                  .rowCourseModel
+                                                  .name
+                                                  .capitalizeFirst!,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Fontstyle.defult(
+                                                12,
+                                                FontWeight.w600,
+                                                ColorStyle.lightBlue,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 2),
+                                            Text(
+                                              "${formatTime12Hour(classList[i].rowClassscheduleModel.startTime)} - ${formatTime12Hour(classList[i].rowClassscheduleModel.endTime)}",
+                                              style: Fontstyle.defult(
+                                                12,
+                                                FontWeight.w500,
+                                                ColorStyle.lightBlue,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
               ),
             ),

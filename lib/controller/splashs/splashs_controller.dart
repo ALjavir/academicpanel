@@ -1,4 +1,3 @@
-import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';

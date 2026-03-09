@@ -9,12 +9,18 @@ class DotlineTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if (index == 0) const SizedBox(height: 6),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2),
-          child: Icon(Icons.brightness_1, size: 11, color: ColorStyle.red),
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(
+              color: ColorStyle.light,
+              shape: BoxShape.circle,
+              border: Border.all(color: ColorStyle.red, width: 1.5),
+            ),
+          ),
         ),
         if (!isLast)
           Expanded(child: Container(width: 1.5, color: Colors.grey.shade300)),

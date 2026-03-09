@@ -3,7 +3,6 @@ import 'dart:core';
 import 'package:academicpanel/controller/account/account_controller.dart';
 import 'package:academicpanel/controller/course/course_controller.dart';
 import 'package:academicpanel/controller/department/department_controller.dart';
-import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/result/result_controller.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/AccountSuperModel/row_installment_model.dart';
@@ -169,10 +168,11 @@ class HomePageController extends GetxController {
         );
       }
 
+      DateFormat format = DateFormat("h:mm a");
       todayClassScheduleListHome.listClassScheduleModel!.sort((a, b) {
-        final aStart = a.rowClassscheduleModel.startTime;
-        final bStart = b.rowClassscheduleModel.startTime;
-        return aStart.compareTo(bStart);
+        DateTime timeA = format.parse(a.rowClassscheduleModel.endTime);
+        DateTime timeB = format.parse(b.rowClassscheduleModel.endTime);
+        return timeA.compareTo(timeB);
       });
 
       final currentMinutes = (now.hour * 60) + now.minute;
@@ -181,26 +181,13 @@ class HomePageController extends GetxController {
         classItem,
       ) {
         final parts = classItem.rowClassscheduleModel.endTime.split(':');
+
         final endHour = int.parse(parts[0]);
-        final endMinute = int.parse(parts[1]);
+        final endMinute = int.parse(parts[1].split(" ")[0]);
+
         final classEndMinutes = (endHour * 60) + endMinute;
         return classEndMinutes < currentMinutes;
       });
-
-      // todayClassScheduleListHome.listClassScheduleModel?.removeWhere((
-      //   classItem,
-      // ) {
-      //   if (classItem.rowClassscheduleModel.endTime.isEmpty) return false;
-
-      //   final parts = classItem.rowClassscheduleModel.endTime.split(':');
-      //   if (parts.length != 2) return false;
-
-      //   final endHour = int.parse(parts[0]);
-      //   final endMinute = int.parse(parts[1]);
-      //   final classEndMinutes = (endHour * 60) + endMinute;
-
-      //   return classEndMinutes < currentMinutes;
-      // });
 
       return todayClassScheduleListHome;
     } catch (e) {

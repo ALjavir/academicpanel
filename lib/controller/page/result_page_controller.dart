@@ -1,5 +1,4 @@
 import 'package:academicpanel/controller/course/course_controller.dart';
-import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/result/result_controller.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 
@@ -19,6 +18,7 @@ class ResultPageController extends GetxController {
   final userController = Get.find<UserController>();
   final courseController = Get.find<CourseController>();
   RxBool isLoading = true.obs;
+  RxBool isLoadingPrevR = true.obs;
 
   final Rxn<RowCgpaCrModel> rowCgpaModelData = Rxn<RowCgpaCrModel>();
 
@@ -171,6 +171,7 @@ class ResultPageController extends GetxController {
     String semester,
   ) async {
     try {
+      isLoadingPrevR.value = true;
       final resultModel = await resultController.fetchResultData(
         getPrevResult: true,
         semester: semester,
@@ -178,14 +179,15 @@ class ResultPageController extends GetxController {
       if (semester == '') {
         semester = resultModel.listPrevSem!.last;
       }
-
+      isLoadingPrevR.value = false;
       return PrevSemResultData.value = PrevSemResultResultPage(
         prevSemester: semester,
         listPrevSem: resultModel.listPrevSem!.reversed.toList(),
         rowPrevResultList: resultModel.rowPrevResult!,
       );
     } catch (e) {
-      print("Error fetching previous semester result: $e");
+      // print("Error fetching previous semester result: $e");
+      isLoadingPrevR.value = false;
       return PrevSemResultData.value = PrevSemResultResultPage(
         prevSemester: '',
         listPrevSem: [],

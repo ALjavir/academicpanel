@@ -14,14 +14,9 @@ class SchedulePageTopHeader {
 }
 
 class ClassSchedulePageSchedule {
-  //final List<String> days;
   List<ClassscheduleModel> classSchedule;
   NoclassModel? noClass;
-  ClassSchedulePageSchedule({
-    //required this.days,
-    required this.classSchedule,
-    this.noClass,
-  });
+  ClassSchedulePageSchedule({required this.classSchedule, this.noClass});
 }
 
 class AssessmentPageSchedule {

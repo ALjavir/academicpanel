@@ -1,12 +1,9 @@
 import 'package:academicpanel/controller/course/course_controller.dart';
 import 'package:academicpanel/controller/department/department_controller.dart';
 
-import 'package:academicpanel/controller/masterController/load_allData.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
-import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
-import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/noClass_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
 import 'package:academicpanel/model/pages/schedule_page_model.dart';
@@ -16,16 +13,17 @@ import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/state_manager.dart';
+import 'package:intl/intl.dart';
 
 class SchedulePageContoller extends GetxController {
   final userController = Get.find<UserController>();
-  // final loadAlldata = Get.find<LoadAlldata>();
+
   final courseController = Get.find<CourseController>();
   final departmentController = Get.find<DepartmentController>();
 
   RxBool isLoading = true.obs;
-
   RxBool isLoadingClassSchdule = true.obs;
+  RxBool isLoadingAcademicC = true.obs;
 
   final Rx<SchedulePageTopHeader> schedulePageTopHeader = SchedulePageTopHeader(
     days: [],
@@ -63,6 +61,7 @@ class SchedulePageContoller extends GetxController {
     await Future.wait([
       fetchScheduleTopHeader(focusedDate.value),
       fetchClassSchedule(focusedDate.value),
+      fetchAcademicCalendar(),
       fetchAssessment(sortBy: 'incomplete'),
       fetchExamPageSchedule(),
     ]);
@@ -72,46 +71,12 @@ class SchedulePageContoller extends GetxController {
 
   // A: --------------------------------------------------------------------------Class Schedule Calander----------------------------------------------------------------------
   Future<SchedulePageTopHeader> fetchScheduleTopHeader(DateTime date) async {
-    // final userModel = userController.user.value;
     final model = schedulePageTopHeader.value;
-    // model.noClass = null;
-    // final days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'];
 
-    // String dayKey = days[date.weekday - 1];
-
-    // if (userModel?.current_course?.isEmpty ?? true) {
-    //   return model;
-    // }
     try {
       SectionsuperModel? classScheduleData;
 
       List<String> tempList = [];
-
-      // if (classSchedulePageSchedule.value.classSchedule.isEmpty) {
-      //   //DepartmentModel noCLassData;
-
-      //   // final fetchedData = await departmentController.fetchDepartmentData(
-      //   //   getNoCalss: true,
-      //   // );
-      //  // noCLassData = fetchedData;
-
-      //   // if (noCLassData.rowNoclassModel != null) {
-      //   //   for (var i in noCLassData.rowNoclassModel!) {
-      //   //     // Holiday Check
-      //   //     if (DatetimeStyle.isDateInRange(date, i.startDate!, i.endDate!)) {
-      //   //       classSchedulePageSchedule.value.noClass = NoclassModel(
-      //   //         title: i.title!,
-      //   //         startDate: i.startDate!,
-      //   //         endDate: i.endDate!,
-      //   //         type: i.type!,
-      //   //       );
-
-      //   //       classSchedulePageSchedule.refresh();
-      //   //       return classSchedulePageSchedule.value;
-      //   //     }
-      //   //   }
-      //   // }
-      // }
 
       // 2. Simple Image Logic
       if (date.month <= 4) {
@@ -124,7 +89,6 @@ class SchedulePageContoller extends GetxController {
 
       int lastDay = DateTime(date.year, date.month + 1, 0).day;
 
-      // Generate list: [Jan 1, Jan 2, ... Jan 31]
       model.curentMonth = List.generate(lastDay, (index) {
         return DateTime(date.year, date.month, index + 1);
       });
@@ -132,28 +96,13 @@ class SchedulePageContoller extends GetxController {
       classScheduleData = await courseController.fetchSectionData(
         getClassSchedule: true,
       );
-      // loadAlldata.allDataSection = classScheduleData;
-
-      // model.classSchedule.clear();
-      //bool shouldPopulateDays = model.days.isEmpty;
 
       if (classScheduleData.schedules != null) {
         for (var i in classScheduleData.schedules!) {
-          // if (shouldPopulateDays) {
-          //   model.days.add(i.rowClassscheduleModel.day);
-          // }
-
           tempList.add(i.rowClassscheduleModel.day);
         }
         model.days.addAll(tempList.toSet().toList());
-
-        // Sort days only once
-        // if (shouldPopulateDays) {
-        //   model.days.sort();
-        // }
       }
-
-      // print("Selected day: ${model.days}");
 
       return model;
     } catch (e) {
@@ -168,7 +117,6 @@ class SchedulePageContoller extends GetxController {
     try {
       isLoadingClassSchdule.value = true;
 
-      // 1. Reset the model for the new date to prevent leftover data
       model.noClass = null;
       model.classSchedule = [];
 
@@ -176,11 +124,10 @@ class SchedulePageContoller extends GetxController {
       final fetchedDataDep = await departmentController.fetchDepartmentData(
         getNoCalss: true,
       );
-      bool isHolidayFound = false; // Our simple switch!
+      bool isHolidayFound = false;
 
       if (fetchedDataDep.rowNoclassModel != null) {
         for (var i in fetchedDataDep.rowNoclassModel!) {
-          // Safe check to prevent that Null Check Error you saw earlier!
           if (i.startDate != null && i.endDate != null) {
             if (DatetimeStyle.isDateInRange(date, i.startDate!, i.endDate!)) {
               // We found a holiday!
@@ -191,7 +138,7 @@ class SchedulePageContoller extends GetxController {
                 type: i.type ?? "No Class",
               );
 
-              isHolidayFound = true; // Flip the switch
+              isHolidayFound = true;
               break; // EXIT THE LOOP IMMEDIATELY! No need to check other dates.
             }
           }
@@ -199,7 +146,7 @@ class SchedulePageContoller extends GetxController {
       }
 
       // --- STEP 2: FETCH CLASSES (ONLY IF NOT A HOLIDAY) ---
-      // If we flipped the switch to true, we skip this entirely and just return the holiday.
+
       if (!isHolidayFound) {
         final fetchedData = await courseController.fetchSectionData(
           getClassSchedule: true,
@@ -211,25 +158,21 @@ class SchedulePageContoller extends GetxController {
 
           for (var tempca in fetchedData.schedules!) {
             if (tempca.rowClassscheduleModel.day == dayKey) {
-              model.classSchedule.add(tempca); // Just use standard add()
+              model.classSchedule.add(tempca);
             }
           }
 
-          model.classSchedule.sort(
-            (a, b) => a.rowClassscheduleModel.endTime.compareTo(
-              b.rowClassscheduleModel.endTime,
-            ),
-          );
-          // model.classSchedule.sort((a, b) {
-          //   final aStart = a.rowClassscheduleModel.startTime;
-          //   final bStart = b.rowClassscheduleModel.startTime;
-          //   return aStart.compareTo(bStart);
-          // });
+          DateFormat format = DateFormat("h:mm a");
+          model.classSchedule.sort((a, b) {
+            DateTime timeA = format.parse(a.rowClassscheduleModel.endTime);
+            DateTime timeB = format.parse(b.rowClassscheduleModel.endTime);
+            return timeA.compareTo(timeB);
+          });
         }
       }
 
       // --- STEP 3: FINISH AND RETURN ---
-      classSchedulePage.refresh(); // Tell the UI to update
+      classSchedulePage.refresh();
       isLoadingClassSchdule.value = false;
       return model;
     } catch (e) {
@@ -242,16 +185,18 @@ class SchedulePageContoller extends GetxController {
   // B: --------------------------------------------------------------------------Academic Calendar----------------------------------------------------------------------
   Future<List<RowAcademiccalendarModel>> fetchAcademicCalendar() async {
     try {
+      isLoadingAcademicC.value = true;
       final fetchData = await departmentController.fetchDepartmentData(
         getAcademicCalendar: true,
       );
 
       academicCalendarData.clear();
       academicCalendarData.addAll(fetchData.academiccalendarModel ?? []);
-
+      isLoadingAcademicC.value = true;
       return academicCalendarData;
     } catch (e) {
       errorSnackbar(title: "Academic Calendar data Fetching Error", e: e);
+      isLoadingAcademicC.value = true;
       return [];
     }
   }

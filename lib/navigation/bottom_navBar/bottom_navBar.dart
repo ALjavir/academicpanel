@@ -1,14 +1,11 @@
 import 'dart:ui';
-import 'package:academicpanel/controller/page/schedule_page_contoller.dart';
 import 'package:academicpanel/features/account/account_page_main.dart';
 import 'package:academicpanel/features/home/home_page_main.dart';
 import 'package:academicpanel/features/result/result_page_main.dart';
 import 'package:academicpanel/features/schedule/schedule_page_main.dart';
-import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
 
 class BottomNavbar extends StatefulWidget {
@@ -20,9 +17,9 @@ class BottomNavbar extends StatefulWidget {
 
 class _BottomNavbarState extends State<BottomNavbar> {
   final RxInt _currentIndex = 0.obs;
-  final schedulePageContoller = Get.put(SchedulePageContoller());
-  late Future<List<RowAcademiccalendarModel>> data = schedulePageContoller
-      .fetchAcademicCalendar();
+  //  final schedulePageContoller = Get.put(SchedulePageContoller());
+  // late Future<List<RowAcademiccalendarModel>> data = schedulePageContoller
+  //     .fetchAcademicCalendar();
 
   final List<Widget> _pages = [
     HomePageMain(),

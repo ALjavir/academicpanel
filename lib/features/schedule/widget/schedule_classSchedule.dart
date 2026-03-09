@@ -46,7 +46,7 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
 
         // 3. Now the condition is reactive!
         if (controller.isLoadingClassSchdule == true)
-          return Loading(hight: 80);
+          return Center(child: Loading(hight: 80));
         else if (noClass != null)
           return SizedBox(
             width: double.maxFinite,
