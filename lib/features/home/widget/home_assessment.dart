@@ -44,7 +44,7 @@ class HomeAssessment extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(20.0),
                 child: Text(
-                  "No reminder yet!!!",
+                  "No For Now...",
                   style: Fontstyle.defult(18, FontWeight.w600, ColorStyle.red),
                 ),
               ),

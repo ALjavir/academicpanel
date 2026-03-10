@@ -80,7 +80,7 @@ void scheduleAcademicCalendar(
                         // Wrapped in Expanded so it scrolls properly inside the constraints
                         if (events.length == 0)
                           Text(
-                            "No data found!!!",
+                            "No Data Found...",
                             style: Fontstyle.defult(
                               22,
                               FontWeight.w600,

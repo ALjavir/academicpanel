@@ -4,6 +4,7 @@ import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/template/normal/assessment_template.dart';
 import 'package:academicpanel/theme/template/normal/dropdownbutton_template.dart';
+import 'package:academicpanel/utility/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
@@ -65,13 +66,14 @@ class _ScheduleAssessmentState extends State<ScheduleAssessment> {
             Obx(() {
               final data =
                   widget.schedulePageContoller.assessmentschedulePage.value;
-
-              if (data.assessmentModel.isEmpty) {
+              if (widget.schedulePageContoller.isLoadingAssessment == true) {
+                return Center(child: Loading(hight: 80));
+              } else if (data.assessmentModel.isEmpty) {
                 return Center(
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Text(
-                      "No reminder yet!!!",
+                      "No Data Found...",
                       style: Fontstyle.defult(
                         18,
                         FontWeight.w600,
@@ -81,7 +83,6 @@ class _ScheduleAssessmentState extends State<ScheduleAssessment> {
                   ),
                 );
               } else {
-                // 3. Render the List (No need for a second Obx inside here)
                 return AssessmentTemplate(assessment: data.assessmentModel);
               }
             }),

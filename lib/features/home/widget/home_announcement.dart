@@ -45,7 +45,7 @@ class HomeAnnouncement extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(20.0),
                 child: Text(
-                  "No announcements yet!!!",
+                  "No Announcement Found...",
                   style: Fontstyle.defult(18, FontWeight.w600, ColorStyle.red),
                 ),
               ),

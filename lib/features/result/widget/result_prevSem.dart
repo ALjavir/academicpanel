@@ -77,7 +77,7 @@ class _ResultPrevsemState extends State<ResultPrevsem> {
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Text(
-                        "No result yet!!!",
+                        "No Data Found...",
                         style: Fontstyle.defult(
                           18,
                           FontWeight.w600,

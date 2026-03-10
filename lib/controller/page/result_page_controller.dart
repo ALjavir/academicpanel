@@ -83,6 +83,8 @@ class ResultPageController extends GetxController {
       for (var courseAssessments in groupedDataTemp.values) {
         List<RowAssessmentMark> quizList = [];
         List<RowAssessmentMark> assignmentList = [];
+        List<RowAssessmentMark> presentationList = [];
+        List<RowAssessmentMark> vivaList = [];
 
         RowAssessmentMark midE = RowAssessmentMark(
           assessment: "",
@@ -90,16 +92,6 @@ class ResultPageController extends GetxController {
           score: 0,
         );
         RowAssessmentMark finalE = RowAssessmentMark(
-          assessment: "",
-          mark: 0,
-          score: 0,
-        );
-        RowAssessmentMark presentation = RowAssessmentMark(
-          assessment: "",
-          mark: 0,
-          score: 0,
-        );
-        RowAssessmentMark viva = RowAssessmentMark(
           assessment: "",
           mark: 0,
           score: 0,
@@ -131,20 +123,22 @@ class ResultPageController extends GetxController {
           } else if (type.startsWith("f")) {
             finalE = rowssmerk;
           } else if (type.startsWith("p")) {
-            presentation = rowssmerk;
+            presentationList.add(rowssmerk);
           } else if (type.startsWith("v")) {
-            viva = rowssmerk;
+            vivaList.add(rowssmerk);
           }
         }
 
         quizList.sort((a, b) => a.assessment.compareTo(b.assessment));
         assignmentList.sort((a, b) => a.assessment.compareTo(b.assessment));
+        presentationList.sort((a, b) => a.assessment.compareTo(b.assessment));
+        vivaList.sort((a, b) => a.assessment.compareTo(b.assessment));
 
         CurrentSemResultModel mainAssessmentModel = CurrentSemResultModel(
           quizList: quizList,
           assignmentList: assignmentList,
-          presentation: presentation,
-          viva: viva,
+          presentationList: presentationList,
+          vivaList: vivaList,
           midE: midE,
           finalE: finalE,
           totalMark: totalMark,

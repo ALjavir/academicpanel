@@ -64,7 +64,6 @@ class Accountinstallment extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    // "No exam for now, relax!",
                     "No Data Found!!!",
                     style: Fontstyle.defult(
                       18,
@@ -240,7 +239,7 @@ class Accountinstallment extends StatelessWidget {
               ), // Changed icon to checkmark
 
               Text(
-                "Will update soon...",
+                "Will be update soon...",
                 style: Fontstyle.defult(
                   16,
                   FontWeight.bold,

@@ -6,8 +6,8 @@ class CurrentSemResultModel {
   final RowCourseModel rowCourseModel;
   final List<RowAssessmentMark> quizList;
   final List<RowAssessmentMark> assignmentList;
-  final RowAssessmentMark presentation;
-  final RowAssessmentMark viva;
+  final List<RowAssessmentMark> presentationList;
+  final List<RowAssessmentMark> vivaList;
   final RowAssessmentMark midE;
   final RowAssessmentMark finalE;
   final double totalMark;
@@ -15,8 +15,8 @@ class CurrentSemResultModel {
   CurrentSemResultModel({
     required this.quizList,
     required this.assignmentList,
-    required this.presentation,
-    required this.viva,
+    required this.presentationList,
+    required this.vivaList,
     required this.midE,
     required this.finalE,
     required this.totalMark,

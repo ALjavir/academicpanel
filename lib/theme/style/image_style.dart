@@ -5,7 +5,7 @@ class ImageStyle {
   }
 
   static String navHome() {
-    return 'lib/assets/icon/home.png';
+    return 'lib/assets/icon/homeNav.png';
   }
 
   static String assessment() {
@@ -13,11 +13,11 @@ class ImageStyle {
   }
 
   static String navSchedule() {
-    return 'lib/assets/icon/calendar.png';
+    return 'lib/assets/icon/scheduleNav.png';
   }
 
   static String navAnnouncement() {
-    return 'lib/assets/icon/chat.png';
+    return 'lib/assets/icon/announcementNav.png';
   }
 
   static String exam() {
@@ -41,11 +41,11 @@ class ImageStyle {
   }
 
   static String navAccount() {
-    return 'lib/assets/icon/account.png';
+    return 'lib/assets/icon/accountNav.png';
   }
 
   static String navResult() {
-    return 'lib/assets/icon/result.png';
+    return 'lib/assets/icon/resultNav.png';
   }
 
   static String errorIcon() {
@@ -66,6 +66,10 @@ class ImageStyle {
 
   static String cgpaDownIcon() {
     return 'lib/assets/icon/cgpaDown.png';
+  }
+
+  static String fullStatementIcon() {
+    return 'lib/assets/icon/fullStatement.png';
   }
 
   static String announcementIcon() {

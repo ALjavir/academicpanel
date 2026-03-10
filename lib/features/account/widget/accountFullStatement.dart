@@ -2,6 +2,7 @@ import 'package:academicpanel/model/AccountSuperModel/row_ac_statement_model.dar
 import 'package:academicpanel/model/pages/account_page_model.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
+import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,25 @@ class Accountfullstatement extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
+            Row(
+              spacing: 4,
+              children: [
+                Image.asset(
+                  ImageStyle.fullStatementIcon(),
+                  scale: 16,
+                  color: ColorStyle.red,
+                ),
+                Text(
+                  "Full Statement",
+                  style: Fontstyle.defult(
+                    22,
+                    FontWeight.w600,
+                    ColorStyle.Textblue,
+                  ),
+                ),
+              ],
+            ),
+            Divider(color: ColorStyle.red),
             showListDue(accountPageModelFullStatement.accountStatementList),
           ],
         ),
@@ -33,20 +53,43 @@ class Accountfullstatement extends StatelessWidget {
 
   Widget showListDue(List<RowAcStatementModel> accountStatement) {
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: accountStatement.length,
       itemBuilder: (context, index) {
         final item = accountStatement[index];
-        final isLast = index == accountStatement.length - 1;
+        final isLast = false;
+        final showLastDot = index == accountStatement.length - 1;
+        ;
 
         return IntrinsicHeight(
           child: Row(
-            spacing: 10,
+            spacing: 5,
             crossAxisAlignment: CrossAxisAlignment.start,
+
             children: [
-              DotlineTemplate(isLast: isLast, index: index),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: RotatedBox(
+                  quarterTurns: -1,
+                  child: Center(
+                    child: Text(
+                      DateFormat('d MMM').format(item.createdAt),
+                      style: Fontstyle.defult(
+                        15,
+                        FontWeight.w500,
+                        ColorStyle.Textblue,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              DotlineTemplate(
+                isLast: isLast,
+                index: index,
+                showLastDot: showLastDot,
+              ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,55 +104,50 @@ class Accountfullstatement extends StatelessWidget {
                         ColorStyle.Textblue,
                       ),
                     ),
-                    Text(
-                      DateFormat('d MMM').format(item.createdAt),
-                      style: Fontstyle.defult(
-                        15,
-                        FontWeight.w500,
-                        ColorStyle.lightBlue,
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "${item.rowCourseModel.code}",
+                            style: Fontstyle.defult(
+                              12,
+                              FontWeight.w500,
+                              ColorStyle.Textblue,
+                            ),
+                          ),
+
+                          TextSpan(
+                            text: " • ",
+                            style: Fontstyle.defult(
+                              12,
+                              FontWeight.w600,
+                              ColorStyle.red,
+                            ),
+                          ),
+                          TextSpan(
+                            text: item.rowCourseModel.credit == 0.0
+                                ? "N/A"
+                                : "${item.rowCourseModel.credit} Cr.",
+                            style: Fontstyle.defult(
+                              12,
+                              FontWeight.w500,
+                              ColorStyle.Textblue,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(bottom: 24),
-                    //   child: RichText(
-                    //     text: TextSpan(
-                    //       children: [
-                    //         TextSpan(
-                    //           text: "${item.rowCourseModel.code}",
-                    //           style: Fontstyle.defult(
-                    //             12,
-                    //             FontWeight.w500,
-                    //             ColorStyle.Textblue,
-                    //           ),
-                    //         ),
-                    //         if(item.rowCourseModel.credit != 0)...[
-                    //         TextSpan(
-                    //           text: " • ",
-                    //           style: Fontstyle.defult(
-                    //             12,
-                    //             FontWeight.w600,
-                    //             ColorStyle.red,
-                    //           ),
-                    //         ),
-                    //         TextSpan(
-                    //           text: "${item.rowCourseModel.credit} Cr.",
-                    //           style: Fontstyle.defult(
-                    //             12,
-                    //             FontWeight.w500,
-                    //             ColorStyle.Textblue,
-                    //           ),
-                    //         ),]
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
 
               const SizedBox(width: 10),
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   //color: ColorStyle.light,
                   border: Border.all(color: Colors.black12, width: 1),
