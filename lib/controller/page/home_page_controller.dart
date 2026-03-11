@@ -227,12 +227,12 @@ class HomePageController extends GetxController {
         }
 
         // 1. Calculate Total Fee needed after Waiver
+        final waiverAmount =
+            ac_statementTotal *
+            (fetchAccountData.rowAccountextModel.waiver / 100);
         final double totalFeeAfterWaiver =
-            ac_statementTotal -
-            (ac_statementTotal *
-                (fetchAccountData.rowAccountextModel.waiver / 100)) -
-            (fetchAccountData.rowAccountextModel.balance) -
-            totalFine;
+            (ac_statementTotal + totalFine) -
+            (waiverAmount + (fetchAccountData.rowAccountextModel.balance));
 
         //final double netPaidForTuition = paidTotal - totalFine;
 

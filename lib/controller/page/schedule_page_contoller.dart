@@ -11,7 +11,6 @@ import 'package:academicpanel/theme/style/dateTime_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 
 import 'package:academicpanel/utility/error_snackbar.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';

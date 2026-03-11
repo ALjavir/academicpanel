@@ -14,9 +14,19 @@ class Accounttopheadertotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final percentagePaid =
+        (accountPageModelTopHeader.totalPaid /
+                accountPageModelTopHeader.totalDue)
+            .clamp(0.0, 1.0);
+
     final remaining =
         accountPageModelTopHeader.totalPaid -
         accountPageModelTopHeader.totalDue;
+
+    final overPaid =
+        accountPageModelTopHeader.totalPaid > accountPageModelTopHeader.totalDue
+        ? true
+        : false;
     return Column(
       spacing: 8,
       children: [
@@ -117,7 +127,7 @@ class Accounttopheadertotal extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Remaining Due",
+                      overPaid ? "Over Paid Fee" : "Remaining Due",
                       style: Fontstyle.defult(
                         14,
                         FontWeight.bold,
@@ -134,10 +144,7 @@ class Accounttopheadertotal extends StatelessWidget {
           animationDuration: 1000,
           animation: true,
           curve: Curves.easeOut,
-          percent:
-              (accountPageModelTopHeader.totalPaid /
-                      accountPageModelTopHeader.totalDue)
-                  .clamp(0.0, 1.0),
+          percent: percentagePaid,
 
           lineHeight: 15,
           barRadius: const Radius.circular(10),
@@ -146,7 +153,8 @@ class Accounttopheadertotal extends StatelessWidget {
           backgroundColor: Colors.white10,
 
           center: Text(
-            "${((accountPageModelTopHeader.totalPaid / accountPageModelTopHeader.totalDue) * 100).toInt()}%",
+            "${(percentagePaid * 100).toInt()}%",
+            // "$percentagePaid %",
             style: Fontstyle.defult(11, FontWeight.w700, Colors.white),
           ),
         ),

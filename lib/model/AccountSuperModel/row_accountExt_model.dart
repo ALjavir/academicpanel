@@ -1,7 +1,7 @@
 class RowAccountextModel {
   final double perCreditFee;
   final double balance;
-  final double waiver;
+  final int waiver;
 
   RowAccountextModel({
     required this.perCreditFee,
@@ -13,7 +13,7 @@ class RowAccountextModel {
     return RowAccountextModel(
       perCreditFee: (map['per_credit'] ?? 0).toDouble(),
       balance: (map['balance'] ?? 0).toDouble(),
-      waiver: (map['waver_%'] ?? 0).toDouble(),
+      waiver: map['waver_%'] ?? 0,
     );
   }
 }

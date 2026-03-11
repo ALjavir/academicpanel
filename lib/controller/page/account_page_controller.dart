@@ -10,8 +10,9 @@ import 'package:get/state_manager.dart';
 
 class AccountPageController extends GetxController {
   final accountController = Get.find<AccountController>();
-  late double totalDue;
-  late double totalPaid;
+  late double totalFDue;
+  late double totalFPaid;
+  late double waiverAmount;
   late AccountModel fetchAccountData;
 
   Future<AccountPageModel> mainAccountPageController() async {
@@ -26,12 +27,12 @@ class AccountPageController extends GetxController {
       return AccountPageModel(
         accountPageModelTopHeader: AccountPageModelTopHeader(
           balance: 0,
-          due: 0,
+          statementDue: 0,
           waiver: 0,
 
           totalDue: 0,
           totalPaid: 0,
-          fine: 0,
+          totalFine: 0,
         ),
         accountPageModelInstallment: [],
         accountPageModelFullStatement: AccountPageModelFullStatement(
@@ -40,11 +41,12 @@ class AccountPageController extends GetxController {
           paymentList: [],
           balance: 0,
           remaing: 0,
-          waiver: 0,
+          waiverPer: 0,
           perCredit: 0,
           totalAccountStatementList: 0,
           totalFineList: 0,
           totalPaymentList: 0,
+          waiverAmount: 0,
         ),
       );
     }
@@ -53,45 +55,43 @@ class AccountPageController extends GetxController {
   Future<AccountPageModelTopHeader> fetchAccountPageHeader() async {
     try {
       final double balance = fetchAccountData.rowAccountextModel.balance;
-      final double waiverPer = fetchAccountData.rowAccountextModel.waiver;
+      final int waiverPer = fetchAccountData.rowAccountextModel.waiver;
 
-      double allPaid = 0;
-      double allDue = 0;
-      double allFine = 0;
+      double statementDue = 0;
+
+      double totalPaid = 0;
+      double totalFine = 0;
 
       for (var i in fetchAccountData.rowAcSatementModelList) {
-        allDue += i.amount;
+        statementDue += i.amount;
       }
       for (var i in fetchAccountData.rowPaymentModelList) {
-        allPaid += i.amount;
+        totalPaid += i.amount;
       }
       for (var i in fetchAccountData.rowFineModelList) {
-        allFine += i.amount;
+        totalFine += i.amount;
       }
 
-      final double waiverAmount = allDue * (waiverPer / 100);
-
-      totalDue = allDue - waiverAmount - (balance) - allFine;
-      totalPaid = allPaid;
-
-      print("This is the total paid from account page: $totalPaid");
+      waiverAmount = statementDue * (waiverPer / 100);
+      totalFPaid = totalPaid;
+      totalFDue = (statementDue + totalFine) - (waiverAmount + (balance));
 
       return AccountPageModelTopHeader(
         balance: balance,
-        due: allDue,
+        statementDue: statementDue,
         waiver: waiverAmount,
-        totalDue: totalDue,
-        totalPaid: totalPaid,
-        fine: allFine,
+        totalDue: totalFDue,
+        totalPaid: totalFPaid,
+        totalFine: totalFine,
       );
     } catch (e) {
       return AccountPageModelTopHeader(
         balance: 0,
-        due: 0,
+        statementDue: 0,
         waiver: 0,
         totalDue: 0,
         totalPaid: 0,
-        fine: 0,
+        totalFine: 0,
       );
     }
   }
@@ -109,15 +109,19 @@ class AccountPageController extends GetxController {
       //     fetchAccountData.rowPaymentModelList;
 
       final now = DateTime.now();
+      String code = '';
+      double target = 0;
+      double paid = 0;
+      double amount = 0;
 
       for (var i in installmentList) {
         String state;
         RowFineModel subData = RowFineModel(
-          code: '',
+          code: code,
           created_at: now,
-          target: 0,
-          paid: 0,
-          amount: 0,
+          target: target,
+          paid: paid,
+          amount: amount,
         );
 
         for (var j in fineList) {
@@ -139,8 +143,8 @@ class AccountPageController extends GetxController {
         final finalData = AccountPageModelInstallment(
           installment: i,
           state: state,
-          totalDue: totalDue,
-          totalPaid: totalPaid,
+          totalDue: totalFDue,
+          totalPaid: totalFPaid,
           fineModel: subData,
         );
 
@@ -156,7 +160,7 @@ class AccountPageController extends GetxController {
   Future<AccountPageModelFullStatement> fetchAccountPageFullStatement() async {
     try {
       final double balance = fetchAccountData.rowAccountextModel.balance;
-      final double waiver = fetchAccountData.rowAccountextModel.waiver;
+      final int waiverPer = fetchAccountData.rowAccountextModel.waiver;
       final double perCredit = fetchAccountData.rowAccountextModel.perCreditFee;
       final List<RowAcStatementModel> accountStatement =
           fetchAccountData.rowAcSatementModelList;
@@ -188,11 +192,12 @@ class AccountPageController extends GetxController {
         paymentList: paymentList,
         balance: balance,
         remaing: remaing,
-        waiver: waiver,
+        waiverPer: waiverPer,
         perCredit: perCredit,
         totalAccountStatementList: totalAccountStatementList,
         totalFineList: totalFineList,
         totalPaymentList: totalPaymentList,
+        waiverAmount: waiverAmount,
       );
     } catch (e) {
       return AccountPageModelFullStatement(
@@ -201,11 +206,12 @@ class AccountPageController extends GetxController {
         paymentList: [],
         balance: 0,
         remaing: 0,
-        waiver: 0,
+        waiverPer: 0,
         perCredit: 0,
         totalAccountStatementList: 0,
         totalFineList: 0,
         totalPaymentList: 0,
+        waiverAmount: 0,
       );
     }
   }

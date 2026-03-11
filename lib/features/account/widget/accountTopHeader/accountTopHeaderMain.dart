@@ -7,6 +7,7 @@ import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/animation/threeD_containerHead.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Accounttopheadermain extends StatelessWidget {
   final AccountPageModelTopHeader accountPageModelTopHeader;

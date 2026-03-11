@@ -45,6 +45,72 @@ class Accountfullstatement extends StatelessWidget {
             ),
             Divider(color: ColorStyle.red),
             showListDue(accountPageModelFullStatement.accountStatementList),
+            Divider(color: ColorStyle.red),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Current Due:",
+                  style: Fontstyle.defult(
+                    18,
+                    FontWeight.w600,
+                    ColorStyle.Textblue,
+                  ),
+                ),
+                Text(
+                  accountPageModelFullStatement.totalAccountStatementList
+                      .toString(),
+                  style: Fontstyle.defult(
+                    18,
+                    FontWeight.w600,
+                    ColorStyle.Textblue,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Balance(due from last sem):",
+                  style: Fontstyle.defult(
+                    18,
+                    FontWeight.w600,
+                    ColorStyle.Textblue,
+                  ),
+                ),
+                Text(
+                  accountPageModelFullStatement.balance.toString(),
+                  style: Fontstyle.defult(
+                    18,
+                    FontWeight.w600,
+                    ColorStyle.Textblue,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Waiver (${accountPageModelFullStatement.waiverPer}%):",
+                  style: Fontstyle.defult(
+                    18,
+                    FontWeight.w600,
+                    ColorStyle.Textblue,
+                  ),
+                ),
+                Text(
+                  accountPageModelFullStatement.waiverAmount.toString(),
+                  style: Fontstyle.defult(
+                    18,
+                    FontWeight.w600,
+                    ColorStyle.Textblue,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -59,9 +125,8 @@ class Accountfullstatement extends StatelessWidget {
       itemCount: accountStatement.length,
       itemBuilder: (context, index) {
         final item = accountStatement[index];
-        final isLast = false;
+
         final showLastDot = index == accountStatement.length - 1;
-        ;
 
         return IntrinsicHeight(
           child: Row(
@@ -86,7 +151,7 @@ class Accountfullstatement extends StatelessWidget {
                 ),
               ),
               DotlineTemplate(
-                isLast: isLast,
+                isLast: false,
                 index: index,
                 showLastDot: showLastDot,
               ),

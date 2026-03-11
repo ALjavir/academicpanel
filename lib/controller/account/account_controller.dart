@@ -96,7 +96,7 @@ class AccountController extends GetxController {
         rowFineModelList: rowFineModelList,
       );
     } catch (e) {
-      print('Error fetching account data: $e');
+      //print('Error fetching account data: $e');
       return AccountModel(
         rowAcSatementModelList: [],
         rowInstallmentModelList: [],

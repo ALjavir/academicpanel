@@ -15,22 +15,22 @@ class AccountPageModel {
 }
 
 class AccountPageModelTopHeader {
-  final double due;
+  final double statementDue;
   final double waiver;
 
   final double balance;
-  final double fine;
+  final double totalFine;
   final double totalDue;
   final double totalPaid;
 
   AccountPageModelTopHeader({
-    required this.due,
+    required this.statementDue,
     required this.waiver,
 
     required this.balance,
     required this.totalDue,
     required this.totalPaid,
-    required this.fine,
+    required this.totalFine,
   });
 }
 
@@ -59,7 +59,8 @@ class AccountPageModelFullStatement {
   final double totalPaymentList;
   final double balance;
   final double remaing;
-  final double waiver;
+  final int waiverPer;
+  final double waiverAmount;
   final double perCredit;
   AccountPageModelFullStatement({
     required this.accountStatementList,
@@ -67,10 +68,11 @@ class AccountPageModelFullStatement {
     required this.paymentList,
     required this.balance,
     required this.remaing,
-    required this.waiver,
+    required this.waiverPer,
     required this.perCredit,
     required this.totalAccountStatementList,
     required this.totalFineList,
     required this.totalPaymentList,
+    required this.waiverAmount,
   });
 }
