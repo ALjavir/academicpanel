@@ -6,7 +6,7 @@ import 'package:academicpanel/theme/template/animation/threeD_containerHead.dart
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
-import 'package:academicpanel/utility/loading.dart';
+import 'package:academicpanel/utility/loading/loadingCirculer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
@@ -72,7 +72,7 @@ class _HomeTopHeaderState extends State<HomeTopHeader> {
                           fit: BoxFit.cover,
 
                           progressIndicatorBuilder: (context, url, progress) {
-                            return const Center(child: Loading(hight: 40));
+                            return const Center(child: LoadingCirculer());
                           },
                           errorWidget: (context, url, error) => Image.asset(
                             ImageStyle.noProfileImageIcon(),

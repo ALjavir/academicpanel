@@ -10,7 +10,8 @@ import 'package:academicpanel/navigation/appbar/custom_appbar.dart';
 import 'package:academicpanel/theme/template/animation/diagonal_reveal.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
-import 'package:academicpanel/utility/loading.dart';
+import 'package:academicpanel/utility/loading/loadingCirculer.dart';
+import 'package:academicpanel/utility/loading/loadingFullPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -44,7 +45,7 @@ class _HomePageMainState extends State<HomePageMain> {
           future: homeFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: Loading(hight: 100));
+              return const SingleChildScrollView(child: LoadingFullPage());
             }
             if (snapshot.hasError) {
               return Center(child: Text("Error: ${snapshot.error}"));

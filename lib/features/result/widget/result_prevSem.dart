@@ -7,7 +7,8 @@ import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
 import 'package:academicpanel/theme/template/normal/dropdownbutton_template.dart';
-import 'package:academicpanel/utility/loading.dart';
+import 'package:academicpanel/utility/loading/loadingFullPage.dart';
+import 'package:academicpanel/utility/loading/loadingPageContent.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
@@ -87,7 +88,7 @@ class _ResultPrevsemState extends State<ResultPrevsem> {
                     ),
                   )
                 else if (widget.resultPageController.isLoadingPrevR == true)
-                  Center(child: Loading(hight: 80))
+                  Center(child: LoadingPageContent())
                 else
                   showData(prevSemResultData.rowPrevResultList),
               ],

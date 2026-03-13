@@ -7,7 +7,8 @@ import 'package:academicpanel/theme/template/animation/threed_logo.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
-import 'package:academicpanel/utility/loading.dart';
+import 'package:academicpanel/utility/loading/loadingCirculer.dart';
+import 'package:academicpanel/utility/loading/loadingFullPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -73,7 +74,9 @@ class _SplashsPageMainState extends State<SplashsPageMain> {
                 ),
               ),
               Expanded(flex: 0, child: SizedBox()),
-              isLoading.value ? Loading(hight: 90) : const SizedBox(height: 90),
+              isLoading.value
+                  ? CircularProgressIndicator()
+                  : const SizedBox(height: 90),
               BlurryTypewriterText(
                 text: 'Presidency University',
                 style: Fontstyle.splashS(32),

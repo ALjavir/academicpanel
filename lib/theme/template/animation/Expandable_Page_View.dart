@@ -22,17 +22,21 @@ class ExpandablePageView extends StatefulWidget {
 
 class _ExpandablePageViewState extends State<ExpandablePageView> {
   late PageController _pageController;
-  double _currentHeight = 0;
+
+  // Cache the heights of all built pages to prevent layout thrashing
+  final Map<int, double> _heights = {};
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
     _pageController = widget.controller ?? PageController();
+    // Ensure we start on the correct initial page
+    _currentPage = _pageController.initialPage;
   }
 
   @override
   void dispose() {
-    // Only dispose if we created it ourselves
     if (widget.controller == null) {
       _pageController.dispose();
     }
@@ -41,35 +45,35 @@ class _ExpandablePageViewState extends State<ExpandablePageView> {
 
   @override
   Widget build(BuildContext context) {
-    return TweenAnimationBuilder<double>(
-      curve: Curves.easeOutQuart, // Smoother curve
+    // Look up the target height. If it hasn't reported its size yet, fallback to 0.
+    final targetHeight = _heights[_currentPage] ?? 1.0;
+
+    return AnimatedContainer(
       duration: widget.animationDuration,
-      tween: Tween<double>(begin: _currentHeight, end: _currentHeight),
-      builder: (context, value, child) {
-        return SizedBox(height: value, child: child);
-      },
+      curve: Curves.easeOutQuart,
+      // If height is 0 (initial load), we use null so it sizes to its content automatically
+      height: targetHeight > 0 ? targetHeight : null,
       child: PageView.builder(
         controller: _pageController,
         itemCount: widget.itemCount,
-        onPageChanged: widget.onPageChanged,
+        // Trigger the height change exactly when the page snaps into place
+        onPageChanged: (index) {
+          setState(() => _currentPage = index);
+          if (widget.onPageChanged != null) {
+            widget.onPageChanged!(index);
+          }
+        },
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: _SizeReportingWidget(
               onSizeChange: (size) {
-                // Logic: Only update height if this is the CURRENT page
-                // or if the controller isn't ready yet (initial render)
-                final isControllerAttached =
-                    _pageController.positions.isNotEmpty;
-
-                if (isControllerAttached) {
-                  final currentPage = _pageController.page?.round() ?? 0;
-                  if (currentPage != index) return;
-                }
-
-                // Only rebuild if height actually changed to save performance
-                if (_currentHeight != size.height) {
-                  setState(() => _currentHeight = size.height);
+                // Only trigger a rebuild if this specific page's height changed
+                if (_heights[index] != size.height) {
+                  // We use addPostFrameCallback here safely to avoid "setState during build" errors
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (mounted) setState(() => _heights[index] = size.height);
+                  });
                 }
               },
               child: widget.itemBuilder(context, index),
@@ -80,6 +84,8 @@ class _ExpandablePageViewState extends State<ExpandablePageView> {
     );
   }
 }
+
+// Your _SizeReportingWidget code stays exactly the same!
 
 class _SizeReportingWidget extends StatefulWidget {
   final Widget child;

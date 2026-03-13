@@ -11,8 +11,9 @@ import 'package:academicpanel/theme/template/animation/diagonal_reveal.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/utility/error_snackbar.dart';
+import 'package:academicpanel/utility/loading/loadingCirculer.dart';
 
-import 'package:academicpanel/utility/loading.dart';
+import 'package:academicpanel/utility/loading/loadingFullPage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -240,7 +241,7 @@ class _SignupPageMainState extends State<SignupPageMain> {
 
               Obx(() {
                 return signupController.isLoading.isTrue
-                    ? Loading(hight: 70)
+                    ? LoadingCirculer()
                     : Column(
                         children: [
                           CustomButton(
@@ -276,7 +277,7 @@ class _SignupPageMainState extends State<SignupPageMain> {
                                     lastName: textConLastName.text.trim(),
                                     email: textContEmail.text.trim(),
                                     password: textContPass.text.trim(),
-                                    department: selectedDepartment!,
+
                                     address: textContAddress.text.trim(),
                                     phone:
                                         int.tryParse(
@@ -285,6 +286,7 @@ class _SignupPageMainState extends State<SignupPageMain> {
                                         0,
                                     uid: '',
                                     id: textContID.text.trim(),
+                                    department: '',
                                   );
                                   await signupController.mainFunction(
                                     user,

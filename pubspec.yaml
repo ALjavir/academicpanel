@@ -53,6 +53,7 @@ dependencies:
   cached_network_image: ^3.4.1
   url_launcher: ^6.3.2
   percent_indicator: ^4.2.5
+  shimmer: ^3.0.0
 
   
 

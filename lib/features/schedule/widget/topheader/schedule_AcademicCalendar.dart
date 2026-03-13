@@ -6,7 +6,8 @@ import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_mo
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
-import 'package:academicpanel/utility/loading.dart';
+import 'package:academicpanel/utility/loading/loadingFullPage.dart';
+import 'package:academicpanel/utility/loading/loadingPageContent.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,7 +22,7 @@ void scheduleAcademicCalendar(
       return StatefulBuilder(
         builder: (context, setState) {
           if (isLoadingClassSchdule == true) {
-            return Center(child: Loading(hight: 80));
+            return Center(child: LoadingPageContent());
           } else if (events.isEmpty) {
             return Center(
               child: Text(

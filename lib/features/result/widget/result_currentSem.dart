@@ -82,7 +82,7 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
         spacing: 10,
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.54,
+            height: MediaQuery.of(context).size.height * 0.58,
             child: PageView.builder(
               controller: controller,
               itemCount: listCurrentSemResultData.length,
@@ -277,6 +277,7 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
               },
             ),
           ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(listCurrentSemResultData.length, (i) {
@@ -412,12 +413,18 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
               builder: (context) {
                 if (noItem) {
                   // SCENARIO A: No items found
-                  return Text(
-                    "N/A",
-                    style: Fontstyle.defult(
-                      15,
-                      FontWeight.w500,
-                      ColorStyle.lightBlue,
+                  return SizedBox(
+                    //color: Colors.amber,
+                    height: 50,
+                    child: Center(
+                      child: Text(
+                        "N/A",
+                        style: Fontstyle.defult(
+                          15,
+                          FontWeight.w500,
+                          ColorStyle.lightBlue,
+                        ),
+                      ),
                     ),
                   );
                 }

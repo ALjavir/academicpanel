@@ -53,7 +53,11 @@ class ImageStyle {
   }
 
   static String loading() {
-    return 'lib/assets/animatedIcon/loading_1.json';
+    return 'lib/assets/animatedIcon/authLoading.json';
+  }
+
+  static String loadingAuth() {
+    return 'lib/assets/animatedIcon/authLoading.json';
   }
 
   static String upCommingClassesHeaderIcon() {

@@ -20,7 +20,7 @@ class Accounttopheaderall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<_ChartItem> items = [
-      _ChartItem("due", accountPageModelTopHeader.totalDue, Colors.red),
+      _ChartItem("Net fee", accountPageModelTopHeader.totalDue, Colors.red),
       _ChartItem("Waiver", accountPageModelTopHeader.waiver, Colors.amber),
       _ChartItem("Balance", accountPageModelTopHeader.balance, Colors.indigo),
       _ChartItem("Fine", accountPageModelTopHeader.totalFine, Colors.white),
@@ -31,57 +31,7 @@ class Accounttopheaderall extends StatelessWidget {
     double chartTotal = accountPageModelTopHeader.statementDue.abs();
     if (chartTotal == 0) chartTotal = 1;
 
-    return
-    // Column(
-    //   spacing: 10,
-    //   children: [
-    //     Row(
-    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //       children: [
-    //         itemInfoSt2(
-    //           Icons.calculate_outlined,
-    //           "Base Fee",
-    //           accountPageModelTopHeader.statementDue,
-    //         ),
-    //         itemInfoSt2(
-    //           Icons.assignment_late_outlined,
-    //           "Total Fine",
-    //           accountPageModelTopHeader.totalFine,
-    //         ),
-    //       ],
-    //     ),
-    //     Column(
-    //       children: [
-    //         Text(
-    //           NumberFormat.decimalPattern().format(
-    //             accountPageModelTopHeader.totalDue.toInt().abs(),
-    //           ),
-    //           style: Fontstyle.defult(22, FontWeight.w600, Colors.red),
-    //         ),
-    //         Text(
-    //           "Net Tuition Fee",
-    //           style: Fontstyle.defult(14, FontWeight.bold, ColorStyle.light),
-    //         ),
-    //       ],
-    //     ),
-    //     Row(
-    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //       children: [
-    //         itemInfoSt2(
-    //           Icons.receipt_long_outlined,
-    //           "Previous Balance",
-    //           accountPageModelTopHeader.balance,
-    //         ),
-    //         itemInfoSt2(
-    //           Icons.discount_outlined,
-    //           "Waiver Amount",
-    //           accountPageModelTopHeader.waiver,
-    //         ),
-    //       ],
-    //     ),
-    //   ],
-    // );
-    Column(
+    return Column(
       spacing: 10,
       children: [
         Row(
@@ -202,80 +152,6 @@ class Accounttopheaderall extends StatelessWidget {
 }
 
 // --- THE PAINTER (Draws the Arcs & Percentages) ---
-Widget itemInfoSt1(IconData icon, String title, double amount) {
-  return Row(
-    spacing: 4,
-    crossAxisAlignment: CrossAxisAlignment.end,
-    children: [
-      Icon(icon, color: Colors.red, size: 18),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 4,
-        children: [
-          Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: title,
-                  style: Fontstyle.defult(
-                    14,
-                    FontWeight.bold,
-                    ColorStyle.light,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Text(
-            "${NumberFormat.decimalPattern().format(amount)}",
-            style: Fontstyle.defult(18, FontWeight.w600, ColorStyle.light),
-          ),
-        ],
-      ),
-    ],
-  );
-}
-
-Widget itemInfoSt2(IconData icon, String title, double amount) {
-  return Row(
-    spacing: 4,
-    crossAxisAlignment: CrossAxisAlignment.end,
-    children: [
-      Icon(icon, color: Colors.red, size: 16),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-
-        children: [
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: NumberFormat.decimalPattern().format(
-                    amount.toInt().abs(),
-                  ),
-                  style: Fontstyle.defult(
-                    18,
-                    FontWeight.w600,
-                    ColorStyle.light,
-                  ),
-                ),
-
-                TextSpan(
-                  text: " ৳",
-                  style: Fontstyle.defult(18, FontWeight.bold, Colors.red),
-                ),
-              ],
-            ),
-          ),
-          Text(
-            title,
-            style: Fontstyle.defult(14, FontWeight.bold, ColorStyle.light),
-          ),
-        ],
-      ),
-    ],
-  );
-}
 
 class _DonutPainter extends CustomPainter {
   final List<_ChartItem> items;

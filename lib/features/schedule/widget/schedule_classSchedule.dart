@@ -6,7 +6,8 @@ import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
-import 'package:academicpanel/utility/loading.dart';
+import 'package:academicpanel/utility/loading/loadingFullPage.dart';
+import 'package:academicpanel/utility/loading/loadingPageContent.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get/state_manager.dart';
@@ -46,7 +47,7 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
 
         // 3. Now the condition is reactive!
         if (controller.isLoadingClassSchdule == true)
-          return Center(child: Loading(hight: 80));
+          return Center(child: LoadingPageContent());
         else if (noClass != null)
           return SizedBox(
             width: double.maxFinite,

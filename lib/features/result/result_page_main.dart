@@ -8,7 +8,7 @@ import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/dateTime_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/template/animation/diagonal_reveal.dart';
-import 'package:academicpanel/utility/loading.dart';
+import 'package:academicpanel/utility/loading/loadingFullPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -35,7 +35,7 @@ class _ResultPageMainState extends State<ResultPageMain> {
         duration: Duration(milliseconds: 300),
         child: Obx(() {
           if (resultPageController.isLoading.value) {
-            return const Center(child: Loading(hight: 100));
+            return const SingleChildScrollView(child: LoadingFullPage());
           } else {
             return SingleChildScrollView(
               child: Column(
