@@ -13,8 +13,8 @@ import 'package:academicpanel/network/save_data/local_stroge/local_stoge.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/utility/error_snackbar.dart';
+
 import 'package:academicpanel/utility/loading/loadingCirculer.dart';
-import 'package:academicpanel/utility/loading/loadingFullPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
@@ -167,14 +167,13 @@ class SignupController extends GetxController {
       }
     }
     isLoading.value = false;
-    print("This is department check from fetchDepartment: no department");
     return 'no department';
   }
 
   //---------------------------------------------------Find user in dataBase--------------------
   Future<bool> userExist(String department, String roleID, String id) async {
     try {
-      print("This is department check from userExist $department");
+      print("This is where i found user: $department");
       if (department == 'no department') {
         errorSnackbar(
           title: "Error",
@@ -334,10 +333,10 @@ class SignupController extends GetxController {
 
         if (validUrl != null) {
           signupmodel = signupmodel.copyWith(image: validUrl);
-          //  print("Image uploaded successfully: $validUrl");
+          print("Image uploaded successfully: $validUrl");
         }
 
-        //print(selectedImage.value);
+        print(selectedImage.value);
       }
     } catch (e) {
       errorSnackbar(title: "Image Upload Error", e: e);
@@ -367,7 +366,7 @@ class SignupController extends GetxController {
 
       return true;
     } catch (e) {
-      //      print("Save failed. Initiating Rollback. Error: $e");
+      print("Save failed. Initiating Rollback. Error: $e");
 
       //fail safe(if any of the place had problem while save the data)----------
       // 1. Delete Local Storage keys if they were written----------------------
@@ -400,9 +399,9 @@ class SignupController extends GetxController {
     if (user == null) return;
     try {
       await user.delete();
-      //  print("Auth user rolled back successfully");
+      print("Auth user rolled back successfully");
     } catch (e) {
-      //  print("Failed to delete user during rollback: $e");
+      print("Failed to delete user during rollback: $e");
     }
   }
 
@@ -437,7 +436,7 @@ class SignupController extends GetxController {
       // 4. Update State (Check if result is valid)
       if (result != null) {
         selectedImage.value = File(result.path);
-        // print("Image selected and compressed: ${result.path}");
+        print("Image selected and compressed: ${result.path}");
       } else {
         // Fallback: If compression fails for some reason, use the original
         selectedImage.value = File(pickedFile.path);

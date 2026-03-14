@@ -9,8 +9,8 @@ import 'package:academicpanel/utility/check_connection.dart';
 import 'package:academicpanel/theme/template/animation/diagonal_reveal.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/utility/error_snackbar.dart';
+
 import 'package:academicpanel/utility/loading/loadingCirculer.dart';
-import 'package:academicpanel/utility/loading/loadingFullPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';

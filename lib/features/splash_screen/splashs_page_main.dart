@@ -7,8 +7,6 @@ import 'package:academicpanel/theme/template/animation/threed_logo.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
-import 'package:academicpanel/utility/loading/loadingCirculer.dart';
-import 'package:academicpanel/utility/loading/loadingFullPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

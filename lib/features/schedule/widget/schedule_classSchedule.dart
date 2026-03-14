@@ -6,7 +6,6 @@ import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
-import 'package:academicpanel/utility/loading/loadingFullPage.dart';
 import 'package:academicpanel/utility/loading/loadingPageContent.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';

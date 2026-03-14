@@ -11,6 +11,7 @@ class LoadingCirculer extends StatelessWidget {
       scale: 2,
       child: LottieBuilder.asset(
         ImageStyle.loading(),
+        height: 60,
         frameRate: FrameRate.max,
         fit: BoxFit.contain,
       ),
