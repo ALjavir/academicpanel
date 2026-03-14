@@ -5,23 +5,20 @@ import 'package:academicpanel/features/auth/widget/custom_button.dart';
 import 'package:academicpanel/features/auth/widget/custom_textfield.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
-import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/utility/check_connection.dart';
 
 import 'package:academicpanel/theme/template/animation/diagonal_reveal.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/utility/error_snackbar.dart';
-import 'package:academicpanel/utility/loading/loadingAuth.dart';
+
 import 'package:academicpanel/utility/loading/loadingCirculer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:lottie/lottie.dart';
 
 class SignupPageMain extends StatefulWidget {
   const SignupPageMain({super.key});
