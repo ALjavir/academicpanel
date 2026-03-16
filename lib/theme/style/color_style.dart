@@ -6,7 +6,7 @@ class ColorStyle {
   static const Color Textblue = Color(0xFF13467D);
   static const Color lightBlue = Color.fromARGB(150, 19, 70, 125);
   static const Color red = Color(0xFF9F1B19);
-  static const Color darkRed = Color.fromARGB(40, 255, 0, 0);
+  static const Color lightRed = Color.fromARGB(113, 159, 27, 25);
 
   static const Color pgCircleBarColor1 = Color(0xFF0065F8);
   static const Color pgCircleBarColor2 = Color(0xffFF5F1F);

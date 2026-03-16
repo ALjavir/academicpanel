@@ -144,7 +144,7 @@ class HomeAccountinfo extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "${NumberFormat.decimalPattern().format(inst.amount.toInt())} ৳",
+                        "${NumberFormat.decimalPattern().format(homeAccountInfoModel.amountLeftToPay.toInt())} ৳",
                         style: Fontstyle.defult(
                           16,
                           FontWeight.w600,

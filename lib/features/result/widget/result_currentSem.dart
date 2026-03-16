@@ -4,7 +4,9 @@ import 'package:academicpanel/model/resultSuperModel/row_assessment_mark.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
+import 'package:academicpanel/theme/template/animation/Expandable_Page_View.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
+import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -83,7 +85,7 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
         children: [
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.58,
-            child: PageView.builder(
+            child: ExpandablePageView(
               controller: controller,
               itemCount: listCurrentSemResultData.length,
               itemBuilder: (context, pageIndex) {
@@ -386,8 +388,8 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(
-                Icons.brightness_1_outlined,
-                size: 11,
+                Icons.radio_button_checked_rounded,
+                size: 12,
                 color: ColorStyle.red,
               ),
               Expanded(
@@ -398,12 +400,12 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
                 ),
               ),
               // Cleaned up the 'SizedBox.shrink()' ternary
-              if (isLast)
-                Icon(
-                  Icons.brightness_1_outlined,
-                  size: 11,
-                  color: ColorStyle.red,
-                ),
+              // if (isLast)
+              //   Icon(
+              //     Icons.radio_button_checked_rounded,
+              //     size: 12,
+              //     color: ColorStyle.red,
+              //   ),
             ],
           ),
 
@@ -415,7 +417,7 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
                   // SCENARIO A: No items found
                   return SizedBox(
                     //color: Colors.amber,
-                    height: 50,
+                    height: 60,
                     child: Center(
                       child: Text(
                         "N/A",

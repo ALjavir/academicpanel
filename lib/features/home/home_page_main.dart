@@ -51,71 +51,75 @@ class _HomePageMainState extends State<HomePageMain> {
             }
             final data = snapshot.data;
             return SingleChildScrollView(
-              child: Column(
-                spacing: 10,
-                children: [
-                  HomeTopHeader(homeTopHeaderModel: data!.homeTopHeaderModel),
+              child: DiagonalReveal(
+                // duration: Duration(seconds: 2),
+                child: Column(
+                  spacing: 10,
+                  children: [
+                    HomeTopHeader(homeTopHeaderModel: data!.homeTopHeaderModel),
 
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      spacing: 20,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 4,
-                          children: [
-                            Text(
-                              "Today's Highlights",
-                              style: Fontstyle.defult3d(
-                                22,
-                                FontWeight.bold,
-                                ColorStyle.Textblue,
-                                const Color.fromARGB(20, 19, 70, 125),
-                                const Offset(3, 3),
-                                4,
-                              ),
-                            ),
-                            Icon(
-                              Icons.auto_graph_outlined,
-                              color: ColorStyle.red,
-                              shadows: [
-                                BoxShadow(
-                                  color: ColorStyle.darkRed,
-                                  blurRadius: 6,
-                                  offset: Offset(0, 4), // Softness
-                                  spreadRadius: 3,
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        spacing: 20,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 4,
+                            children: [
+                              Text(
+                                "Today's Highlights",
+                                style: Fontstyle.defult3d(
+                                  22,
+                                  FontWeight.bold,
+                                  ColorStyle.Textblue,
+                                  const Color.fromARGB(20, 19, 70, 125),
+                                  const Offset(3, 3),
+                                  4,
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        HomeClassschedule(
-                          todayClass: data.homeTodayClassSchedule,
-                        ),
-                        Row(
-                          spacing: 10,
-                          children: [
-                            Expanded(
-                              child: HomeAccountinfo(
-                                homeAccountInfoModel: data.homeAccountInfoModel,
                               ),
-                            ),
-                            Expanded(
-                              child: HomeCgpainfo(
-                                rowCgpaModel: data.homeRowCgpaModel,
+                              Icon(
+                                Icons.auto_graph_outlined,
+                                color: ColorStyle.red,
+                                shadows: [
+                                  BoxShadow(
+                                    color: ColorStyle.lightRed,
+                                    blurRadius: 6,
+                                    offset: Offset(0, 4), // Softness
+                                    spreadRadius: 3,
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                        HomeAnnouncement(announcements: data.homeAnouncement),
-                        HomeAssessment(assessment: data.homeAssessment),
-                      ],
+                            ],
+                          ),
+                          HomeClassschedule(
+                            todayClass: data.homeTodayClassSchedule,
+                          ),
+                          Row(
+                            spacing: 10,
+                            children: [
+                              Expanded(
+                                child: HomeAccountinfo(
+                                  homeAccountInfoModel:
+                                      data.homeAccountInfoModel,
+                                ),
+                              ),
+                              Expanded(
+                                child: HomeCgpainfo(
+                                  rowCgpaModel: data.homeRowCgpaModel,
+                                ),
+                              ),
+                            ],
+                          ),
+                          HomeAnnouncement(announcements: data.homeAnouncement),
+                          HomeAssessment(assessment: data.homeAssessment),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 80),
-                ],
+                    SizedBox(height: 80),
+                  ],
+                ),
               ),
             );
           },

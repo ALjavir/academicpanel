@@ -7,7 +7,7 @@ class DiagonalReveal extends StatefulWidget {
   const DiagonalReveal({
     super.key,
     required this.child,
-    this.duration = const Duration(seconds: 3),
+    this.duration = const Duration(seconds: 2),
   });
 
   @override

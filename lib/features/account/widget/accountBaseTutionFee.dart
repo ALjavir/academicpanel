@@ -9,11 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:intl/intl.dart';
 
-class Accountfullstatement extends StatelessWidget {
-  final AccountPageModelFullStatement accountPageModelFullStatement;
-  const Accountfullstatement({
+class AccountBaseTutionFee extends StatelessWidget {
+  final AccountPageModelBaseTutionFee accountPageModelBaseTutionFee;
+  const AccountBaseTutionFee({
     super.key,
-    required this.accountPageModelFullStatement,
+    required this.accountPageModelBaseTutionFee,
   });
 
   @override
@@ -44,72 +44,34 @@ class Accountfullstatement extends StatelessWidget {
               ],
             ),
             Divider(color: ColorStyle.red),
-            showListDue(accountPageModelFullStatement.accountStatementList),
+            showListDue(accountPageModelBaseTutionFee.accountStatementList),
             Divider(color: ColorStyle.red),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Current Due:",
-                  style: Fontstyle.defult(
-                    18,
-                    FontWeight.w600,
-                    ColorStyle.Textblue,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Total:",
+                    style: Fontstyle.defult(
+                      18,
+                      FontWeight.w600,
+                      ColorStyle.Textblue,
+                    ),
                   ),
-                ),
-                Text(
-                  accountPageModelFullStatement.totalAccountStatementList
-                      .toString(),
-                  style: Fontstyle.defult(
-                    18,
-                    FontWeight.w600,
-                    ColorStyle.Textblue,
+                  Text(
+                    NumberFormat.decimalPattern().format(
+                      accountPageModelBaseTutionFee.totalAccountStatementList,
+                    ),
+                    style: Fontstyle.defult(
+                      18,
+                      FontWeight.w600,
+                      ColorStyle.Textblue,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Balance(due from last sem):",
-                  style: Fontstyle.defult(
-                    18,
-                    FontWeight.w600,
-                    ColorStyle.Textblue,
-                  ),
-                ),
-                Text(
-                  accountPageModelFullStatement.balance.toString(),
-                  style: Fontstyle.defult(
-                    18,
-                    FontWeight.w600,
-                    ColorStyle.Textblue,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Waiver (${accountPageModelFullStatement.waiverPer}%):",
-                  style: Fontstyle.defult(
-                    18,
-                    FontWeight.w600,
-                    ColorStyle.Textblue,
-                  ),
-                ),
-                Text(
-                  accountPageModelFullStatement.waiverAmount.toString(),
-                  style: Fontstyle.defult(
-                    18,
-                    FontWeight.w600,
-                    ColorStyle.Textblue,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -150,11 +112,7 @@ class Accountfullstatement extends StatelessWidget {
                   ),
                 ),
               ),
-              DotlineTemplate(
-                isLast: false,
-                index: index,
-                showLastDot: showLastDot,
-              ),
+              DotlineTemplate(isLast: false, index: index),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,7 +135,7 @@ class Accountfullstatement extends StatelessWidget {
                             style: Fontstyle.defult(
                               12,
                               FontWeight.w500,
-                              ColorStyle.Textblue,
+                              ColorStyle.lightBlue,
                             ),
                           ),
 
@@ -186,7 +144,7 @@ class Accountfullstatement extends StatelessWidget {
                             style: Fontstyle.defult(
                               12,
                               FontWeight.w600,
-                              ColorStyle.red,
+                              ColorStyle.lightRed,
                             ),
                           ),
                           TextSpan(
@@ -196,13 +154,13 @@ class Accountfullstatement extends StatelessWidget {
                             style: Fontstyle.defult(
                               12,
                               FontWeight.w500,
-                              ColorStyle.Textblue,
+                              ColorStyle.lightBlue,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    if (!showLastDot) const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -228,7 +186,7 @@ class Accountfullstatement extends StatelessWidget {
                   ],
                 ),
                 child: Text(
-                  item.amount.toString(),
+                  NumberFormat.decimalPattern().format(item.amount),
                   style: Fontstyle.defult(
                     15,
                     FontWeight.w600,

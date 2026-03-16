@@ -4,13 +4,8 @@ import 'package:flutter/material.dart';
 class DotlineTemplate extends StatelessWidget {
   final bool isLast;
   final int index;
-  final bool? showLastDot;
-  const DotlineTemplate({
-    super.key,
-    required this.isLast,
-    required this.index,
-    this.showLastDot,
-  });
+
+  const DotlineTemplate({super.key, required this.isLast, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -18,37 +13,19 @@ class DotlineTemplate extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 4),
-          child:
-              //  Icon(
-              //   Icons.brightness_1_outlined,
-              //   size: 14,
-              //   color: ColorStyle.red,
-              // ),
-              Container(
-                width: 11,
-                height: 11,
-                decoration: BoxDecoration(
-                  color: ColorStyle.light,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: ColorStyle.red, width: 1.5),
-                ),
-              ),
+          child: Icon(
+            Icons.radio_button_checked_rounded,
+            size: 14,
+            color: ColorStyle.red,
+          ),
         ),
         if (!isLast)
           Expanded(child: Container(width: 1.5, color: Colors.grey.shade300)),
-        if (showLastDot == true)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Container(
-              width: 11,
-              height: 11,
-              decoration: BoxDecoration(
-                color: ColorStyle.light,
-                shape: BoxShape.circle,
-                border: Border.all(color: ColorStyle.red, width: 1.5),
-              ),
-            ),
-          ),
+        // if (showLastDot == true)
+        //   Padding(
+        //     padding: const EdgeInsets.symmetric(vertical: 4),
+        //     child: Icon(Icons., size: 14, color: ColorStyle.red),
+        //   ),
       ],
     );
   }

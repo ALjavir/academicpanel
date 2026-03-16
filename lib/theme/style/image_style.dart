@@ -52,6 +52,10 @@ class ImageStyle {
     return 'lib/assets/icon/error.png';
   }
 
+  static String paymentIcon() {
+    return 'lib/assets/icon/payment.png';
+  }
+
   static String loading() {
     return 'lib/assets/animatedIcon/loading.json';
   }

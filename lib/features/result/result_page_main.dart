@@ -31,13 +31,12 @@ class _ResultPageMainState extends State<ResultPageMain> {
       backgroundColor: ColorStyle.light,
       extendBodyBehindAppBar: true,
       appBar: CustomAppbar(),
-      body: DiagonalReveal(
-        duration: Duration(milliseconds: 300),
-        child: Obx(() {
-          if (resultPageController.isLoading.value) {
-            return const SingleChildScrollView(child: LoadingFullPage());
-          } else {
-            return SingleChildScrollView(
+      body: Obx(() {
+        if (resultPageController.isLoading.value) {
+          return const SingleChildScrollView(child: LoadingFullPage());
+        } else {
+          return SingleChildScrollView(
+            child: DiagonalReveal(
               child: Column(
                 spacing: 10,
                 children: [
@@ -61,10 +60,10 @@ class _ResultPageMainState extends State<ResultPageMain> {
                   SizedBox(height: 100),
                 ],
               ),
-            );
-          }
-        }),
-      ),
+            ),
+          );
+        }
+      }),
     );
   }
 }

@@ -20,10 +20,14 @@ class Accounttopheaderall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<_ChartItem> items = [
-      _ChartItem("Net fee", accountPageModelTopHeader.totalDue, Colors.red),
       _ChartItem("Waiver", accountPageModelTopHeader.waiver, Colors.amber),
       _ChartItem("Balance", accountPageModelTopHeader.balance, Colors.indigo),
-      _ChartItem("Fine", accountPageModelTopHeader.totalFine, Colors.white),
+      _ChartItem(
+        "Fine(inst)",
+        accountPageModelTopHeader.totalFine,
+        Colors.white,
+      ),
+      _ChartItem("Final fee", accountPageModelTopHeader.totalDue, Colors.red),
       //_ChartItem("paid", accountPageModelTopHeader.totalPaid, Colors.green),
     ];
 
@@ -125,7 +129,7 @@ class Accounttopheaderall extends StatelessWidget {
             children: [
               WidgetSpan(
                 child: Icon(
-                  Icons.data_usage_sharp,
+                  Icons.donut_small_sharp,
                   color: Colors.red,
                   size: 20,
                 ),

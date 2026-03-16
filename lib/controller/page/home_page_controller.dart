@@ -68,6 +68,7 @@ class HomePageController extends GetxController {
           totalPaid: 0,
           paidPercentage: 0,
           balance: 0,
+          amountLeftToPay: 0,
         ),
         homeRowCgpaModel: RowCgpaCrModel(
           comment: '',
@@ -209,11 +210,13 @@ class HomePageController extends GetxController {
           paidPercentage: 0,
           upcomingInstallment: null,
           balance: fetchAccountData.rowAccountextModel.balance.toDouble(),
+          amountLeftToPay: 0,
         );
       } else {
         double ac_statementTotal = 0;
         double paidTotal = 0;
         double totalFine = 0;
+        double amountLeftToPay = 0;
 
         for (var i in fetchAccountData.rowAcSatementModelList) {
           ac_statementTotal += i.amount;
@@ -223,7 +226,9 @@ class HomePageController extends GetxController {
         }
 
         for (var i in fetchAccountData.rowFineModelList) {
-          totalFine += i.amount;
+          if (i.target < i.paid) {
+            totalFine += i.amount;
+          }
         }
 
         // 1. Calculate Total Fee needed after Waiver
@@ -257,7 +262,7 @@ class HomePageController extends GetxController {
                   totalFeeAfterWaiver * (firstInst.amountPercentage / 100);
 
               if (paidTotal < targetAmount) {
-                final double amountLeftToPay = targetAmount - paidTotal;
+                amountLeftToPay = targetAmount - paidTotal;
 
                 urgentInstallment = RowInstallmentModel(
                   fine: firstInst.fine.toDouble(),
@@ -265,7 +270,7 @@ class HomePageController extends GetxController {
 
                   amountPercentage: firstInst.amountPercentage,
                   code: firstInst.code,
-                  amount: amountLeftToPay,
+                  // amount: amountLeftToPay,
                 );
               }
             }
@@ -284,6 +289,7 @@ class HomePageController extends GetxController {
           paidPercentage: percent,
           upcomingInstallment: urgentInstallment,
           balance: fetchAccountData.rowAccountextModel.balance.toDouble(),
+          amountLeftToPay: amountLeftToPay,
         );
       }
     } catch (e) {
@@ -294,6 +300,7 @@ class HomePageController extends GetxController {
         paidPercentage: 0,
         upcomingInstallment: null,
         balance: 0,
+        amountLeftToPay: 0,
       );
     }
   }

@@ -6,11 +6,13 @@ import 'package:academicpanel/model/AccountSuperModel/row_payment_model.dart';
 class AccountPageModel {
   final AccountPageModelTopHeader accountPageModelTopHeader;
   final List<AccountPageModelInstallment> accountPageModelInstallment;
-  final AccountPageModelFullStatement accountPageModelFullStatement;
+  final AccountPageModelBaseTutionFee accountPageModelBaseTutionFee;
+  final AccountPageModelPayment accountPageModelPayment;
   AccountPageModel({
     required this.accountPageModelTopHeader,
     required this.accountPageModelInstallment,
-    required this.accountPageModelFullStatement,
+    required this.accountPageModelBaseTutionFee,
+    required this.accountPageModelPayment,
   });
 }
 
@@ -49,30 +51,22 @@ class AccountPageModelInstallment {
   });
 }
 
-class AccountPageModelFullStatement {
-  final List<RowAcStatementModel> accountStatementList;
-  final List<RowFineModel> fineList;
+class AccountPageModelPayment {
   final List<RowPaymentModel> paymentList;
-
-  final double totalAccountStatementList;
-  final double totalFineList;
-  final double totalPaymentList;
-  final double balance;
-  final double remaing;
-  final int waiverPer;
-  final double waiverAmount;
-  final double perCredit;
-  AccountPageModelFullStatement({
-    required this.accountStatementList,
-    required this.fineList,
+  final double totalPayment;
+  AccountPageModelPayment({
     required this.paymentList,
-    required this.balance,
-    required this.remaing,
-    required this.waiverPer,
+    required this.totalPayment,
+  });
+}
+
+class AccountPageModelBaseTutionFee {
+  final List<RowAcStatementModel> accountStatementList;
+  final double totalAccountStatementList;
+  final double perCredit;
+  AccountPageModelBaseTutionFee({
+    required this.accountStatementList,
     required this.perCredit,
     required this.totalAccountStatementList,
-    required this.totalFineList,
-    required this.totalPaymentList,
-    required this.waiverAmount,
   });
 }

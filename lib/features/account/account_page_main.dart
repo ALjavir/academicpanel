@@ -1,6 +1,7 @@
 import 'package:academicpanel/controller/page/account_page_controller.dart';
-import 'package:academicpanel/features/account/widget/accountFullStatement.dart';
+import 'package:academicpanel/features/account/widget/accountBaseTutionFee.dart';
 import 'package:academicpanel/features/account/widget/accountInstallment.dart';
+import 'package:academicpanel/features/account/widget/accountPayment.dart';
 import 'package:academicpanel/features/account/widget/accountTopHeader/accountTopHeaderMain.dart';
 import 'package:academicpanel/model/pages/account_page_model.dart';
 import 'package:academicpanel/navigation/appbar/custom_appbar.dart';
@@ -34,19 +35,18 @@ class _AccountPageMainState extends State<AccountPageMain> {
       backgroundColor: ColorStyle.light,
       extendBodyBehindAppBar: true,
       appBar: CustomAppbar(),
-      body: DiagonalReveal(
-        duration: Duration(milliseconds: 300),
-        child: FutureBuilder(
-          future: accountFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const SingleChildScrollView(child: LoadingFullPage());
-            }
-            if (snapshot.hasError) {
-              return Center(child: Text("Error: ${snapshot.error}"));
-            }
-            final data = snapshot.data;
-            return SingleChildScrollView(
+      body: FutureBuilder(
+        future: accountFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SingleChildScrollView(child: LoadingFullPage());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          }
+          final data = snapshot.data;
+          return SingleChildScrollView(
+            child: DiagonalReveal(
               child: Column(
                 spacing: 10,
                 children: [
@@ -57,17 +57,21 @@ class _AccountPageMainState extends State<AccountPageMain> {
                     accountPageModelInstallment:
                         data.accountPageModelInstallment,
                   ),
-                  Accountfullstatement(
-                    accountPageModelFullStatement:
-                        data.accountPageModelFullStatement,
+
+                  AccountPayment(
+                    accountPageModelPayment: data.accountPageModelPayment,
+                  ),
+                  AccountBaseTutionFee(
+                    accountPageModelBaseTutionFee:
+                        data.accountPageModelBaseTutionFee,
                   ),
                   SizedBox(height: 100),
                 ],
               ),
-            );
-          },
-          //}
-        ),
+            ),
+          );
+        },
+        //}
       ),
     );
   }

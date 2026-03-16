@@ -87,14 +87,13 @@ class _SchedulePageMainState extends State<SchedulePageMain> {
       //       )
       //     : null,
       backgroundColor: ColorStyle.light,
-      body: DiagonalReveal(
-        duration: Duration(milliseconds: 300),
-        child: Obx(() {
-          if (schedulePageContoller.isLoading.value) {
-            return SingleChildScrollView(child: LoadingFullPage());
-          } else {
-            return SingleChildScrollView(
-              controller: _scrollController,
+      body: Obx(() {
+        if (schedulePageContoller.isLoading.value) {
+          return SingleChildScrollView(child: LoadingFullPage());
+        } else {
+          return SingleChildScrollView(
+            controller: _scrollController,
+            child: DiagonalReveal(
               child: Column(
                 spacing: 20,
                 children: [
@@ -108,10 +107,10 @@ class _SchedulePageMainState extends State<SchedulePageMain> {
                   SizedBox(height: 100),
                 ],
               ),
-            );
-          }
-        }),
-      ),
+            ),
+          );
+        }
+      }),
     );
   }
 }

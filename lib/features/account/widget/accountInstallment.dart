@@ -133,7 +133,7 @@ class Accountinstallment extends StatelessWidget {
   }
 
   Widget pastInst(AccountPageModelInstallment item, String name) {
-    final double remainingDue = item.fineModel.paid - item.fineModel.target;
+    final double remainingDue = item.fineModel.target - item.fineModel.paid;
     final double fineAmount = item.fineModel.amount;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +176,7 @@ class Accountinstallment extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 4),
-        if (remainingDue < 0 && item.fineModel.code.isNotEmpty) ...[
+        if (remainingDue > 0 && item.fineModel.code.isNotEmpty) ...[
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -206,13 +206,13 @@ class Accountinstallment extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 2.0, left: 20.0),
                 child: Text(
-                  "*Fine ${fineAmount.toStringAsFixed(0)}TK added",
+                  "*Fine ${fineAmount.toString()} TK is added",
                   style: Fontstyle.defult(12, FontWeight.w500, ColorStyle.red),
                 ),
               ),
             ],
           ),
-        ] else if (remainingDue >= 0 && item.fineModel.code.isNotEmpty) ...[
+        ] else if (remainingDue <= 0 && item.fineModel.code.isNotEmpty) ...[
           Row(
             spacing: 2,
             children: [
@@ -256,6 +256,7 @@ class Accountinstallment extends StatelessWidget {
   Widget presentInst(AccountPageModelInstallment item, String name) {
     final double targetAmount =
         item.totalDue * (item.installment.amountPercentage / 100);
+    final double fineAmount = item.installment.fine;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -341,7 +342,7 @@ class Accountinstallment extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 2.0, left: 20.0),
           child: Text(
-            "*Fine ${item.installment.fine.toString()}TK wiil be add if overdue",
+            "*Fine ${fineAmount.toString()} TK wiil be add if overdue",
             style: Fontstyle.defult(12, FontWeight.w500, ColorStyle.red),
           ),
         ),
@@ -352,6 +353,7 @@ class Accountinstallment extends StatelessWidget {
   Widget futureInst(AccountPageModelInstallment item, String name) {
     final double targetAmount =
         item.totalDue * (item.installment.amountPercentage / 100);
+    final double fineAmount = item.installment.fine;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -403,7 +405,7 @@ class Accountinstallment extends StatelessWidget {
             ),
 
             Text(
-              "${targetAmount.toString()}৳",
+              "${NumberFormat.decimalPattern().format(targetAmount.toString())}৳",
               style: Fontstyle.defult(16, FontWeight.bold, ColorStyle.red),
             ),
           ],
@@ -411,8 +413,8 @@ class Accountinstallment extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 2.0, left: 20.0),
           child: Text(
-            "*Fine ${item.installment.fine.toString()}TK wiil be add if overdue",
-            style: Fontstyle.defult(12, FontWeight.w500, ColorStyle.red),
+            "*Fine ${fineAmount.toString()} TK wiil be add if overdue",
+            style: Fontstyle.defult(12, FontWeight.w500, ColorStyle.Textblue),
           ),
         ),
       ],

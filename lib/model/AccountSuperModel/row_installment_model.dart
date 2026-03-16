@@ -6,14 +6,14 @@ class RowInstallmentModel {
   final double amountPercentage;
   final double fine;
   final String code;
-  final double amount;
+  //final double amount;
 
   RowInstallmentModel({
     required this.deadline,
     required this.amountPercentage,
     required this.fine,
     required this.code,
-    required this.amount,
+    //required this.amount,
   });
 
   factory RowInstallmentModel.fromMap(Map<String, dynamic> map) {
@@ -22,7 +22,7 @@ class RowInstallmentModel {
       amountPercentage: (map['amount_%'] ?? 0).toDouble(),
       fine: (map['fine'] ?? 0).toDouble(),
       code: TbaStyle.checkTBA(map['code']),
-      amount: 0,
+      // amount: 0,
     );
   }
 }

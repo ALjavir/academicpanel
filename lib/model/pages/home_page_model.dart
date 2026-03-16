@@ -48,6 +48,7 @@ class HomeAccountModel {
   final double paidPercentage;
   final double balance;
   final RowInstallmentModel? upcomingInstallment;
+  final double amountLeftToPay;
 
   HomeAccountModel({
     required this.totalDue,
@@ -55,5 +56,6 @@ class HomeAccountModel {
     required this.paidPercentage,
     required this.balance,
     this.upcomingInstallment,
+    required this.amountLeftToPay,
   });
 }
