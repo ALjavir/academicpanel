@@ -1,7 +1,9 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
+import 'package:academicpanel/model/departmentSuperModel/row_announcement_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
-import 'package:academicpanel/model/departmentSuperModel/row_noClass_model.dart';
+import 'package:academicpanel/model/departmentSuperModel/row_departmentBaseData_model.dart';
+
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
 import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:get/get_instance/get_instance.dart';
@@ -12,11 +14,12 @@ class DepartmentController extends GetxController {
   final firebaseDatapath = Get.find<FirebaseDatapath>();
 
   final List<RowAcademiccalendarModel> academiccalendarModelData = [];
-  final List<RowNoclassModel> noClassData = [];
+  final List<RowAnnouncementModel> announcementModel = [];
 
   Future<DepartmentModel> fetchDepartmentData({
     bool getAcademicCalendar = false,
-    bool getNoCalss = false,
+    bool getAnnouncement = false,
+    bool getBaseData = false,
   }) async {
     final userModel = userController.user.value;
     final departmentRef = firebaseDatapath.departmentData(
@@ -24,36 +27,57 @@ class DepartmentController extends GetxController {
     );
     try {
       final result = await departmentRef.get();
-      final departmentResultData = result.data() ?? {};
-      if (getAcademicCalendar) {
-        final List<dynamic> calendarList =
-            departmentResultData['academic_calendar'] ?? [];
+      final resultData = result.data();
+      final baseData = await RowDepartmenBaseModel.fromMap(resultData!);
+      String current_sem = baseData.currentSem;
 
-        for (var item in calendarList) {
-          academiccalendarModelData.add(
-            RowAcademiccalendarModel.fromMap(item as Map<String, dynamic>),
-          );
-        }
-      }
-      if (getNoCalss) {
-        final List<dynamic> noClassList =
-            departmentResultData['no_class'] ?? [];
+      //print("this is the testing of Base data whatsApp: ${baseData.whatsApp}");
+      if (current_sem != "TBA" || current_sem != "" || current_sem.isNotEmpty) {
+        try {
+          final resultCurrentSem = await departmentRef
+              .collection("semester")
+              .doc(current_sem)
+              .get();
 
-        for (var item in noClassList) {
-          noClassData.add(
-            RowNoclassModel.fromJson(item as Map<String, dynamic>),
-          );
+          final departmentResultData = resultCurrentSem.data() ?? {};
+          if (getAcademicCalendar) {
+            final List<dynamic> calendarList =
+                departmentResultData['academic_calendar'] ?? [];
+
+            for (var item in calendarList) {
+              academiccalendarModelData.add(
+                RowAcademiccalendarModel.fromJson(item as Map<String, dynamic>),
+              );
+            }
+          }
+          if (getAnnouncement) {
+            final List<dynamic> noClassList =
+                departmentResultData['announcements'] ?? [];
+
+            for (var item in noClassList) {
+              announcementModel.add(
+                RowAnnouncementModel.fromMap(item as Map<String, dynamic>),
+              );
+            }
+          }
+        } catch (e) {
+          print(e);
+          errorSnackbar(title: "Error->DeptCont", e: e);
         }
       }
 
       return DepartmentModel(
         academiccalendarModel: academiccalendarModelData,
-        rowNoclassModel: noClassData,
+        announcementModel: announcementModel,
+        departmenBaseModel: baseData,
       );
     } catch (e) {
       print(e);
       errorSnackbar(title: "Department Data Fetching Error", e: e);
-      return DepartmentModel(academiccalendarModel: academiccalendarModelData);
+      return DepartmentModel(
+        academiccalendarModel: academiccalendarModelData,
+        departmenBaseModel: RowDepartmenBaseModel(whatsApp: '', currentSem: ''),
+      );
     }
   }
 }

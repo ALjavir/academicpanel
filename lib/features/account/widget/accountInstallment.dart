@@ -405,7 +405,7 @@ class Accountinstallment extends StatelessWidget {
             ),
 
             Text(
-              "${NumberFormat.decimalPattern().format(targetAmount.toString())}৳",
+              "${NumberFormat.decimalPattern().format(targetAmount)}৳",
               style: Fontstyle.defult(16, FontWeight.bold, ColorStyle.red),
             ),
           ],

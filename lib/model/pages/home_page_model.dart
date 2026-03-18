@@ -3,7 +3,7 @@ import 'package:academicpanel/model/Announcement/announcement_model.dart';
 
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
-import 'package:academicpanel/model/departmentSuperModel/noClass_model.dart';
+import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
 import 'package:academicpanel/model/resultSuperModel/row_cgpacr_model.dart';
 
 class HomePageModel {
@@ -37,7 +37,7 @@ class HomeTopHeaderModel {
 }
 
 class HomeTodayClassSchedule {
-  NoclassModel? noclassModel;
+  RowAcademiccalendarModel? noclassModel;
   List<ClassscheduleModel>? listClassScheduleModel;
   HomeTodayClassSchedule({this.noclassModel, this.listClassScheduleModel});
 }

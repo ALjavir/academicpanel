@@ -38,92 +38,87 @@ class _HomePageMainState extends State<HomePageMain> {
       extendBodyBehindAppBar: true,
       appBar: CustomAppbar(),
       backgroundColor: ColorStyle.light,
-      body: DiagonalReveal(
-        duration: Duration(milliseconds: 300),
-        child: FutureBuilder(
-          future: homeFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const SingleChildScrollView(child: LoadingFullPage());
-            }
-            if (snapshot.hasError) {
-              return Center(child: Text("Error: ${snapshot.error}"));
-            }
-            final data = snapshot.data;
-            return SingleChildScrollView(
-              child: DiagonalReveal(
-                // duration: Duration(seconds: 2),
-                child: Column(
-                  spacing: 10,
-                  children: [
-                    HomeTopHeader(homeTopHeaderModel: data!.homeTopHeaderModel),
+      body: FutureBuilder(
+        future: homeFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SingleChildScrollView(child: LoadingFullPage());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          }
+          final data = snapshot.data;
+          return SingleChildScrollView(
+            child: DiagonalReveal(
+              child: Column(
+                spacing: 10,
+                children: [
+                  HomeTopHeader(homeTopHeaderModel: data!.homeTopHeaderModel),
 
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        spacing: 20,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            spacing: 4,
-                            children: [
-                              Text(
-                                "Today's Highlights",
-                                style: Fontstyle.defult3d(
-                                  22,
-                                  FontWeight.bold,
-                                  ColorStyle.Textblue,
-                                  const Color.fromARGB(20, 19, 70, 125),
-                                  const Offset(3, 3),
-                                  4,
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      spacing: 20,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 4,
+                          children: [
+                            Text(
+                              "Today's Highlights",
+                              style: Fontstyle.defult3d(
+                                22,
+                                FontWeight.bold,
+                                ColorStyle.Textblue,
+                                const Color.fromARGB(20, 19, 70, 125),
+                                const Offset(3, 3),
+                                4,
+                              ),
+                            ),
+                            Icon(
+                              Icons.auto_graph_outlined,
+                              color: ColorStyle.red,
+                              shadows: [
+                                BoxShadow(
+                                  color: ColorStyle.lightRed,
+                                  blurRadius: 6,
+                                  offset: Offset(0, 4), // Softness
+                                  spreadRadius: 3,
                                 ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        HomeClassschedule(
+                          todayClass: data.homeTodayClassSchedule,
+                        ),
+                        Row(
+                          spacing: 10,
+                          children: [
+                            Expanded(
+                              child: HomeAccountinfo(
+                                homeAccountInfoModel: data.homeAccountInfoModel,
                               ),
-                              Icon(
-                                Icons.auto_graph_outlined,
-                                color: ColorStyle.red,
-                                shadows: [
-                                  BoxShadow(
-                                    color: ColorStyle.lightRed,
-                                    blurRadius: 6,
-                                    offset: Offset(0, 4), // Softness
-                                    spreadRadius: 3,
-                                  ),
-                                ],
+                            ),
+                            Expanded(
+                              child: HomeCgpainfo(
+                                rowCgpaModel: data.homeRowCgpaModel,
                               ),
-                            ],
-                          ),
-                          HomeClassschedule(
-                            todayClass: data.homeTodayClassSchedule,
-                          ),
-                          Row(
-                            spacing: 10,
-                            children: [
-                              Expanded(
-                                child: HomeAccountinfo(
-                                  homeAccountInfoModel:
-                                      data.homeAccountInfoModel,
-                                ),
-                              ),
-                              Expanded(
-                                child: HomeCgpainfo(
-                                  rowCgpaModel: data.homeRowCgpaModel,
-                                ),
-                              ),
-                            ],
-                          ),
-                          HomeAnnouncement(announcements: data.homeAnouncement),
-                          HomeAssessment(assessment: data.homeAssessment),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                        HomeAnnouncement(announcements: data.homeAnouncement),
+                        HomeAssessment(assessment: data.homeAssessment),
+                      ],
                     ),
-                    SizedBox(height: 80),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 80),
+                ],
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

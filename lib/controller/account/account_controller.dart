@@ -20,7 +20,7 @@ class AccountController extends GetxController {
       if (userModel == null) throw Exception("User not logged in");
       final studentId = userModel.id;
       final department = userModel.department;
-      String current_sem = "";
+      late String current_sem;
       final List<RowFineModel> rowFineModelList = [];
       final List<RowAcStatementModel> rowAcSatementModelList = [];
       final List<RowInstallmentModel> rowInstallmentModelList = [];

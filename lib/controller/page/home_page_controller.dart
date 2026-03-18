@@ -12,7 +12,7 @@ import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
-import 'package:academicpanel/model/departmentSuperModel/noClass_model.dart';
+import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
 import 'package:academicpanel/model/pages/home_page_model.dart';
 import 'package:academicpanel/model/resultSuperModel/result_model.dart';
 import 'package:academicpanel/model/resultSuperModel/row_cgpacr_model.dart';
@@ -118,29 +118,39 @@ class HomePageController extends GetxController {
     }
     try {
       List<ClassscheduleModel> tempClassschedule = [];
-
+      List<RowAcademiccalendarModel> noClass = [];
       todayClassScheduleListHome.listClassScheduleModel ??= [];
 
       if (todayClassScheduleListHome.listClassScheduleModel!.isEmpty) {
-        DepartmentModel noCLassData;
+        DepartmentModel deptModelData;
 
         final fetchedDataDep = await departmentController.fetchDepartmentData(
-          getNoCalss: true,
+          getAcademicCalendar: true,
         );
-        noCLassData = fetchedDataDep;
+
+        deptModelData = fetchedDataDep;
 
         final now = DateTime.now();
 
-        if (noCLassData.rowNoclassModel != null) {
-          for (var i in noCLassData.rowNoclassModel!) {
+        if (deptModelData.academiccalendarModel != null) {
+          for (var i in deptModelData.academiccalendarModel!) {
+            noClass.addIf(
+              i.type.toLowerCase() == "holiday" ||
+                  i.type.toLowerCase() == "exam",
+              i,
+            );
+          }
+
+          for (var i in noClass) {
             // Holiday Check
-            if (DatetimeStyle.isDateInRange(now, i.startDate!, i.endDate!)) {
-              todayClassScheduleListHome.noclassModel = NoclassModel(
-                title: i.title!,
-                startDate: i.startDate!,
-                endDate: i.endDate!,
-                type: i.type!,
-              );
+            if (DatetimeStyle.isDateInRange(now, i.startDate, i.endDate)) {
+              todayClassScheduleListHome.noclassModel =
+                  RowAcademiccalendarModel(
+                    title: i.title,
+                    startDate: i.startDate,
+                    endDate: i.endDate,
+                    type: i.type,
+                  );
               todayClassScheduleListHome.listClassScheduleModel = [];
               return todayClassScheduleListHome;
             }

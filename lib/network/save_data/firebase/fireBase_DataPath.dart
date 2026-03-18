@@ -25,8 +25,18 @@ class FirebaseDatapath extends GetxController {
         .doc(courseCode);
   }
 
-  DocumentReference<Map<String, dynamic>> accountData(String department) {
-    return FirebaseFirestore.instance.collection('accounts').doc(department);
+  DocumentReference<Map<String, dynamic>> courseSecData(
+    String department,
+    String courseCode,
+    String sectionId,
+  ) {
+    return FirebaseFirestore.instance
+        .collection('course')
+        .doc(department)
+        .collection('course_code')
+        .doc(courseCode)
+        .collection("section")
+        .doc(sectionId);
   }
 
   DocumentReference<Map<String, dynamic>> resultData(
@@ -38,6 +48,10 @@ class FirebaseDatapath extends GetxController {
         .doc(department)
         .collection('student_id')
         .doc(student_id);
+  }
+
+  DocumentReference<Map<String, dynamic>> accountData(String department) {
+    return FirebaseFirestore.instance.collection('accounts').doc(department);
   }
 
   DocumentReference<Map<String, dynamic>> departmentData(String department) {

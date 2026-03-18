@@ -72,7 +72,9 @@ class AnnouncementTemplate extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  DatetimeStyle.getHybridDate(item.rowAnnouncementModel.date),
+                  DatetimeStyle.getHybridDate(
+                    item.rowAnnouncementModel.createdAt,
+                  ),
                   style: Fontstyle.defult(
                     10,
                     FontWeight.w600,

@@ -45,7 +45,6 @@ class _SigninPageMainState extends State<SigninPageMain> {
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(10, 150, 10, 10),
         child: DiagonalReveal(
-          duration: Duration(seconds: 2),
           child: Center(
             child: Column(
               spacing: 80,

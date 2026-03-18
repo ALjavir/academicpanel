@@ -80,7 +80,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                 // spacing: 10,
                 children: [
                   Image.asset(
-                    noClass.type.toLowerCase() == 'test'
+                    noClass.type.toLowerCase() == 'exam'
                         ? ImageStyle.exam()
                         : ImageStyle.holidays(),
                     scale: 5,

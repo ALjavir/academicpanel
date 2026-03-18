@@ -9,6 +9,8 @@ import 'package:academicpanel/features/splash_screen/splashs_page_main.dart';
 import 'package:academicpanel/navigation/routes/routes.dart';
 import 'package:academicpanel/network/api/firebase_initialize.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
+import 'package:academicpanel/uploadData/academicCalander.dart';
+import 'package:academicpanel/uploadData/midNfinal.dart';
 import 'package:academicpanel/utility/check_connection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -28,8 +30,14 @@ Future<void> main() async {
   Get.lazyPut(() => RoutesController(), fenix: true);
   Get.put(CheckConnection(), permanent: true);
 
-  //Future.wait([result(), result1(), result2(), result3(), result4()]);
-  //await uploadmix();
+  // Future.wait([
+  //   uploadmix1(),
+  //   uploadmix2(),
+  //   uploadmix3(),
+  //   uploadmix4(),
+  //   uploadmix5(),
+  // ]);
+  await uploadacademi();
 
   runApp(const MyApp());
 }

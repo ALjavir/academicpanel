@@ -9,6 +9,7 @@ import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/utility/loading/loadingPageContent.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 void scheduleAcademicCalendar(
   BuildContext context,
@@ -18,6 +19,42 @@ void scheduleAcademicCalendar(
   showDialog(
     context: context,
     builder: (context) {
+      Map<String, String> formatDateRange(
+        DateTime startDate,
+        DateTime endDate,
+      ) {
+        final sameDay =
+            startDate.year == endDate.year &&
+            startDate.month == endDate.month &&
+            startDate.day == endDate.day;
+
+        final sameMonth =
+            startDate.year == endDate.year && startDate.month == endDate.month;
+
+        String dateStr;
+        String dayStr;
+
+        // Case 1: Same day
+        if (sameDay) {
+          dateStr = DateFormat("d MMM").format(startDate); // 21 Feb
+          dayStr = DateFormat("EEEE").format(startDate); // Saturday
+        }
+        // Case 2: Same month, different day
+        else if (sameMonth) {
+          dateStr =
+              "${startDate.day}-${endDate.day} ${DateFormat("MMM").format(endDate)}"; // 21-27 Feb
+          dayStr = DateFormat("EEEE").format(endDate); // last day
+        }
+        // Case 3: Different month
+        else {
+          dateStr =
+              "${DateFormat("d MMM").format(startDate)} - ${DateFormat("d MMM").format(endDate)}"; // 21 Feb - 5 Mar
+          dayStr = DateFormat("EEEE").format(endDate); // last day
+        }
+
+        return {"date": dateStr, "day": dayStr};
+      }
+
       return StatefulBuilder(
         builder: (context, setState) {
           if (isLoadingClassSchdule == true) {
@@ -96,9 +133,13 @@ void scheduleAcademicCalendar(
                               itemCount: events.length,
                               itemBuilder: (context, index) {
                                 final event = events[index];
+                                final dateInfo = formatDateRange(
+                                  event.startDate,
+                                  event.endDate,
+                                );
                                 return TimelineTile(
-                                  date: event.date,
-                                  day: event.day,
+                                  date: dateInfo['date']!,
+                                  day: dateInfo['day']!,
                                   title: event.title,
                                   type: event.type,
                                   isLast: index == events.length - 1,

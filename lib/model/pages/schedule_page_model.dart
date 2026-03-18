@@ -1,6 +1,6 @@
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
-import 'package:academicpanel/model/departmentSuperModel/noClass_model.dart';
+import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
 
 class SchedulePageTopHeader {
   final List<String> days;
@@ -15,7 +15,7 @@ class SchedulePageTopHeader {
 
 class ClassSchedulePageSchedule {
   List<ClassscheduleModel> classSchedule;
-  NoclassModel? noClass;
+  RowAcademiccalendarModel? noClass;
   ClassSchedulePageSchedule({required this.classSchedule, this.noClass});
 }
 

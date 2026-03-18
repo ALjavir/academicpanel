@@ -4,7 +4,6 @@ import 'package:academicpanel/controller/department/department_controller.dart';
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
-import 'package:academicpanel/model/departmentSuperModel/noClass_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
 import 'package:academicpanel/model/pages/schedule_page_model.dart';
 import 'package:academicpanel/theme/style/dateTime_style.dart';
@@ -25,7 +24,7 @@ class SchedulePageContoller extends GetxController {
   RxBool isLoadingClassSchdule = true.obs;
   RxBool isLoadingAcademicC = true.obs;
   RxBool isLoadingAssessment = true.obs;
-
+  final List<RowAcademiccalendarModel> noClassList = [];
   final Rx<SchedulePageTopHeader> schedulePageTopHeader = SchedulePageTopHeader(
     days: [],
     image: '',
@@ -35,7 +34,7 @@ class SchedulePageContoller extends GetxController {
   final Rx<ClassSchedulePageSchedule> classSchedulePage =
       ClassSchedulePageSchedule(
         classSchedule: [],
-        noClass: NoclassModel(
+        noClass: RowAcademiccalendarModel(
           title: '',
           startDate: DateTime.now(),
           endDate: DateTime.now(),
@@ -115,34 +114,40 @@ class SchedulePageContoller extends GetxController {
   // A: --------------------------------------------------------------------------Class Schedule Calander----------------------------------------------------------------------
   Future<ClassSchedulePageSchedule> fetchClassSchedule(DateTime date) async {
     final model = classSchedulePage.value;
+
     try {
       isLoadingClassSchdule.value = true;
-
       model.noClass = null;
       model.classSchedule = [];
-
       // --- STEP 1: CHECK FOR HOLIDAYS ---
+
       final fetchedDataDep = await departmentController.fetchDepartmentData(
-        getNoCalss: true,
+        getAcademicCalendar: true,
       );
+
       bool isHolidayFound = false;
 
-      if (fetchedDataDep.rowNoclassModel != null) {
-        for (var i in fetchedDataDep.rowNoclassModel!) {
-          if (i.startDate != null && i.endDate != null) {
-            if (DatetimeStyle.isDateInRange(date, i.startDate!, i.endDate!)) {
-              // We found a holiday!
-              model.noClass = NoclassModel(
-                title: i.title ?? "Holiday",
-                startDate: i.startDate!,
-                endDate: i.endDate!,
-                type: i.type ?? "No Class",
-              );
+      if (noClassList.isEmpty) {
+        for (var i in fetchedDataDep.academiccalendarModel!) {
+          noClassList.addIf(
+            i.type.toLowerCase() == "holiday" || i.type.toLowerCase() == "exam",
+            i,
+          );
+        }
+      }
 
-              isHolidayFound = true;
-              break; // EXIT THE LOOP IMMEDIATELY! No need to check other dates.
-            }
-          }
+      for (var i in noClassList) {
+        if (DatetimeStyle.isDateInRange(date, i.startDate, i.endDate)) {
+          // We found a holiday!
+          model.noClass = RowAcademiccalendarModel(
+            title: i.title,
+            startDate: i.startDate,
+            endDate: i.endDate,
+            type: i.type,
+          );
+
+          isHolidayFound = true;
+          break; // EXIT THE LOOP IMMEDIATELY! No need to check other dates.
         }
       }
 

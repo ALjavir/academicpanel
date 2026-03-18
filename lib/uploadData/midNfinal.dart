@@ -1,44 +1,123 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-Future<void> uploadmix() async {
-  final String assessment = 'mid';
+Future<void> uploadmix1() async {
+  final String message =
+      'Applications are open for Summer 2026 internships. Submit your CV by April 5';
 
-  final DateTime startTime = DateTime(2026, 2, 5, 12, 00, 24);
-  final DateTime endTime = DateTime(2026, 2, 5, 13, 10, 52);
-
-  final String room = '413';
-  final int mark = 30;
-
-  final String link = '';
-  final String syllabus = '';
-
-  final List<String> instructor = ['EThomas', 'MiaM'];
-
-  final Map<String, int> result = {'222208038': 222208038};
+  final DateTime created_at = DateTime(2026, 1, 12, 12, 00, 24);
 
   DocumentReference docRef = FirebaseFirestore.instance
-      .collection('course')
+      .collection('department')
       .doc('CSE')
-      .collection('course_code')
-      .doc('CSE101')
-      .collection("section")
-      .doc('1')
-      .collection("assessment")
+      .collection("announcement")
       .doc();
 
   //course/CSE/course_code/CHE101/section/3/assessment
 
   try {
     await docRef.set({
-      'assessment': assessment,
-      'startTime': Timestamp.fromDate(startTime),
-      'endTime': Timestamp.fromDate(endTime),
-      'room': room,
-      'mark': mark,
-      'link': link,
-      'syllabus': syllabus,
-      'instructor': instructor,
-      'result': result,
+      'message': message,
+      'created_at': Timestamp.fromDate(created_at),
+    });
+    print("✅ Successfully updated '$docRef");
+  } catch (e) {
+    print("❌ Error uploading: $e");
+  }
+}
+
+Future<void> uploadmix2() async {
+  final String message =
+      'Join the intra-department coding contest on March 25. Register now!';
+
+  final DateTime created_at = DateTime(2026, 1, 7, 12, 00, 24);
+
+  DocumentReference docRef = FirebaseFirestore.instance
+      .collection('department')
+      .doc('CSE')
+      .collection("announcement")
+      .doc();
+
+  //course/CSE/course_code/CHE101/section/3/assessment
+
+  try {
+    await docRef.set({
+      'message': message,
+      'created_at': Timestamp.fromDate(created_at),
+    });
+    print("✅ Successfully updated '$docRef");
+  } catch (e) {
+    print("❌ Error uploading: $e");
+  }
+}
+
+Future<void> uploadmix3() async {
+  final String message =
+      'Midterm exams will begin from April 10. Check the portal for details';
+
+  final DateTime created_at = DateTime(2026, 1, 12, 12, 00, 24);
+
+  DocumentReference docRef = FirebaseFirestore.instance
+      .collection('department')
+      .doc('CSE')
+      .collection("announcement")
+      .doc();
+
+  //course/CSE/course_code/CHE101/section/3/assessment
+
+  try {
+    await docRef.set({
+      'message': message,
+      'created_at': Timestamp.fromDate(created_at),
+    });
+    print("✅ Successfully updated '$docRef");
+  } catch (e) {
+    print("❌ Error uploading: $e");
+  }
+}
+
+Future<void> uploadmix4() async {
+  final String message =
+      'All computer labs will remain closed on March 20 due to maintenance.';
+
+  final DateTime created_at = DateTime(2026, 1, 12, 12, 00, 24);
+
+  DocumentReference docRef = FirebaseFirestore.instance
+      .collection('department')
+      .doc('CSE')
+      .collection("announcement")
+      .doc();
+
+  //course/CSE/course_code/CHE101/section/3/assessment
+
+  try {
+    await docRef.set({
+      'message': message,
+      'created_at': Timestamp.fromDate(created_at),
+    });
+    print("✅ Successfully updated '$docRef");
+  } catch (e) {
+    print("❌ Error uploading: $e");
+  }
+}
+
+Future<void> uploadmix5() async {
+  final String message =
+      'Final year students must submit thesis proposals by April 1';
+
+  final DateTime created_at = DateTime(2026, 1, 12, 12, 00, 24);
+
+  DocumentReference docRef = FirebaseFirestore.instance
+      .collection('department')
+      .doc('CSE')
+      .collection("announcement")
+      .doc();
+
+  //course/CSE/course_code/CHE101/section/3/assessment
+
+  try {
+    await docRef.set({
+      'message': message,
+      'created_at': Timestamp.fromDate(created_at),
     });
     print("✅ Successfully updated '$docRef");
   } catch (e) {

@@ -8,6 +8,7 @@ import 'package:academicpanel/model/assessment/row_assessment_model.dart';
 import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
+import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
@@ -81,17 +82,30 @@ class CourseController extends GetxController {
 
           // --- BLOCK 2: ANNOUNCEMENTS ---
           if (getAnnouncement) {
-            final rawList = secData['announcement'] as List<dynamic>?;
-            if (rawList != null) {
-              foundAnnouncements = rawList.map((item) {
-                final map = item as Map<String, dynamic>;
-                final rowAnnouncement = RowAnnouncementModel.fromMap(map);
-                // print("This is the rowAnnaounment: ${rowAnnouncement.message}");
-                return AnnouncementModel(
-                  rowAnnouncementModel: rowAnnouncement,
-                  rowCourseModel: rowCourse,
-                );
-              }).toList();
+            final whatsApp = secData['whatsApp'].toString();
+            final rawList = await courseRef
+                .collection('section')
+                .doc(sectionId)
+                .collection('announcement')
+                .get();
+            ;
+            if (rawList.docs.isNotEmpty) {
+              try {
+                foundAnnouncements = rawList.docs.map((item) {
+                  final data = item.data();
+                  //  final map = item as Map<String, dynamic>;
+                  final rowAnnouncement = RowAnnouncementModel.fromMap(data);
+                  // print("This is the rowAnnaounment: ${rowAnnouncement.message}");
+                  return AnnouncementModel(
+                    rowAnnouncementModel: rowAnnouncement,
+                    rowCourseModel: rowCourse,
+                    whatsApp: whatsApp,
+                  );
+                }).toList();
+              } catch (e) {
+                print(e);
+                errorSnackbar(title: "Error->getAnnouncement", e: e);
+              }
             }
           }
 
@@ -122,7 +136,7 @@ class CourseController extends GetxController {
                   );
                 }).toList();
               } catch (e) {
-                // print("This is the e: $e");
+                errorSnackbar(title: "Error->getAssessment", e: e);
               }
             }
           }
@@ -154,13 +168,13 @@ class CourseController extends GetxController {
       }
 
       // 4. Sorting
-      if (getAnnouncement) {
-        allAnnouncements.sort(
-          (a, b) => b.rowAnnouncementModel.date.compareTo(
-            a.rowAnnouncementModel.date,
-          ),
-        );
-      }
+      // if (getAnnouncement) {
+      //   allAnnouncements.sort(
+      //     (a, b) => b.rowAnnouncementModel.createdAt.compareTo(
+      //       a.rowAnnouncementModel.createdAt,
+      //     ),
+      //   );
+      // }
 
       // SORT ASSESSMENTS BY DATE (Newest First)
       if (getAssessment) {

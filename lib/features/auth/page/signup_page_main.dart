@@ -55,7 +55,6 @@ class _SignupPageMainState extends State<SignupPageMain> {
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(10, 80, 10, 10),
         child: DiagonalReveal(
-          duration: Duration(seconds: 2),
           child: Column(
             children: [
               AuthHeadertext(
