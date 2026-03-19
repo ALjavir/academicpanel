@@ -1,7 +1,7 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
 import 'package:academicpanel/model/AccountSuperModel/account_model.dart';
 import 'package:academicpanel/model/AccountSuperModel/row_ac_statement_model.dart';
-import 'package:academicpanel/model/AccountSuperModel/row_accountExt_model.dart';
+import 'package:academicpanel/model/AccountSuperModel/row_accounBase_model.dart';
 import 'package:academicpanel/model/AccountSuperModel/row_fine_model.dart';
 import 'package:academicpanel/model/AccountSuperModel/row_installment_model.dart';
 import 'package:academicpanel/model/AccountSuperModel/row_payment_model.dart';
@@ -25,7 +25,7 @@ class AccountController extends GetxController {
       final List<RowAcStatementModel> rowAcSatementModelList = [];
       final List<RowInstallmentModel> rowInstallmentModelList = [];
       final List<RowPaymentModel> rowPaymentModelList = [];
-      RowAccountextModel? rowAccountextModel;
+      RowAccounbaseModel? rowAccountextModel;
       final deptSnapshot = await firebaseDatapath.accountData(department).get();
       final deptData = deptSnapshot.data();
       if (deptData != null) {
@@ -45,11 +45,11 @@ class AccountController extends GetxController {
           .doc(studentId)
           .get();
       if (studentSnapshot.exists && studentSnapshot.data() != null) {
-        rowAccountextModel = RowAccountextModel.fromMap(
+        rowAccountextModel = RowAccounbaseModel.fromMap(
           studentSnapshot.data()!,
         );
       } else {
-        rowAccountextModel = RowAccountextModel(
+        rowAccountextModel = RowAccounbaseModel(
           balance: 0,
           perCreditFee: 0,
           waiver: 0,
@@ -101,7 +101,7 @@ class AccountController extends GetxController {
         rowAcSatementModelList: [],
         rowInstallmentModelList: [],
         rowPaymentModelList: [],
-        rowAccountextModel: RowAccountextModel(
+        rowAccountextModel: RowAccounbaseModel(
           balance: 0,
           perCreditFee: 0,
           waiver: 0,

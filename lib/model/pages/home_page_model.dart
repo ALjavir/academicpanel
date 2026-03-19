@@ -4,20 +4,20 @@ import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/model/ClassSchedule/classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
-import 'package:academicpanel/model/resultSuperModel/row_cgpacr_model.dart';
+import 'package:academicpanel/model/resultSuperModel/row_resultBase_model.dart';
 
 class HomePageModel {
   final HomeTopHeaderModel homeTopHeaderModel;
   final HomeTodayClassSchedule homeTodayClassSchedule;
   final HomeAccountModel homeAccountInfoModel;
-  final RowCgpaCrModel homeRowCgpaModel;
+  final RowResultbaseModel rowResultbaseModel;
   final List<AnnouncementModel> homeAnouncement;
   final List<AssessmentModel> homeAssessment;
   HomePageModel({
     required this.homeTopHeaderModel,
     required this.homeTodayClassSchedule,
     required this.homeAccountInfoModel,
-    required this.homeRowCgpaModel,
+    required this.rowResultbaseModel,
     required this.homeAnouncement,
     required this.homeAssessment,
   });

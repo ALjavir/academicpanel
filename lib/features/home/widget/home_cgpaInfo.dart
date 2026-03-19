@@ -1,4 +1,4 @@
-import 'package:academicpanel/model/resultSuperModel/row_cgpacr_model.dart';
+import 'package:academicpanel/model/resultSuperModel/row_resultBase_model.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
@@ -6,7 +6,7 @@ import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:flutter/material.dart';
 
 class HomeCgpainfo extends StatelessWidget {
-  final RowCgpaCrModel rowCgpaModel;
+  final RowResultbaseModel rowCgpaModel;
 
   const HomeCgpainfo({super.key, required this.rowCgpaModel});
 

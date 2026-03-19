@@ -1,5 +1,5 @@
 import 'package:academicpanel/model/AccountSuperModel/row_ac_statement_model.dart';
-import 'package:academicpanel/model/AccountSuperModel/row_accountExt_model.dart';
+import 'package:academicpanel/model/AccountSuperModel/row_accounBase_model.dart';
 import 'package:academicpanel/model/AccountSuperModel/row_fine_model.dart';
 import 'package:academicpanel/model/AccountSuperModel/row_installment_model.dart';
 import 'package:academicpanel/model/AccountSuperModel/row_payment_model.dart';
@@ -10,7 +10,7 @@ class AccountModel {
   final List<RowAcStatementModel> rowAcSatementModelList;
   final List<RowInstallmentModel> rowInstallmentModelList;
   final List<RowPaymentModel> rowPaymentModelList;
-  final RowAccountextModel rowAccountextModel;
+  final RowAccounbaseModel rowAccountextModel;
 
   AccountModel({
     required this.rowAcSatementModelList,

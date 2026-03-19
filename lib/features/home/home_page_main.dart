@@ -103,7 +103,7 @@ class _HomePageMainState extends State<HomePageMain> {
                             ),
                             Expanded(
                               child: HomeCgpainfo(
-                                rowCgpaModel: data.homeRowCgpaModel,
+                                rowCgpaModel: data.rowResultbaseModel,
                               ),
                             ),
                           ],

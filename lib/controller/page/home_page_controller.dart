@@ -15,7 +15,7 @@ import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
 import 'package:academicpanel/model/pages/home_page_model.dart';
 import 'package:academicpanel/model/resultSuperModel/result_model.dart';
-import 'package:academicpanel/model/resultSuperModel/row_cgpacr_model.dart';
+import 'package:academicpanel/model/resultSuperModel/row_resultBase_model.dart';
 import 'package:academicpanel/model/user/user_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
 import 'package:academicpanel/theme/style/dateTime_style.dart';
@@ -37,7 +37,7 @@ class HomePageController extends GetxController {
 
   final List<AnnouncementModel> announcementtHome = [];
   final List<AssessmentModel> assessmentHome = [];
-
+  late DepartmentModel deptModelData;
   // ------------------------------------------------------------------------------MAIN HOME CONTROLLER----------------------------------------------------------------------
   Future<HomePageModel> mainHomeController() async {
     final userModel = userController.user.value;
@@ -47,7 +47,7 @@ class HomePageController extends GetxController {
         homeTodayClassSchedule: await todayClassSchedule(userModel),
 
         homeAccountInfoModel: await fetchAccountInfo(userModel),
-        homeRowCgpaModel: await fetchCGPAinfo(),
+        rowResultbaseModel: await fetchCGPAinfo(),
         homeAnouncement: await fetchAllAnnouncements(),
         homeAssessment: await fetchAssment(userModel),
       );
@@ -70,7 +70,7 @@ class HomePageController extends GetxController {
           balance: 0,
           amountLeftToPay: 0,
         ),
-        homeRowCgpaModel: RowCgpaCrModel(
+        rowResultbaseModel: RowResultbaseModel(
           comment: '',
           credit_completed: 0,
           target_credit: 0,
@@ -122,8 +122,6 @@ class HomePageController extends GetxController {
       todayClassScheduleListHome.listClassScheduleModel ??= [];
 
       if (todayClassScheduleListHome.listClassScheduleModel!.isEmpty) {
-        DepartmentModel deptModelData;
-
         final fetchedDataDep = await departmentController.fetchDepartmentData(
           getAcademicCalendar: true,
         );
@@ -316,16 +314,16 @@ class HomePageController extends GetxController {
   }
 
   // d: ----------------------------------------------------------------------------CGPA----------------------------------------------------------------------------------
-  Future<RowCgpaCrModel> fetchCGPAinfo() async {
+  Future<RowResultbaseModel> fetchCGPAinfo() async {
     try {
       ResultModel resultModel;
 
       final fetchedData = await resultController.fetchResultData(getCGPA: true);
       resultModel = fetchedData;
 
-      return resultModel.rowCgpaCrModel!;
+      return resultModel.rowResultbaseModel!;
     } catch (e) {
-      return RowCgpaCrModel(
+      return RowResultbaseModel(
         comment: '',
         credit_completed: 0,
         target_credit: 0,
@@ -340,25 +338,57 @@ class HomePageController extends GetxController {
 
   Future<List<AnnouncementModel>> fetchAllAnnouncements() async {
     try {
-      SectionsuperModel announcementData;
+      List<AnnouncementModel> tempAnnouncementList = [];
 
-      final fetchedData = await courseController.fetchSectionData(
+      // 1. Handle Department Announcements securely
+      var departAnnouncementData = deptModelData.announcementModel ?? [];
+
+      if (departAnnouncementData.isEmpty) {
+        final fetchedDataDep = await departmentController.fetchDepartmentData(
+          getAnnouncement: true,
+        );
+        deptModelData = fetchedDataDep;
+        // Use ?? [] instead of ! to prevent crashes if the API returns null
+        departAnnouncementData = deptModelData.announcementModel ?? [];
+      }
+
+      // 2. Handle Course Announcements securely
+      final announcementData = await courseController.fetchSectionData(
         getAnnouncement: true,
       );
-      announcementData = fetchedData;
+      // Default to an empty list if null
+      final courseAnnouncements = announcementData.announcements ?? [];
 
-      if (announcementData.announcements != null) {
-        final announcementList = announcementData.announcements!;
-        for (var item in announcementList) {
-          if (announcementtHome.length >= 4) break;
-          announcementtHome.add(item);
-        }
+      // 3. Add up to 4 course announcements
+      tempAnnouncementList.addAll(courseAnnouncements.take(4));
+      for (var element in tempAnnouncementList) {
+        print(
+          "announcment course:${DateFormat('MMM d, y').format(element.rowAnnouncementModel.createdAt)} - ${element.rowAnnouncementModel.createdAt.runtimeType}",
+        );
       }
+
+      int remainingSlots = 8 - tempAnnouncementList.length;
+      tempAnnouncementList.addAll(departAnnouncementData.take(remainingSlots));
+      for (var element in tempAnnouncementList) {
+        print(
+          "announcment dept:${DateFormat('MMM d, y').format(element.rowAnnouncementModel.createdAt)} - ${element.rowAnnouncementModel.createdAt.runtimeType}",
+        );
+      }
+
+      tempAnnouncementList.sort(
+        (a, b) => b.rowAnnouncementModel.createdAt.compareTo(
+          a.rowAnnouncementModel.createdAt,
+        ),
+      );
+
+      announcementtHome.clear();
+      announcementtHome.addAll(tempAnnouncementList.take(4));
 
       return announcementtHome;
     } catch (e) {
-      errorSnackbar(title: "Error fetching Announcement", e: e);
-      return [];
+      print("Error fetching announcements: $e");
+
+      return announcementtHome;
     }
   }
   // f: ----------------------------------------------------------------------------Assessment----------------------------------------------------------------------------------

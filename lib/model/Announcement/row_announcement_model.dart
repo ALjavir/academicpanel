@@ -11,7 +11,7 @@ class RowAnnouncementModel {
     return RowAnnouncementModel(
       message: TbaStyle.checkTBA(map['message']),
 
-      createdAt: (map['created_at'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
 }

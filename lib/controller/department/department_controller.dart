@@ -1,6 +1,8 @@
 import 'package:academicpanel/controller/user/user_controller.dart';
+import 'package:academicpanel/model/Announcement/announcement_model.dart';
+import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/department_model.dart';
-import 'package:academicpanel/model/departmentSuperModel/row_announcement_model.dart';
+import 'package:academicpanel/model/Announcement/row_announcement_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/row_academicCalendar_model.dart';
 import 'package:academicpanel/model/departmentSuperModel/row_departmentBaseData_model.dart';
 
@@ -14,7 +16,7 @@ class DepartmentController extends GetxController {
   final firebaseDatapath = Get.find<FirebaseDatapath>();
 
   final List<RowAcademiccalendarModel> academiccalendarModelData = [];
-  final List<RowAnnouncementModel> announcementModel = [];
+  final List<AnnouncementModel> announcementModel = [];
 
   Future<DepartmentModel> fetchDepartmentData({
     bool getAcademicCalendar = false,
@@ -51,14 +53,47 @@ class DepartmentController extends GetxController {
             }
           }
           if (getAnnouncement) {
-            final List<dynamic> noClassList =
+            final whatsApp = baseData.whatsApp;
+
+            final List<dynamic> announcementData =
                 departmentResultData['announcements'] ?? [];
 
-            for (var item in noClassList) {
+            for (var item in announcementData) {
+              final data = RowAnnouncementModel.fromMap(
+                item as Map<String, dynamic>,
+              );
+
               announcementModel.add(
-                RowAnnouncementModel.fromMap(item as Map<String, dynamic>),
+                AnnouncementModel(
+                  rowCourseModel: RowCourseModel(
+                    code: "N/A",
+                    name: "Dept of CSE",
+                    credit: 0,
+                  ),
+                  rowAnnouncementModel: data,
+                  whatsApp: whatsApp,
+                ),
+
+                //RowAnnouncementModel.fromMap(item as Map<String, dynamic>),
               );
             }
+            // foundAnnouncements = rawList.docs.map((item) {
+            //   final data = item.data();
+            //   //  final map = item as Map<String, dynamic>;
+            //   final rowAnnouncement = RowAnnouncementModel.fromMap(data);
+            //   // print("This is the rowAnnaounment: ${rowAnnouncement.message}");
+            //   return AnnouncementModel(
+            //     rowAnnouncementModel: rowAnnouncement,
+            //     rowCourseModel: rowCourse,
+            //     whatsApp: whatsApp,
+            //   );
+            // }).toList();
+
+            announcementModel.sort(
+              (a, b) => b.rowAnnouncementModel.createdAt.compareTo(
+                a.rowAnnouncementModel.createdAt,
+              ),
+            );
           }
         } catch (e) {
           print(e);

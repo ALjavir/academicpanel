@@ -5,7 +5,7 @@ import 'package:get/get_instance/src/extension_instance.dart';
 
 final userController = Get.find<UserController>();
 
-class RowCgpaCrModel {
+class RowResultbaseModel {
   final double credit_completed;
   final double target_credit;
   final double credit_enrolled;
@@ -13,7 +13,7 @@ class RowCgpaCrModel {
   final double current_cgpa;
   final String comment;
 
-  RowCgpaCrModel({
+  RowResultbaseModel({
     required this.credit_completed,
     required this.target_credit,
     required this.credit_enrolled,
@@ -21,7 +21,7 @@ class RowCgpaCrModel {
     required this.current_cgpa,
     required this.comment,
   });
-  factory RowCgpaCrModel.fromMap(Map<String, dynamic> map) {
+  factory RowResultbaseModel.fromMap(Map<String, dynamic> map) {
     double credit_enrolled = 0.0;
 
     final userModel = userController.user.value;
@@ -31,7 +31,7 @@ class RowCgpaCrModel {
       credit_enrolled += (i['credit'] ?? 0) as num;
     }
 
-    return RowCgpaCrModel(
+    return RowResultbaseModel(
       comment: TbaStyle.checkTBA(map['comment']),
 
       credit_completed: (map['credit_completed'] ?? 0).toDouble(),

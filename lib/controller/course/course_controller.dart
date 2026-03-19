@@ -6,6 +6,7 @@ import 'package:academicpanel/model/ClassSchedule/row_classSchedule_model.dart';
 import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/model/assessment/row_assessment_model.dart';
 import 'package:academicpanel/model/courseSuperModel/row_course_model.dart';
+import 'package:academicpanel/model/courseSuperModel/row_sectionBase_model.dart';
 import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/network/save_data/firebase/fireBase_DataPath.dart';
 import 'package:academicpanel/utility/error_snackbar.dart';
@@ -52,16 +53,19 @@ class CourseController extends GetxController {
 
         if (infoSnapshot.exists && sectionSnapshot.exists) {
           final infoData = infoSnapshot.data() ?? {};
-          final secData = sectionSnapshot.data() ?? {};
+          final secData = RowSectionbaseModel.fromMap(
+            sectionSnapshot.data() ?? {},
+          );
+          //sectionSnapshot.data() ?? {};
 
           final rowCourse = RowCourseModel.fromMap(infoData);
 
           // --- BLOCK 1: SCHEDULE ---
           if (getClassSchedule) {
-            final scheduleMap = secData['schedule'] as Map<String, dynamic>?;
-            final instructor = secData['instructor'].toString();
+            final scheduleMap = secData.scheduleMap;
+            final instructor = secData.instructor;
 
-            if (scheduleMap != null) {
+            if (scheduleMap != {}) {
               scheduleMap.forEach((dayKey, value) {
                 if (value is Map<String, dynamic>) {
                   final scheduleDetails = RowClassscheduleModel.fromMap(
@@ -82,7 +86,7 @@ class CourseController extends GetxController {
 
           // --- BLOCK 2: ANNOUNCEMENTS ---
           if (getAnnouncement) {
-            final whatsApp = secData['whatsApp'].toString();
+            final whatsApp = secData.whatsApp;
             final rawList = await courseRef
                 .collection('section')
                 .doc(sectionId)
@@ -112,7 +116,7 @@ class CourseController extends GetxController {
           // --- BLOCK 3: ASSESSMENT ---
           if (getAssessment) {
             //  print("In side the Assessment");
-            final gClassRoom = secData['gClassRoom'].toString();
+            final gClassRoom = secData.gClassRoom;
             final assessmentQuery = await courseRef
                 .collection('section')
                 .doc(sectionId)
@@ -163,6 +167,11 @@ class CourseController extends GetxController {
         if (result.schedules != null) allSchedules.addAll(result.schedules!);
         if (result.announcements != null)
           allAnnouncements.addAll(result.announcements!);
+        allAnnouncements.sort(
+          (a, b) => b.rowAnnouncementModel.createdAt.compareTo(
+            a.rowAnnouncementModel.createdAt,
+          ),
+        );
         if (result.assessment != null)
           allAssessments.addAll(result.assessment!);
       }

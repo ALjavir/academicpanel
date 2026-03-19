@@ -7,7 +7,7 @@ import 'package:academicpanel/model/courseSuperModel/sectionSuper_model.dart';
 import 'package:academicpanel/model/pages/result_Page_model.dart';
 import 'package:academicpanel/model/resultSuperModel/result_model.dart';
 import 'package:academicpanel/model/resultSuperModel/row_assessment_mark.dart';
-import 'package:academicpanel/model/resultSuperModel/row_cgpacr_model.dart';
+import 'package:academicpanel/model/resultSuperModel/row_resultBase_model.dart';
 import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/state_manager.dart';
@@ -20,7 +20,7 @@ class ResultPageController extends GetxController {
   RxBool isLoading = true.obs;
   RxBool isLoadingPrevR = true.obs;
 
-  final Rxn<RowCgpaCrModel> rowCgpaModelData = Rxn<RowCgpaCrModel>();
+  final Rxn<RowResultbaseModel> rowCgpaModelData = Rxn<RowResultbaseModel>();
 
   final RxList<CurrentSemResultModel> listCurrentSemResultData =
       <CurrentSemResultModel>[].obs;
@@ -41,18 +41,18 @@ class ResultPageController extends GetxController {
   }
 
   // a: ----------------------------------------------------------------------------CGPA----------------------------------------------------------------------------------
-  Future<RowCgpaCrModel> fetchCGPAinfo() async {
+  Future<RowResultbaseModel> fetchCGPAinfo() async {
     try {
       ResultModel resultModel;
 
       final fetchedData = await resultController.fetchResultData(getCGPA: true);
       resultModel = fetchedData;
 
-      return rowCgpaModelData.value = resultModel.rowCgpaCrModel!;
+      return rowCgpaModelData.value = resultModel.rowResultbaseModel!;
     } catch (e) {
       errorSnackbar(title: 'Error in Result', e: e);
       print(e);
-      return RowCgpaCrModel(
+      return RowResultbaseModel(
         comment: '',
         credit_completed: 0,
         target_credit: 0,
