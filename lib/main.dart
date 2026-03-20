@@ -28,13 +28,7 @@ Future<void> main() async {
   Get.lazyPut(() => RoutesController(), fenix: true);
   Get.put(CheckConnection(), permanent: true);
 
-  // Future.wait([
-  //   uploadmix1(),
-  //   uploadmix2(),
-  //   uploadmix3(),
-  //   uploadmix4(),
-  //   uploadmix5(),
-  // ]);
+  //Future.wait([uploadmix1(), uploadmix2(), uploadmix3(), uploadmix4()]);
   // await uploadacademi();
 
   runApp(const MyApp());

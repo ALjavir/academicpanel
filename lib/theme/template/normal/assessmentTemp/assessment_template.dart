@@ -2,7 +2,7 @@ import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
-import 'package:academicpanel/theme/template/normal/showDialogAssessment_template.dart';
+import 'package:academicpanel/theme/template/normal/assessmentTemp/showDialogAssessment_template.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 

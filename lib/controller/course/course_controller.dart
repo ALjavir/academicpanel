@@ -13,6 +13,7 @@ import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:intl/intl.dart';
 
 class CourseController extends GetxController {
   final firebaseDatapath = Get.find<FirebaseDatapath>();
@@ -99,7 +100,9 @@ class CourseController extends GetxController {
                   final data = item.data();
                   //  final map = item as Map<String, dynamic>;
                   final rowAnnouncement = RowAnnouncementModel.fromMap(data);
-                  // print("This is the rowAnnaounment: ${rowAnnouncement.message}");
+                  print(
+                    "This is the rowAnnaounment: ${rowAnnouncement.message} - ${DateFormat('MMM d, y').format(rowAnnouncement.createdAt)}",
+                  );
                   return AnnouncementModel(
                     rowAnnouncementModel: rowAnnouncement,
                     rowCourseModel: rowCourse,
@@ -167,23 +170,24 @@ class CourseController extends GetxController {
         if (result.schedules != null) allSchedules.addAll(result.schedules!);
         if (result.announcements != null)
           allAnnouncements.addAll(result.announcements!);
-        allAnnouncements.sort(
-          (a, b) => b.rowAnnouncementModel.createdAt.compareTo(
-            a.rowAnnouncementModel.createdAt,
-          ),
-        );
+
         if (result.assessment != null)
           allAssessments.addAll(result.assessment!);
       }
 
       // 4. Sorting
-      // if (getAnnouncement) {
-      //   allAnnouncements.sort(
-      //     (a, b) => b.rowAnnouncementModel.createdAt.compareTo(
-      //       a.rowAnnouncementModel.createdAt,
-      //     ),
-      //   );
-      // }
+      if (getAnnouncement) {
+        allAnnouncements.sort(
+          (a, b) => b.rowAnnouncementModel.createdAt.compareTo(
+            a.rowAnnouncementModel.createdAt,
+          ),
+        );
+      }
+      for (var element in allAnnouncements) {
+        print(
+          "announcment course:${DateFormat('MMM d, y').format(element.rowAnnouncementModel.createdAt)} - ${element.rowAnnouncementModel.createdAt.runtimeType}",
+        );
+      }
 
       // SORT ASSESSMENTS BY DATE (Newest First)
       if (getAssessment) {

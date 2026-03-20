@@ -7,7 +7,7 @@ class DatetimeStyle {
     try {
       final fromDateTimeIs = TimeOfDay.fromDateTime(dateTime).format(context);
       if (fromDateTimeIs == '00:00') {
-        fromDateTimeIs == 'Class Time';
+        fromDateTimeIs == 'TBA';
       }
       return fromDateTimeIs;
     } catch (e) {
@@ -62,5 +62,22 @@ class DatetimeStyle {
     }
 
     return semmesterIs;
+  }
+
+  static String announcementTime(DateTime announcementDate) {
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = DateTime(now.year, now.month, now.day - 1);
+    final targetDate = DateTime(
+      announcementDate.year,
+      announcementDate.month,
+      announcementDate.day,
+    );
+    if (targetDate == today) {
+      return "Today";
+    } else if (targetDate == yesterday) {
+      return "Yesterday";
+    } else {
+      return DateFormat('d MMMM').format(announcementDate);
+    }
   }
 }

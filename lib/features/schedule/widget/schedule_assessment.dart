@@ -2,7 +2,7 @@ import 'package:academicpanel/controller/page/schedule_page_contoller.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
-import 'package:academicpanel/theme/template/normal/assessment_template.dart';
+import 'package:academicpanel/theme/template/normal/assessmentTemp/assessment_template.dart';
 import 'package:academicpanel/theme/template/normal/dropdownbutton_template.dart';
 import 'package:academicpanel/utility/loading/loadingPageContent.dart';
 import 'package:flutter/material.dart';

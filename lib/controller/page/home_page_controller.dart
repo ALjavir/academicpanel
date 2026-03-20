@@ -340,7 +340,6 @@ class HomePageController extends GetxController {
     try {
       List<AnnouncementModel> tempAnnouncementList = [];
 
-      // 1. Handle Department Announcements securely
       var departAnnouncementData = deptModelData.announcementModel ?? [];
 
       if (departAnnouncementData.isEmpty) {
@@ -348,32 +347,28 @@ class HomePageController extends GetxController {
           getAnnouncement: true,
         );
         deptModelData = fetchedDataDep;
-        // Use ?? [] instead of ! to prevent crashes if the API returns null
         departAnnouncementData = deptModelData.announcementModel ?? [];
       }
 
-      // 2. Handle Course Announcements securely
-      final announcementData = await courseController.fetchSectionData(
+      final courseModelData = await courseController.fetchSectionData(
         getAnnouncement: true,
       );
-      // Default to an empty list if null
-      final courseAnnouncements = announcementData.announcements ?? [];
+      final courseAnnouncements = courseModelData.announcements ?? [];
 
-      // 3. Add up to 4 course announcements
       tempAnnouncementList.addAll(courseAnnouncements.take(4));
-      for (var element in tempAnnouncementList) {
-        print(
-          "announcment course:${DateFormat('MMM d, y').format(element.rowAnnouncementModel.createdAt)} - ${element.rowAnnouncementModel.createdAt.runtimeType}",
-        );
-      }
+      // for (var element in tempAnnouncementList) {
+      //   // print(
+      //   //   "announcment course:${DateFormat('MMM d, y').format(element.rowAnnouncementModel.createdAt)} - ${element.rowAnnouncementModel.createdAt.runtimeType}",
+      //   // );
+      // }
 
       int remainingSlots = 8 - tempAnnouncementList.length;
       tempAnnouncementList.addAll(departAnnouncementData.take(remainingSlots));
-      for (var element in tempAnnouncementList) {
-        print(
-          "announcment dept:${DateFormat('MMM d, y').format(element.rowAnnouncementModel.createdAt)} - ${element.rowAnnouncementModel.createdAt.runtimeType}",
-        );
-      }
+      // for (var element in tempAnnouncementList) {
+      //   // print(
+      //   //   "announcment dept:${DateFormat('MMM d, y').format(element.rowAnnouncementModel.createdAt)} - ${element.rowAnnouncementModel.createdAt.runtimeType}",
+      //   // );
+      // }
 
       tempAnnouncementList.sort(
         (a, b) => b.rowAnnouncementModel.createdAt.compareTo(

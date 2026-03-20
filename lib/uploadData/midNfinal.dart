@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 Future<void> uploadmix1() async {
-  final String message =
-      'Applications are open for Summer 2026 internships. Submit your CV by April 5';
+  final String message = 'Assignment submission today';
 
   final DateTime created_at = DateTime(2026, 1, 12, 12, 00, 24);
 
   DocumentReference docRef = FirebaseFirestore.instance
-      .collection('department')
+      .collection('course')
       .doc('CSE')
+      .collection('course_code')
+      .doc('CHE101')
+      .collection("section")
+      .doc('3')
       .collection("announcement")
       .doc();
 
@@ -17,7 +20,7 @@ Future<void> uploadmix1() async {
   try {
     await docRef.set({
       'message': message,
-      'created_at': Timestamp.fromDate(created_at),
+      'createdAt': Timestamp.fromDate(created_at),
     });
     print("✅ Successfully updated '$docRef");
   } catch (e) {
@@ -26,14 +29,17 @@ Future<void> uploadmix1() async {
 }
 
 Future<void> uploadmix2() async {
-  final String message =
-      'Join the intra-department coding contest on March 25. Register now!';
+  final String message = 'Assignment 3 deadline extended';
 
   final DateTime created_at = DateTime(2026, 1, 7, 12, 00, 24);
 
   DocumentReference docRef = FirebaseFirestore.instance
-      .collection('department')
+      .collection('course')
       .doc('CSE')
+      .collection('course_code')
+      .doc('CHE101')
+      .collection("section")
+      .doc('3')
       .collection("announcement")
       .doc();
 
@@ -42,7 +48,7 @@ Future<void> uploadmix2() async {
   try {
     await docRef.set({
       'message': message,
-      'created_at': Timestamp.fromDate(created_at),
+      'createdAt': Timestamp.fromDate(created_at),
     });
     print("✅ Successfully updated '$docRef");
   } catch (e) {
@@ -51,14 +57,17 @@ Future<void> uploadmix2() async {
 }
 
 Future<void> uploadmix3() async {
-  final String message =
-      'Midterm exams will begin from April 10. Check the portal for details';
+  final String message = 'No late submission wii be aceptable for assignment 2';
 
   final DateTime created_at = DateTime(2026, 1, 12, 12, 00, 24);
 
   DocumentReference docRef = FirebaseFirestore.instance
-      .collection('department')
+      .collection('course')
       .doc('CSE')
+      .collection('course_code')
+      .doc('CHE101')
+      .collection("section")
+      .doc('3')
       .collection("announcement")
       .doc();
 
@@ -67,7 +76,7 @@ Future<void> uploadmix3() async {
   try {
     await docRef.set({
       'message': message,
-      'created_at': Timestamp.fromDate(created_at),
+      'createdAt': Timestamp.fromDate(created_at),
     });
     print("✅ Successfully updated '$docRef");
   } catch (e) {
@@ -76,14 +85,17 @@ Future<void> uploadmix3() async {
 }
 
 Future<void> uploadmix4() async {
-  final String message =
-      'All computer labs will remain closed on March 20 due to maintenance.';
+  final String message = 'Tommorow class will be held online';
 
   final DateTime created_at = DateTime(2026, 1, 12, 12, 00, 24);
 
   DocumentReference docRef = FirebaseFirestore.instance
-      .collection('department')
+      .collection('course')
       .doc('CSE')
+      .collection('course_code')
+      .doc('CHE101')
+      .collection("section")
+      .doc('3')
       .collection("announcement")
       .doc();
 
@@ -92,32 +104,7 @@ Future<void> uploadmix4() async {
   try {
     await docRef.set({
       'message': message,
-      'created_at': Timestamp.fromDate(created_at),
-    });
-    print("✅ Successfully updated '$docRef");
-  } catch (e) {
-    print("❌ Error uploading: $e");
-  }
-}
-
-Future<void> uploadmix5() async {
-  final String message =
-      'Final year students must submit thesis proposals by April 1';
-
-  final DateTime created_at = DateTime(2026, 1, 12, 12, 00, 24);
-
-  DocumentReference docRef = FirebaseFirestore.instance
-      .collection('department')
-      .doc('CSE')
-      .collection("announcement")
-      .doc();
-
-  //course/CSE/course_code/CHE101/section/3/assessment
-
-  try {
-    await docRef.set({
-      'message': message,
-      'created_at': Timestamp.fromDate(created_at),
+      'createdAt': Timestamp.fromDate(created_at),
     });
     print("✅ Successfully updated '$docRef");
   } catch (e) {
