@@ -1,5 +1,4 @@
 import 'package:academicpanel/model/Announcement/announcement_model.dart';
-import 'package:academicpanel/model/assessment/assessment_model.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/dateTime_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';

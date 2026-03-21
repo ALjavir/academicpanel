@@ -69,7 +69,7 @@ class _HomePageMainState extends State<HomePageMain> {
                               "Today's Highlights",
                               style: Fontstyle.defult3d(
                                 22,
-                                FontWeight.bold,
+                                //FontWeight.bold,
                                 ColorStyle.Textblue,
                                 const Color.fromARGB(20, 19, 70, 125),
                                 const Offset(3, 3),

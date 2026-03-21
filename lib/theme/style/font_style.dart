@@ -40,22 +40,32 @@ class Fontstyle {
     );
   }
 
+  static TextStyle heading(
+  //double fontSize,
+  // FontWeight fontweight,
+  {bool underline = false}) {
+    return TextStyle(
+      fontFamily: 'Manrope',
+      fontSize: 22,
+      color: ColorStyle.Textblue,
+      fontWeight: FontWeight.w700,
+    );
+  }
+
   static TextStyle defult3d(
     double fontSize,
-    FontWeight fontweight,
+    //FontWeight fontweight,
     Color color,
     Color color3d,
     Offset offset,
     double blurRadius,
   ) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: 'Manrope',
       fontSize: fontSize,
       color: color,
-      fontWeight: fontweight,
-
+      fontWeight: FontWeight.bold,
       decoration: TextDecoration.none,
-
       shadows: [
         BoxShadow(
           color: color3d,

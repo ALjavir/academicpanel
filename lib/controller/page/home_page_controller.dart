@@ -118,54 +118,55 @@ class HomePageController extends GetxController {
     }
     try {
       List<ClassscheduleModel> tempClassschedule = [];
-      List<RowAcademiccalendarModel> noClass = [];
+      // List<RowAcademiccalendarModel> noClass = [];
       todayClassScheduleListHome.listClassScheduleModel ??= [];
 
-      if (todayClassScheduleListHome.listClassScheduleModel!.isEmpty) {
+      // Safely check if the list is either null OR empty
+      if (todayClassScheduleListHome.listClassScheduleModel?.isEmpty ?? true) {
         final fetchedDataDep = await departmentController.fetchDepartmentData(
           getAcademicCalendar: true,
         );
 
         deptModelData = fetchedDataDep;
-
         final now = DateTime.now();
 
-        if (deptModelData.academiccalendarModel != null) {
-          for (var i in deptModelData.academiccalendarModel!) {
-            noClass.addIf(
-              i.type.toLowerCase() == "holiday" ||
-                  i.type.toLowerCase() == "exam",
-              i,
-            );
-          }
+        // 1. Single Loop Processing
+        final calendarModel = deptModelData.academiccalendarModel;
 
-          for (var i in noClass) {
-            // Holiday Check
-            if (DatetimeStyle.isDateInRange(now, i.startDate, i.endDate)) {
+        if (calendarModel != null) {
+          for (var event in calendarModel) {
+            final type = event.type.toLowerCase();
+
+            // 2. Check type AND date range at the exact same time
+            if ((type == "holiday" || type == "exam") &&
+                DatetimeStyle.isDateInRange(
+                  now,
+                  event.startDate,
+                  event.endDate,
+                )) {
               todayClassScheduleListHome.noclassModel =
                   RowAcademiccalendarModel(
-                    title: i.title,
-                    startDate: i.startDate,
-                    endDate: i.endDate,
-                    type: i.type,
+                    title: event.title,
+                    startDate: event.startDate,
+                    endDate: event.endDate,
+                    type: event.type,
                   );
               todayClassScheduleListHome.listClassScheduleModel = [];
-              return todayClassScheduleListHome;
+
+              return todayClassScheduleListHome; // Exit early!
             }
           }
         }
 
-        SectionsuperModel classScheduleData;
-
-        final fetchedData = await courseController.fetchSectionData(
+        // 3. Clean variable declaration
+        final classScheduleData = await courseController.fetchSectionData(
           getClassSchedule: true,
         );
-        classScheduleData = fetchedData;
+
         if (classScheduleData.schedules != null) {
           tempClassschedule = classScheduleData.schedules!;
         }
       }
-
       final now = DateTime.now();
       final days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'];
       String dayKey = days[now.weekday - 1];

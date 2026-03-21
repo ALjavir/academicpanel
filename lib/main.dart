@@ -29,7 +29,7 @@ Future<void> main() async {
   Get.put(CheckConnection(), permanent: true);
 
   //Future.wait([uploadmix1(), uploadmix2(), uploadmix3(), uploadmix4()]);
-  // await uploadacademi();
+  //await uploadacademi();
 
   runApp(const MyApp());
 }

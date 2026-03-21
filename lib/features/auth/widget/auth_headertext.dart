@@ -27,7 +27,7 @@ class _AuthHeadertextState extends State<AuthHeadertext> {
           textAlign: TextAlign.center,
           style: Fontstyle.defult3d(
             32,
-            FontWeight.bold,
+            // FontWeight.bold,
             ColorStyle.Textblue,
             const Color.fromARGB(40, 19, 70, 125),
             const Offset(3, 3),

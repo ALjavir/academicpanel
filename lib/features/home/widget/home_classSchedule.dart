@@ -7,6 +7,7 @@ import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/export.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 class HomeClassschedule extends StatefulWidget {
@@ -62,11 +63,13 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
               ),
               Text(
                 "Upcoming Class",
-                style: Fontstyle.defult(
-                  22,
-                  FontWeight.w600,
-                  ColorStyle.Textblue,
-                ),
+                style: Fontstyle.heading(),
+
+                // Fontstyle.defult(
+                //   22,
+                //   FontWeight.w600,
+                //   ColorStyle.Textblue,
+                // ),
               ),
             ],
           ),
@@ -85,14 +88,25 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                         : ImageStyle.holidays(),
                     scale: 5,
                   ),
+                  const SizedBox(height: 10),
                   Text(
                     noClass.title,
                     style: Fontstyle.defult(
                       18,
-                      FontWeight.bold,
+                      FontWeight.w600,
                       ColorStyle.Textblue,
                     ),
                   ),
+                  if (noClass.startDate.day != noClass.endDate.day ||
+                      noClass.startDate.month != noClass.endDate.month)
+                    Text(
+                      "from ${DateFormat('d MMMM').format((noClass.startDate))} to ${DateFormat('d MMMM').format((noClass.endDate))}",
+                      style: Fontstyle.defult(
+                        18,
+                        FontWeight.w600,
+                        ColorStyle.Textblue,
+                      ),
+                    ),
                 ],
               ),
             )
@@ -137,80 +151,85 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                       // ================== LEFT SIDE (Main Class) ==================
                       Expanded(
                         flex: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing:
-                              12, // Note: 'spacing' requires Flutter 3.27+ on Columns
-                          children: [
-                            Text(
-                              "${classList[0].rowCourseModel.name.capitalizeFirst!} - (${classList[0].rowCourseModel.code})",
-                              style: Fontstyle.defult(
-                                16.5,
-                                FontWeight.w600,
-                                ColorStyle.Textblue,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 8,
+                            children: [
+                              Text(
+                                "${classList[0].rowCourseModel.name.capitalizeFirst!} - (${classList[0].rowCourseModel.code})",
+                                style: Fontstyle.defult(
+                                  16,
+                                  FontWeight.w600,
+                                  ColorStyle.Textblue,
+                                ),
                               ),
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.watch_later_outlined,
-                                  color: ColorStyle.red,
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  "${formatTime12Hour(classList[0].rowClassscheduleModel.startTime)} - ${formatTime12Hour(classList[0].rowClassscheduleModel.endTime)}",
-                                  style: Fontstyle.defult(
-                                    14.5,
-                                    FontWeight.w600,
-                                    ColorStyle.Textblue,
+                              const SizedBox(height: 0),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.watch_later_outlined,
+                                    color: ColorStyle.red,
+                                    size: 18,
                                   ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.location_on_outlined,
-                                  color: ColorStyle.red,
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  widget
-                                      .todayClass
-                                      .listClassScheduleModel![0]
-                                      .rowClassscheduleModel
-                                      .room,
-                                  style: Fontstyle.defult(
-                                    14.5,
-                                    FontWeight.w600,
-                                    ColorStyle.Textblue,
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    "${formatTime12Hour(classList[0].rowClassscheduleModel.startTime)} - ${formatTime12Hour(classList[0].rowClassscheduleModel.endTime)}",
+                                    style: Fontstyle.defult(
+                                      14,
+                                      FontWeight.w600,
+                                      ColorStyle.Textblue,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 16),
-                                Icon(
-                                  Icons.person_outline,
-                                  color: Colors.red[900],
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  widget
-                                      .todayClass
-                                      .listClassScheduleModel![0]
-                                      .instructor
-                                      .capitalizeFirst!,
-                                  style: Fontstyle.defult(
-                                    14.5,
-                                    FontWeight.w600,
-                                    ColorStyle.Textblue,
+                                ],
+                              ),
+
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_outlined,
+                                    color: ColorStyle.red,
+                                    size: 18,
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                  const SizedBox(width: 2),
+                                  Text(
+                                    widget
+                                        .todayClass
+                                        .listClassScheduleModel![0]
+                                        .rowClassscheduleModel
+                                        .room,
+                                    style: Fontstyle.defult(
+                                      14,
+                                      FontWeight.w600,
+                                      ColorStyle.Textblue,
+                                    ),
+                                  ),
+                                  const Expanded(child: SizedBox()),
+                                  //const SizedBox(width: 16),
+                                  Icon(
+                                    Icons.person_outline,
+                                    color: ColorStyle.red,
+                                    size: 18,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    widget
+                                        .todayClass
+                                        .listClassScheduleModel![0]
+                                        .instructor
+                                        .capitalizeFirst!,
+                                    style: Fontstyle.defult(
+                                      14,
+                                      FontWeight.w600,
+                                      ColorStyle.Textblue,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
 
@@ -243,7 +262,7 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                                 i++
                               )
                                 Padding(
-                                  padding: const EdgeInsets.only(bottom: 12.0),
+                                  padding: const EdgeInsets.only(bottom: 10),
                                   child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -279,9 +298,9 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                               style: Fontstyle.defult(
-                                                12,
+                                                14,
                                                 FontWeight.w600,
-                                                ColorStyle.lightBlue,
+                                                ColorStyle.Textblue,
                                               ),
                                             ),
                                             const SizedBox(height: 2),
@@ -293,6 +312,8 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                                                 ColorStyle.lightBlue,
                                               ),
                                             ),
+
+                                            const SizedBox(height: 2),
                                           ],
                                         ),
                                       ),

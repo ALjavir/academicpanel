@@ -125,6 +125,32 @@ flutter:
           weight: 700
 
     # ---------------------
+    # Manrope
+    # ---------------------
+    - family: Manrope
+      fonts:
+        - asset: lib/assets/font/Manrope/Manrope-Regular.ttf
+          weight: 400
+        - asset: lib/assets/font/Manrope/Manrope-SemiBold.ttf
+          weight: 600
+        - asset: lib/assets/font/Manrope/Manrope-ExtraBold.ttf
+          weight: 700
+
+
+    # ---------------------
+    # Work_Sans
+    # ---------------------
+    - family: Work_Sans
+      fonts:
+        - asset: lib/assets/font/Work_Sans/WorkSans-Regular.ttf
+          weight: 400
+        - asset: lib/assets/font/Work_Sans/WorkSans-SemiBold.ttf
+          weight: 600
+        - asset: lib/assets/font/Work_Sans/WorkSans-Bold.ttf
+          weight: 700      
+
+
+    # ---------------------
     # Playfair Display
     # ---------------------
     - family: PlayfairDisplay
@@ -147,6 +173,8 @@ flutter:
           weight: 600
         - asset: lib/assets/font/Quicksand/Quicksand-Bold.ttf
           weight: 700
+
+
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

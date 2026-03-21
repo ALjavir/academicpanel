@@ -307,7 +307,7 @@ class _SignupPageMainState extends State<SignupPageMain> {
 
                                   style: Fontstyle.defult3d(
                                     18,
-                                    FontWeight.bold,
+                                    //FontWeight.bold,
                                     ColorStyle.red,
                                     const Color.fromARGB(30, 159, 27, 25),
                                     const Offset(3, 3),

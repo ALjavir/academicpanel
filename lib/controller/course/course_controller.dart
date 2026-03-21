@@ -100,9 +100,7 @@ class CourseController extends GetxController {
                   final data = item.data();
                   //  final map = item as Map<String, dynamic>;
                   final rowAnnouncement = RowAnnouncementModel.fromMap(data);
-                  print(
-                    "This is the rowAnnaounment: ${rowAnnouncement.message} - ${DateFormat('MMM d, y').format(rowAnnouncement.createdAt)}",
-                  );
+
                   return AnnouncementModel(
                     rowAnnouncementModel: rowAnnouncement,
                     rowCourseModel: rowCourse,
@@ -183,11 +181,11 @@ class CourseController extends GetxController {
           ),
         );
       }
-      for (var element in allAnnouncements) {
-        print(
-          "announcment course:${DateFormat('MMM d, y').format(element.rowAnnouncementModel.createdAt)} - ${element.rowAnnouncementModel.createdAt.runtimeType}",
-        );
-      }
+      // for (var element in allAnnouncements) {
+      //   print(
+      //     "announcment course:${DateFormat('MMM d, y').format(element.rowAnnouncementModel.createdAt)} - ${element.rowAnnouncementModel.createdAt.runtimeType}",
+      //   );
+      // }
 
       // SORT ASSESSMENTS BY DATE (Newest First)
       if (getAssessment) {

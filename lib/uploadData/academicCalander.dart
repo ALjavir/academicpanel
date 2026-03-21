@@ -34,7 +34,7 @@ Future<void> uploadacademi() async {
       "endDate": DateTime(2026, 1, 10),
     },
     {
-      "title": "Holiday: Shab-e-Meraj",
+      "title": "hab-e-Meraj",
       "type": "holiday",
       "startDate": DateTime(2026, 1, 17),
       "endDate": DateTime(2026, 1, 17),
@@ -46,7 +46,7 @@ Future<void> uploadacademi() async {
       "endDate": DateTime(2026, 1, 19),
     },
     {
-      "title": "Holiday: Shab-e-Barat",
+      "title": "Shab-e-Barat",
       "type": "holiday",
       "startDate": DateTime(2026, 2, 4),
       "endDate": DateTime(2026, 2, 4),
@@ -64,7 +64,7 @@ Future<void> uploadacademi() async {
       "endDate": DateTime(2026, 2, 18),
     },
     {
-      "title": "Holiday: Intl Mother Language Day",
+      "title": "Intl Mother Language Day",
       "type": "holiday",
       "startDate": DateTime(2026, 2, 21),
       "endDate": DateTime(2026, 2, 21),
@@ -82,19 +82,19 @@ Future<void> uploadacademi() async {
       "endDate": DateTime(2026, 3, 13),
     },
     {
-      "title": "Holiday: Shab-e-Qadar",
+      "title": "Shab-e-Qadar",
       "type": "holiday",
       "startDate": DateTime(2026, 3, 17),
       "endDate": DateTime(2026, 3, 17),
     },
     {
-      "title": "Holiday: Jummatul-Bida & Eid-ul-Fitr",
+      "title": "Jummatul-Bida & Eid-ul-Fitr",
       "type": "holiday",
       "startDate": DateTime(2026, 3, 18),
       "endDate": DateTime(2026, 3, 25),
     },
     {
-      "title": "Holiday: Independence Day",
+      "title": "Independence Day",
       "type": "holiday",
       "startDate": DateTime(2026, 3, 26),
       "endDate": DateTime(2026, 3, 26),
@@ -107,7 +107,7 @@ Future<void> uploadacademi() async {
     },
 
     {
-      "title": "Holiday: Bangla New Year",
+      "title": "Bangla New Year",
       "type": "holiday",
       "startDate": DateTime(2026, 4, 14),
       "endDate": DateTime(2026, 4, 14),
@@ -119,7 +119,7 @@ Future<void> uploadacademi() async {
       "endDate": DateTime(2026, 4, 27),
     },
     {
-      "title": "Holiday: May Day & Buddha Purnima",
+      "title": "May Day & Buddha Purnima",
       "type": "holiday",
       "startDate": DateTime(2026, 5, 1),
       "endDate": DateTime(2026, 5, 1),
@@ -178,7 +178,7 @@ Future<void> uploadacademi() async {
   try {
     // 3. Update the Field directly
     // This REPLACES the list. Perfect for a new semester reset.
-    await docRef.update({'announcements': announcements});
+    await docRef.update({'academic_calendar': academicCalendar});
 
     print("✅ Successfully updated 'academic_calendar' in /course/CSE");
   } catch (e) {
