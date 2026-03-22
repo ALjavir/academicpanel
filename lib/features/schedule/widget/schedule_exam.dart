@@ -140,11 +140,11 @@ class _ScheduleExamState extends State<ScheduleExam> {
                             ),
                           ),
                           Text(
-                            "No exam for now, relax!",
+                            "No exam for now, relax...",
 
                             style: Fontstyle.defult(
                               18,
-                              FontWeight.bold,
+                              FontWeight.w500,
                               ColorStyle.Textblue,
                             ),
                           ),

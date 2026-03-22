@@ -13,7 +13,6 @@ import 'package:academicpanel/utility/error_snackbar.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:intl/intl.dart';
 
 class CourseController extends GetxController {
   final firebaseDatapath = Get.find<FirebaseDatapath>();

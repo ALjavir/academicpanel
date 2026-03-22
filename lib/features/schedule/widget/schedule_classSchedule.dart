@@ -10,6 +10,7 @@ import 'package:academicpanel/utility/loading/loadingPageContent.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get/state_manager.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 class ScheduleClassschedule extends StatefulWidget {
@@ -48,28 +49,49 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
         if (controller.isLoadingClassSchdule == true)
           return Center(child: LoadingPageContent());
         else if (noClass != null)
-          return SizedBox(
-            width: double.maxFinite,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
+          return Padding(
+            padding: const EdgeInsets.all(10),
+            child: SizedBox(
+              width: double.maxFinite,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                // spacing: 10,
+
                 children: [
+                  const SizedBox(height: 10),
                   Image.asset(
                     noClass.type.toLowerCase() == 'exam'
                         ? ImageStyle.exam()
                         : ImageStyle.holidays(),
                     scale: 5,
                   ),
-                  Text(
-                    noClass.title,
-                    style: Fontstyle.defult(
-                      18,
-                      FontWeight.bold,
-                      ColorStyle.Textblue,
+                  const SizedBox(height: 20),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: noClass.title,
+                          style: Fontstyle.defult(
+                            16,
+                            FontWeight.w500,
+                            ColorStyle.Textblue,
+                          ),
+                        ),
+
+                        if (noClass.startDate.day != noClass.endDate.day ||
+                            noClass.startDate.month != noClass.endDate.month)
+                          TextSpan(
+                            text:
+                                "\nFrom ${DateFormat('d MMMM').format(noClass.startDate)} to ${DateFormat('d MMMM').format(noClass.endDate)}",
+                            style: Fontstyle.defult(
+                              16,
+                              FontWeight.w500,
+                              ColorStyle.Textblue,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
+                  const SizedBox(height: 10),
                 ],
               ),
             ),
@@ -93,10 +115,10 @@ class _ScheduleClassscheduleState extends State<ScheduleClassschedule> {
                 ),
               ),
               Text(
-                "No class for now, relax!",
+                "No class for now, relax...",
                 style: Fontstyle.defult(
                   18,
-                  FontWeight.bold,
+                  FontWeight.w500,
                   ColorStyle.Textblue,
                 ),
               ),

@@ -61,53 +61,56 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                 color: ColorStyle.red,
                 scale: 19,
               ),
-              Text(
-                "Upcoming Class",
-                style: Fontstyle.heading(),
-
-                // Fontstyle.defult(
-                //   22,
-                //   FontWeight.w600,
-                //   ColorStyle.Textblue,
-                // ),
-              ),
+              Text("Upcoming Class", style: Fontstyle.heading()),
             ],
           ),
           Divider(color: ColorStyle.red),
 
           if (noClass != null)
-            SizedBox(
-              width: double.maxFinite,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                // spacing: 10,
-                children: [
-                  Image.asset(
-                    noClass.type.toLowerCase() == 'exam'
-                        ? ImageStyle.exam()
-                        : ImageStyle.holidays(),
-                    scale: 5,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    noClass.title,
-                    style: Fontstyle.defult(
-                      18,
-                      FontWeight.w600,
-                      ColorStyle.Textblue,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.maxFinite,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+
+                  children: [
+                    const SizedBox(height: 10),
+                    Image.asset(
+                      noClass.type.toLowerCase() == 'exam'
+                          ? ImageStyle.exam()
+                          : ImageStyle.holidays(),
+                      scale: 5,
                     ),
-                  ),
-                  if (noClass.startDate.day != noClass.endDate.day ||
-                      noClass.startDate.month != noClass.endDate.month)
-                    Text(
-                      "from ${DateFormat('d MMMM').format((noClass.startDate))} to ${DateFormat('d MMMM').format((noClass.endDate))}",
-                      style: Fontstyle.defult(
-                        18,
-                        FontWeight.w600,
-                        ColorStyle.Textblue,
+                    const SizedBox(height: 20),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: noClass.title,
+                            style: Fontstyle.defult(
+                              16,
+                              FontWeight.w500,
+                              ColorStyle.Textblue,
+                            ),
+                          ),
+
+                          if (noClass.startDate.day != noClass.endDate.day ||
+                              noClass.startDate.month != noClass.endDate.month)
+                            TextSpan(
+                              text:
+                                  "\nFrom ${DateFormat('d MMMM').format(noClass.startDate)} to ${DateFormat('d MMMM').format(noClass.endDate)}",
+                              style: Fontstyle.defult(
+                                16,
+                                FontWeight.w500,
+                                ColorStyle.Textblue,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
-                ],
+                  ],
+                ),
               ),
             )
           else if (classList!.isEmpty)
@@ -131,10 +134,10 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                 ),
 
                 Text(
-                  "No class for now, relax!",
+                  "No class for now, relax...",
                   style: Fontstyle.defult(
                     18,
-                    FontWeight.bold,
+                    FontWeight.w500,
                     ColorStyle.Textblue,
                   ),
                 ),
@@ -298,9 +301,9 @@ class _HomeClassscheduleState extends State<HomeClassschedule> {
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                               style: Fontstyle.defult(
-                                                14,
+                                                12,
                                                 FontWeight.w600,
-                                                ColorStyle.Textblue,
+                                                ColorStyle.lightBlue,
                                               ),
                                             ),
                                             const SizedBox(height: 2),

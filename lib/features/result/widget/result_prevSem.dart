@@ -4,6 +4,7 @@ import 'package:academicpanel/controller/page/result_page_controller.dart';
 import 'package:academicpanel/model/resultSuperModel/row_prev_result.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
+import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
 import 'package:academicpanel/theme/template/normal/dropdownbutton_template.dart';
@@ -11,6 +12,7 @@ import 'package:academicpanel/utility/loading/loadingPageContent.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
+import 'package:lottie/lottie.dart';
 
 class ResultPrevsem extends StatefulWidget {
   final ResultPageController resultPageController;
@@ -72,21 +74,35 @@ class _ResultPrevsemState extends State<ResultPrevsem> {
                 Divider(color: ColorStyle.red),
 
                 // 1. Wrap the WHOLE logic in Obx
-                if (prevSemResultData.rowPrevResultList.isEmpty)
+                if (prevSemResultData.rowPrevResultList.isEmpty) ...[
+                  ClipRect(
+                    child: SizedBox(
+                      height: 120,
+                      width: double.maxFinite,
+                      child: Transform.scale(
+                        scale: 2,
+                        child: LottieBuilder.asset(
+                          ImageStyle.upCommingClassaAimatedIcon(),
+                          frameRate: FrameRate.max,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                  ),
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Text(
-                        "No Data Found...",
+                        "No data found...",
                         style: Fontstyle.defult(
                           18,
-                          FontWeight.w600,
-                          ColorStyle.red,
+                          FontWeight.w500,
+                          ColorStyle.Textblue,
                         ),
                       ),
                     ),
-                  )
-                else if (widget.resultPageController.isLoadingPrevR == true)
+                  ),
+                ] else if (widget.resultPageController.isLoadingPrevR == true)
                   Center(child: LoadingPageContent())
                 else
                   showData(prevSemResultData.rowPrevResultList),
@@ -99,14 +115,36 @@ class _ResultPrevsemState extends State<ResultPrevsem> {
 
   Widget showData(List<RowPrevResult> rowPrevResultList) {
     if (rowPrevResultList.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Text(
-            "No results found",
-            style: Fontstyle.defult(18, FontWeight.w600, ColorStyle.red),
+      return Column(
+        children: [
+          ClipRect(
+            child: SizedBox(
+              height: 120,
+              width: double.maxFinite,
+              child: Transform.scale(
+                scale: 2,
+                child: LottieBuilder.asset(
+                  ImageStyle.upCommingClassaAimatedIcon(),
+                  frameRate: FrameRate.max,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
           ),
-        ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                "No results found...",
+                style: Fontstyle.defult(
+                  18,
+                  FontWeight.w500,
+                  ColorStyle.Textblue,
+                ),
+              ),
+            ),
+          ),
+        ],
       );
     }
     return ListView.builder(

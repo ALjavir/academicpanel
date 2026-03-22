@@ -1,4 +1,5 @@
 import 'package:academicpanel/controller/page/schedule_page_contoller.dart';
+import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/animation/threed_containel.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
@@ -7,6 +8,7 @@ import 'package:academicpanel/theme/template/normal/dropdownbutton_template.dart
 import 'package:academicpanel/utility/loading/loadingPageContent.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:lottie/lottie.dart';
 
 class ScheduleAssessment extends StatefulWidget {
   final SchedulePageContoller schedulePageContoller;
@@ -69,18 +71,36 @@ class _ScheduleAssessmentState extends State<ScheduleAssessment> {
               if (widget.schedulePageContoller.isLoadingAssessment == true) {
                 return Center(child: LoadingPageContent());
               } else if (data.assessmentModel.isEmpty) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text(
-                      "No Data Found...",
-                      style: Fontstyle.defult(
-                        18,
-                        FontWeight.w600,
-                        ColorStyle.red,
+                return Column(
+                  children: [
+                    ClipRect(
+                      child: SizedBox(
+                        height: 120,
+                        width: double.maxFinite,
+                        child: Transform.scale(
+                          scale: 2,
+                          child: LottieBuilder.asset(
+                            ImageStyle.upCommingClassaAimatedIcon(),
+                            frameRate: FrameRate.max,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          "No Incomplete assessment...",
+                          style: Fontstyle.defult(
+                            18,
+                            FontWeight.w500,
+                            ColorStyle.Textblue,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 );
               } else {
                 return AssessmentTemplate(assessment: data.assessmentModel);

@@ -2,10 +2,12 @@ import 'package:academicpanel/model/Announcement/announcement_model.dart';
 import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/dateTime_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
+import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/normal/dotLine_template.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AnnouncementTemplate extends StatelessWidget {
   final List<AnnouncementModel> announcement;
@@ -184,11 +186,83 @@ class AnnouncementTemplate extends StatelessWidget {
               Divider(color: ColorStyle.red),
             ],
           ),
-          content: Text(
-            announcement.rowAnnouncementModel.message.capitalizeFirst!,
+          content: Column(
+            spacing: 12,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                announcement.rowAnnouncementModel.message.capitalizeFirst!,
 
-            softWrap: true,
-            style: Fontstyle.defult(16, FontWeight.w500, ColorStyle.Textblue),
+                softWrap: true,
+                style: Fontstyle.defult(
+                  16,
+                  FontWeight.w500,
+                  ColorStyle.Textblue,
+                ),
+              ),
+              Align(
+                alignment: AlignmentGeometry.bottomRight,
+
+                child: FloatingActionButton(
+                  onPressed: () async {
+                    final url = announcement.whatsApp.trim();
+                    final uri = Uri.tryParse(url);
+
+                    if (uri == null) {
+                      debugPrint('Invalid URL');
+                      return;
+                    }
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(
+                        uri,
+                        mode: LaunchMode.externalApplication,
+                      );
+                    } else {
+                      debugPrint('Cannot launch $url');
+                    }
+                  },
+                  elevation: 1,
+                  mini: true,
+
+                  shape: CircleBorder(),
+
+                  child: ClipOval(
+                    child: Image.asset(
+                      ImageStyle.whatsApp(),
+                      fit: BoxFit.cover, // fill completely
+                      width: double.infinity,
+                      height: double.infinity,
+                    ),
+                  ),
+                ),
+              ),
+              // ElevatedButton(
+              //   style: ElevatedButton.styleFrom(
+              //     backgroundColor: ColorStyle.light,
+              //     elevation: 2,
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(12),
+              //     ),
+              //   ),
+              //   onPressed: () async {
+              //     final url = announcement.whatsApp.trim();
+              //     final uri = Uri.tryParse(url);
+
+              //     if (uri == null) {
+              //       debugPrint('Invalid URL');
+              //       return;
+              //     }
+              //     if (await canLaunchUrl(uri)) {
+              //       await launchUrl(uri, mode: LaunchMode.externalApplication);
+              //     } else {
+              //       debugPrint('Cannot launch $url');
+              //     }
+              //   },
+
+              //   child: Image.asset(ImageStyle.whatsApp(), scale: 16),
+              // ),
+            ],
           ),
         );
       },

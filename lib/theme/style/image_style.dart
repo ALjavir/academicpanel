@@ -24,6 +24,10 @@ class ImageStyle {
     return 'lib/assets/icon/exam.png';
   }
 
+  static String whatsApp() {
+    return 'lib/assets/icon/whatsapp.png';
+  }
+
   static String info() {
     return 'lib/assets/icon/info.png';
   }
@@ -34,6 +38,10 @@ class ImageStyle {
 
   static String installmentIcon() {
     return 'lib/assets/icon/installment.png';
+  }
+
+  static String announcementBackground() {
+    return 'lib/assets/icon/announcementBackground.png';
   }
 
   static String holidays() {

@@ -77,7 +77,7 @@ class DatetimeStyle {
     } else if (targetDate == yesterday) {
       return "Yesterday";
     } else {
-      return DateFormat('d MMMM').format(announcementDate);
+      return DateFormat('d MMM').format(announcementDate);
     }
   }
 }

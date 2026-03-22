@@ -5,6 +5,7 @@ import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/normal/announcement_template.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class HomeAnnouncement extends StatelessWidget {
   final List<AnnouncementModel>? announcements;
@@ -40,17 +41,35 @@ class HomeAnnouncement extends StatelessWidget {
             ],
           ),
           Divider(color: ColorStyle.red),
-          if (announcements == null || announcements!.isEmpty)
-            Center(
-              child: Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Text(
-                  "No Announcement Found...",
-                  style: Fontstyle.defult(18, FontWeight.w600, ColorStyle.red),
+          if (announcements == null || announcements!.isEmpty) ...[
+            ClipRect(
+              child: SizedBox(
+                height: 120,
+                width: double.maxFinite,
+                child: Transform.scale(
+                  scale: 2,
+                  child: LottieBuilder.asset(
+                    ImageStyle.upCommingClassaAimatedIcon(),
+                    frameRate: FrameRate.max,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
-            )
-          else
+            ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Text(
+                  "No announcement found...",
+                  style: Fontstyle.defult(
+                    18,
+                    FontWeight.w500,
+                    ColorStyle.Textblue,
+                  ),
+                ),
+              ),
+            ),
+          ] else
             AnnouncementTemplate(announcement: announcements ?? []),
         ],
       ),

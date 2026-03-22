@@ -71,8 +71,8 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
               ),
             ),
             Text(
-              "No Data Found...",
-              style: Fontstyle.defult(18, FontWeight.bold, ColorStyle.Textblue),
+              "No data found...",
+              style: Fontstyle.defult(18, FontWeight.w500, ColorStyle.Textblue),
             ),
             const SizedBox(height: 10),
           ],
@@ -156,10 +156,10 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
                           ),
                         ),
                         Text(
-                          "No Result Found...",
+                          "No result found...",
                           style: Fontstyle.defult(
                             18,
-                            FontWeight.bold,
+                            FontWeight.w500,
                             ColorStyle.Textblue,
                           ),
                         ),

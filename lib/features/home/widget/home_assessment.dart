@@ -5,6 +5,7 @@ import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/normal/assessmentTemp/assessment_template.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class HomeAssessment extends StatelessWidget {
   final List<AssessmentModel> assessment;
@@ -39,17 +40,35 @@ class HomeAssessment extends StatelessWidget {
             ],
           ),
           Divider(color: ColorStyle.red),
-          if (assessment.isEmpty)
-            Center(
-              child: Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Text(
-                  "No For Now...",
-                  style: Fontstyle.defult(18, FontWeight.w600, ColorStyle.red),
+          if (assessment.isEmpty) ...[
+            ClipRect(
+              child: SizedBox(
+                height: 120,
+                width: double.maxFinite,
+                child: Transform.scale(
+                  scale: 2,
+                  child: LottieBuilder.asset(
+                    ImageStyle.upCommingClassaAimatedIcon(),
+                    frameRate: FrameRate.max,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
-            )
-          else
+            ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Text(
+                  "No reminder found...",
+                  style: Fontstyle.defult(
+                    18,
+                    FontWeight.w500,
+                    ColorStyle.Textblue,
+                  ),
+                ),
+              ),
+            ),
+          ] else
             AssessmentTemplate(assessment: assessment),
         ],
       ),
