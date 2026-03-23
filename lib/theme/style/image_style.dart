@@ -41,11 +41,15 @@ class ImageStyle {
   }
 
   static String announcementBackground() {
-    return 'lib/assets/icon/announcementBackground.png';
+    return 'lib/assets/image/announcementBackground.jpg';
   }
 
   static String holidays() {
     return 'lib/assets/icon/holidays.png';
+  }
+
+  static String pinBord() {
+    return 'lib/assets/icon/pin.svg';
   }
 
   static String navAccount() {
@@ -89,7 +93,7 @@ class ImageStyle {
   }
 
   static String announcementIcon() {
-    return 'lib/assets/icon/announcement.png';
+    return 'lib/assets/icon/announcement.svg';
   }
 
   static String reminderIcon() {

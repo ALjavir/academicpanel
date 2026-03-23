@@ -4,7 +4,9 @@ import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/normal/announcement_template.dart';
+import 'package:academicpanel/theme/template/normal/showIcon.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 
 class HomeAnnouncement extends StatelessWidget {
@@ -25,11 +27,13 @@ class HomeAnnouncement extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
 
             children: [
-              Image.asset(
-                ImageStyle.announcementIcon(),
-                color: ColorStyle.red,
-                scale: 19,
-              ),
+              ShowIcon(size: 28, imageName: ImageStyle.announcementIcon()),
+
+              // Image.asset(
+              //   ImageStyle.announcementIcon(),
+              //   color: ColorStyle.red,
+              //   scale: 19,
+              // ),
               Text(
                 "Announcement",
                 style: Fontstyle.defult(

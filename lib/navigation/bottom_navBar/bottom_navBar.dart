@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:academicpanel/features/account/account_page_main.dart';
+import 'package:academicpanel/features/announcement/announcement_page_main.dart';
 import 'package:academicpanel/features/home/home_page_main.dart';
 import 'package:academicpanel/features/result/result_page_main.dart';
 import 'package:academicpanel/features/schedule/schedule_page_main.dart';
@@ -26,6 +27,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
     SchedulePageMain(),
     ResultPageMain(),
     AccountPageMain(),
+    AnnouncementPageMain(),
   ];
 
   @override
