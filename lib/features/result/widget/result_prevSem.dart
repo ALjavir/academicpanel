@@ -46,13 +46,23 @@ class _ResultPrevsemState extends State<ResultPrevsem> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                     children: [
-                      Text(
-                        prevSemResultData.prevSemester,
-                        style: Fontstyle.defult(
-                          22,
-                          FontWeight.w600,
-                          ColorStyle.Textblue,
-                        ),
+                      Row(
+                        spacing: 8,
+                        children: [
+                          Image.asset(
+                            ImageStyle.examResults(),
+                            color: ColorStyle.red,
+                            scale: 16,
+                          ),
+                          Text(
+                            prevSemResultData.prevSemester,
+                            style: Fontstyle.defult(
+                              22,
+                              FontWeight.w600,
+                              ColorStyle.Textblue,
+                            ),
+                          ),
+                        ],
                       ),
 
                       DropdownbuttonTemplate(

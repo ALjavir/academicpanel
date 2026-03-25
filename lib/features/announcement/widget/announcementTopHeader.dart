@@ -5,12 +5,14 @@ import 'package:academicpanel/theme/style/color_style.dart';
 import 'package:academicpanel/theme/style/font_style.dart';
 import 'package:academicpanel/theme/style/image_style.dart';
 import 'package:academicpanel/theme/template/animation/threeD_containerHead.dart';
-import 'package:academicpanel/theme/template/normal/showIcon.dart';
 import 'package:flutter/material.dart';
 
 class Announcementtopheader extends StatelessWidget {
-  final AnnouncementPageModel announcementPageModel;
-  const Announcementtopheader({super.key, required this.announcementPageModel});
+  final AnnouncementPageTopHeader announcementPageTopHeader;
+  const Announcementtopheader({
+    super.key,
+    required this.announcementPageTopHeader,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,85 +27,46 @@ class Announcementtopheader extends StatelessWidget {
           blendMode: BlendMode.srcOver,
           child: Container(
             padding: const EdgeInsets.all(10),
+            alignment: AlignmentGeometry.center,
 
             decoration: BoxDecoration(
-              border: Border.all(width: 1, color: Colors.white54),
+              border: Border.all(width: 1, color: Colors.white60),
               borderRadius: BorderRadius.circular(10),
               color: ColorStyle.glassWhite,
             ),
 
             child: Column(
-              spacing: 5,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+
               children: [
-                Row(
-                  children: [
-                    Text(
-                      "Announcement",
-                      style: Fontstyle.defult(
-                        22,
-                        FontWeight.w600,
-                        ColorStyle.light,
-                      ),
-                    ),
-                    ShowIcon(size: 28, imageName: ImageStyle.pinBord()),
-                  ],
+                Text(
+                  "Announcement",
+                  style: Fontstyle.defult(
+                    22,
+                    FontWeight.w600,
+                    ColorStyle.light,
+                  ),
                 ),
+                Divider(thickness: 1.5),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   spacing: 10,
                   children: [
-                    showData("Total", announcementPageModel.totalAnn),
-                    // Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: [
-                    //     Text(
-                    //       textAlign: TextAlign.center,
-                    //       'Hello, ${widget.homeTopHeaderModel.lastName.capitalizeFirst!}',
-
-                    //       style: Fontstyle.defult(
-                    //         22,
-                    //         FontWeight.bold,
-                    //         ColorStyle.light,
-                    //       ),
-                    //     ),
-                    //     Row(
-                    //       spacing: 5,
-                    //       children: [
-                    //         Text(
-                    //           textAlign: TextAlign.center,
-                    //           widget.homeTopHeaderModel.date,
-
-                    //           style: Fontstyle.defult(
-                    //             14,
-                    //             FontWeight.w600,
-                    //             ColorStyle.light,
-                    //             // const Color.fromARGB(20, 19, 70, 125),
-                    //             //  const Offset(3, 3),
-                    //             // 4,
-                    //           ),
-                    //         ),
-                    //         Container(
-                    //           width: 5,
-                    //           height: 5,
-                    //           decoration: BoxDecoration(
-                    //             color: ColorStyle.light,
-                    //             shape: BoxShape.circle,
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           textAlign: TextAlign.center,
-                    //           widget.homeTopHeaderModel.semester,
-
-                    //           style: Fontstyle.defult(
-                    //             14,
-                    //             FontWeight.w600,
-                    //             ColorStyle.light,
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ],
-                    // ),
+                    showData("Total", announcementPageTopHeader.totalAnn),
+                    Container(
+                      width: 2,
+                      height: MediaQuery.of(context).size.height * 0.06,
+                      color: Colors.white30,
+                    ),
+                    showData("New", announcementPageTopHeader.newAnnNum),
+                    Container(
+                      width: 2,
+                      height: MediaQuery.of(context).size.height * 0.06,
+                      color: Colors.white30,
+                    ),
+                    showData("Source", announcementPageTopHeader.totalCourse),
                   ],
                 ),
               ],
@@ -116,16 +79,16 @@ class Announcementtopheader extends StatelessWidget {
 
   Widget showData(String title, int number) {
     return Column(
-      spacing: 5,
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           number.toString(),
-          style: Fontstyle.defult(14, FontWeight.w600, ColorStyle.light),
+          style: Fontstyle.defult(28, FontWeight.bold, ColorStyle.light),
         ),
         Text(
           title,
-          style: Fontstyle.defult(14, FontWeight.w600, ColorStyle.light),
+          style: Fontstyle.defult(14, FontWeight.w500, Colors.white70),
         ),
       ],
     );

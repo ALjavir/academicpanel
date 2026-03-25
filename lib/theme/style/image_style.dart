@@ -8,8 +8,20 @@ class ImageStyle {
     return 'lib/assets/icon/homeNav.png';
   }
 
-  static String assessment() {
-    return 'lib/assets/icon/assessment.png';
+  static String sunject() {
+    return 'lib/assets/icon/subJect.png';
+  }
+
+  static String examResults() {
+    return 'lib/assets/icon/examResults.png';
+  }
+
+  static String examSh() {
+    return 'lib/assets/icon/examSh.png';
+  }
+
+  static String assment() {
+    return 'lib/assets/icon/assment.png';
   }
 
   static String navSchedule() {

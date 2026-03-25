@@ -14,45 +14,54 @@ class AnnouncementController extends GetxController {
   final userController = Get.find<UserController>();
   final departmentController = Get.find<DepartmentController>();
 
-  RxBool isAnnouncementLoading = false.obs;
+  RxBool isAnnouncementLoadingFull = false.obs;
+  RxBool isAnnouncementLoadingList = false.obs;
 
-  final Rx<AnnouncementPageModel> announcementPageModel = AnnouncementPageModel(
-    newAnnNum: 0,
-    totalCourse: 0,
-    courseName: [],
-    announcementModel: [],
-    totalAnn: 0,
-  ).obs;
+  final AnnouncementPageTopHeader announcementPageTopHeader =
+      AnnouncementPageTopHeader(totalAnn: 0, newAnnNum: 0, totalCourse: 0);
+  final Rx<AnnouncementPageAnnList> announcementPageModel =
+      AnnouncementPageAnnList(courseName: [], announcementModel: []).obs;
 
   @override
   Future<void> onInit() async {
     super.onInit();
-
+    isAnnouncementLoadingFull.value = true;
     await Future.wait([fetchAnnouncementPageModel("start")]);
+    isAnnouncementLoadingFull.value = false;
   }
 
-  Future<AnnouncementPageModel> fetchAnnouncementPageModel(
-    String sortBy,
-  ) async {
+  Future fetchAnnouncementPageModel(String sortBy) async {
     final model = announcementPageModel.value;
     try {
-      isAnnouncementLoading.value = true;
+      isAnnouncementLoadingList.value = true;
       final results = await Future.wait([
         departmentController.fetchDepartmentData(getAnnouncement: true),
         courseController.fetchSectionData(getAnnouncement: true),
       ]);
+
       final departAnnouncementData =
           (results[0] as DepartmentModel).announcementModel ?? [];
       final courseAnnouncements =
           (results[1] as SectionsuperModel).announcements ?? [];
 
-      List<AnnouncementModel> allAnnouncementList = [
-        ...departAnnouncementData,
-        ...courseAnnouncements,
-      ];
+      final Map<String, AnnouncementModel> uniqueAnnouncements = {};
+
+      for (var item in departAnnouncementData) {
+        final uniqueKey = item.rowAnnouncementModel.message;
+        uniqueAnnouncements[uniqueKey] = item;
+      }
+
+      for (var item in courseAnnouncements) {
+        final uniqueKey = item.rowAnnouncementModel.message;
+        uniqueAnnouncements[uniqueKey] = item;
+      }
+
+      List<AnnouncementModel> allAnnouncementList = uniqueAnnouncements.values
+          .toList();
 
       int newAnnNum = 0;
-      final Set<String> courseName = {};
+      int totalAnn = 0;
+      final Set<String> courseName = {"Latest"};
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
 
@@ -65,33 +74,37 @@ class AnnouncementController extends GetxController {
         }
       }
 
-      List<AnnouncementModel> filteredList = [];
+      List<AnnouncementModel> startList = [];
+      //List<AnnouncementModel> filteredList = [];
 
       if (sortBy == "start" || sortBy == "Latest") {
-        filteredList = List.from(allAnnouncementList);
+        startList = List.from(allAnnouncementList);
+        totalAnn = startList.length;
+
+        announcementPageTopHeader.newAnnNum = newAnnNum;
+        announcementPageTopHeader.totalAnn = totalAnn;
+        announcementPageTopHeader.totalCourse = courseName.length;
       } else {
-        filteredList = allAnnouncementList.where((element) {
+        startList = allAnnouncementList.where((element) {
           return element.rowCourseModel.code == sortBy;
         }).toList();
       }
 
-      filteredList.sort(
+      startList.sort(
         (a, b) => b.rowAnnouncementModel.createdAt.compareTo(
           a.rowAnnouncementModel.createdAt,
         ),
       );
 
-      model.newAnnNum = newAnnNum;
-      model.totalCourse = courseName.length;
       model.courseName = courseName.toList();
-      model.announcementModel = filteredList;
-      model.totalAnn = filteredList.length;
+      model.announcementModel = startList;
 
-      isAnnouncementLoading.value = false;
+      isAnnouncementLoadingList.value = false;
 
       return model;
     } catch (e) {
-      isAnnouncementLoading.value = false;
+      isAnnouncementLoadingFull.value = false;
+
       return model;
     }
   }

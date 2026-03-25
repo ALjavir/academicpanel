@@ -7,7 +7,9 @@ import 'package:academicpanel/theme/template/normal/assessmentTemp/assessment_te
 import 'package:academicpanel/theme/template/normal/dropdownbutton_template.dart';
 import 'package:academicpanel/utility/loading/loadingPageContent.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:lottie/lottie.dart';
 
 class ScheduleAssessment extends StatefulWidget {
@@ -19,6 +21,7 @@ class ScheduleAssessment extends StatefulWidget {
 }
 
 class _ScheduleAssessmentState extends State<ScheduleAssessment> {
+  final RxString title = "Assessments".obs;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -35,13 +38,25 @@ class _ScheduleAssessmentState extends State<ScheduleAssessment> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
               children: [
-                Text(
-                  "Assessments",
-                  style: Fontstyle.defult(
-                    22,
-                    FontWeight.w600,
-                    ColorStyle.Textblue,
-                  ),
+                Row(
+                  spacing: 8,
+                  children: [
+                    Image.asset(
+                      ImageStyle.assment(),
+                      color: ColorStyle.red,
+                      scale: 18,
+                    ),
+                    Obx(() {
+                      return Text(
+                        title.value.capitalizeFirst!,
+                        style: Fontstyle.defult(
+                          22,
+                          FontWeight.w600,
+                          ColorStyle.Textblue,
+                        ),
+                      );
+                    }),
+                  ],
                 ),
                 DropdownbuttonTemplate(
                   onChanged: (value) async {
@@ -51,6 +66,7 @@ class _ScheduleAssessmentState extends State<ScheduleAssessment> {
                     await widget.schedulePageContoller.fetchAssessment(
                       sortBy: value!,
                     );
+                    title.value = value;
                   },
                   items: widget
                       .schedulePageContoller

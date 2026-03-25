@@ -65,8 +65,8 @@ class DepartmentController extends GetxController {
               announcementModel.add(
                 AnnouncementModel(
                   rowCourseModel: RowCourseModel(
-                    code: "N/A",
-                    name: "Dept of CSE",
+                    code: "Department",
+                    name: baseData.department_id,
                     credit: 0,
                   ),
                   rowAnnouncementModel: data,
@@ -110,7 +110,12 @@ class DepartmentController extends GetxController {
       errorSnackbar(title: "Department Data Fetching Error", e: e);
       return DepartmentModel(
         academiccalendarModel: academiccalendarModelData,
-        departmenBaseModel: RowDepartmenBaseModel(whatsApp: '', currentSem: ''),
+        departmenBaseModel: RowDepartmenBaseModel(
+          whatsApp: '',
+          currentSem: '',
+          name: '',
+          department_id: '',
+        ),
       );
     }
   }

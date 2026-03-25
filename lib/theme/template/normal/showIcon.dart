@@ -5,7 +5,13 @@ import 'package:flutter_svg/svg.dart';
 class ShowIcon extends StatelessWidget {
   final double size;
   final String imageName;
-  const ShowIcon({super.key, required this.size, required this.imageName});
+  final Color? color;
+  const ShowIcon({
+    super.key,
+    required this.size,
+    required this.imageName,
+    this.color,
+  });
 
   @override
   Widget build(BuildContext context) {

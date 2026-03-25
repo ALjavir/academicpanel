@@ -106,7 +106,7 @@ class _ScheduleExamState extends State<ScheduleExam> {
                       spacing: 10,
                       children: [
                         Image.asset(
-                          ImageStyle.assessment(),
+                          ImageStyle.examSh(),
                           scale: 20,
                           color: ColorStyle.red,
                         ),

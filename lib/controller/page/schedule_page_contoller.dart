@@ -62,7 +62,7 @@ class SchedulePageContoller extends GetxController {
       fetchScheduleTopHeader(focusedDate.value),
       fetchClassSchedule(focusedDate.value),
       fetchAcademicCalendar(),
-      fetchAssessment(sortBy: 'incomplete'),
+      fetchAssessment(sortBy: 'All'),
       fetchExamPageSchedule(),
     ]);
 

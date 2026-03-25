@@ -123,7 +123,7 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
                           spacing: 10,
                           children: [
                             Image.asset(
-                              ImageStyle.assessment(),
+                              ImageStyle.sunject(),
                               scale: 20,
                               color: ColorStyle.red,
                             ),
@@ -182,7 +182,7 @@ class _ResultCurrentsemState extends State<ResultCurrentsem> {
                             spacing: 6,
                             children: [
                               Image.asset(
-                                ImageStyle.assessment(),
+                                ImageStyle.sunject(),
                                 scale: 22,
                                 color: ColorStyle.red,
                               ),
