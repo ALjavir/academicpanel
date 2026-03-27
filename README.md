@@ -12,10 +12,11 @@ Traditional university systems are often disconnected. This app unifies:
 
 ---
 
-## 📱 App Preview
+## 📺 Demo Video
 
-### 🎥 Live Demo
-[**Watch the Demo Video Here**]<a href="https://youtu.be/KRyTtdjijj8"></a>
+Check out the app in action on YouTube:
+[**Watch the Demo Video Here**]("https://youtu.be/KRyTtdjijj8)
+
 
 ---
 
