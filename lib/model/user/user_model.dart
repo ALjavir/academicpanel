@@ -48,7 +48,7 @@ class UserModel {
     uid: data['uid'] ?? '',
     image: data['image'] ?? '',
     //image: _convertToDirectLink(data['image'].toString()),
-    current_course: Map<String, dynamic>.from(data['current_course'] ?? {}),
+    current_course: data['current_course'] ?? {},
 
     email: data['email'] ?? '',
     firstName: data['first_name'] ?? '',
@@ -90,7 +90,7 @@ class UserModel {
       password: password ?? this.password,
     );
   }
-
+}
   // static String _convertToDirectLink(String link) {
   //   final regex = RegExp(r'd/([^/]+)/'); // Matches "d/<fileId>/"
   //   final altRegex = RegExp(r'id=([^&]+)'); // Matches "id=<fileId>"
@@ -107,4 +107,3 @@ class UserModel {
   //     return link;
   //   }
   // }
-}

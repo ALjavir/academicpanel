@@ -27,12 +27,34 @@ class CourseController extends GetxController {
       final userModel = userController.user.value;
       final studentId = userModel!.id;
       final department = userModel.department;
-      final courses = userModel.current_course ?? {};
+      final Map<String, dynamic>? courses = userModel.current_course;
+
+      // print(
+      //   "this is inside the course-----------------------------------------: ${courses.entries}",
+      // );
+      // print(
+      //   "this is inside the courseRef-----------------------------------------: ${department}",
+      // );
+      if (courses!.isEmpty) {
+        return SectionsuperModel(
+          schedules: [],
+          announcements: [],
+          assessment: [],
+        );
+      }
 
       // 1. Loop through courses
+
       final courseFutures = courses.entries.map((entry) async {
+        //print("what the fuccccccccccccccccccccccccccccccccccccccccccccck!!!!!!");
+
         String courseCode = entry.key;
+
         String sectionId = entry.value['section'];
+
+        // print(
+        //   "this is inside the courseFutures------------------------${courseCode}---------${sectionId}}",
+        // );
 
         final courseRef = firebaseDatapath.courseData(department, courseCode);
 
@@ -42,6 +64,10 @@ class CourseController extends GetxController {
           courseRef.collection('section').doc(sectionId).get(),
         ]);
 
+        // print(
+        //   "this is inside the result-----------------------------------------: ${results}",
+        // );
+
         final infoSnapshot = results[0];
         final sectionSnapshot = results[1];
 
@@ -49,7 +75,7 @@ class CourseController extends GetxController {
         // ClassscheduleModel? foundSchedule;
         List<ClassscheduleModel> foundSchedules = [];
         List<AnnouncementModel> foundAnnouncements = [];
-        List<AssessmentModel> foundAssessments = []; // <--- Temp List
+        List<AssessmentModel> foundAssessments = [];
 
         if (infoSnapshot.exists && sectionSnapshot.exists) {
           final infoData = infoSnapshot.data() ?? {};

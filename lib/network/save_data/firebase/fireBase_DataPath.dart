@@ -25,6 +25,8 @@ class FirebaseDatapath extends GetxController {
         .doc(courseCode);
   }
 
+  //course/CSE/course_code/BNG101/section/1
+
   DocumentReference<Map<String, dynamic>> courseSecData(
     String department,
     String courseCode,

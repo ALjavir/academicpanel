@@ -33,7 +33,7 @@ class ImageStyle {
   }
 
   static String exam() {
-    return 'lib/assets/icon/exam.png';
+    return 'lib/assets/icon/examDay.png';
   }
 
   static String whatsApp() {

@@ -321,6 +321,27 @@ class HomePageController extends GetxController {
 
       final fetchedData = await resultController.fetchResultData(getCGPA: true);
       resultModel = fetchedData;
+      print(
+        "this is another carzy shit:--------------------------------${resultModel}",
+      );
+      // print(
+      //   "this is another carzy shit comment:--------------------------------${resultModel.rowResultbaseModel!.comment}",
+      // );
+      print(
+        "this is another carzy shit credit_completed:--------------------------------${resultModel.rowResultbaseModel!.credit_completed}",
+      );
+      // print(
+      //   "this is another carzy shit credit_enrolled:--------------------------------${resultModel.rowResultbaseModel!.credit_enrolled}",
+      // );
+      // print(
+      //   "this is another carzy shit current_cgpa:--------------------------------${resultModel.rowResultbaseModel!.current_cgpa}",
+      // );
+      // print(
+      //   "this is another carzy shit pervious_cgpa:--------------------------------${resultModel.rowResultbaseModel!.pervious_cgpa}",
+      // );
+      // print(
+      //   "this is another carzy shit target_credit:--------------------------------${resultModel.rowResultbaseModel!.target_credit}",
+      // );
 
       return resultModel.rowResultbaseModel!;
     } catch (e) {

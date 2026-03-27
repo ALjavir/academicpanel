@@ -333,10 +333,10 @@ class SignupController extends GetxController {
 
         if (validUrl != null) {
           signupmodel = signupmodel.copyWith(image: validUrl);
-          print("Image uploaded successfully: $validUrl");
+          //  print("Image uploaded successfully: $validUrl");
         }
 
-        print(selectedImage.value);
+        // print(selectedImage.value);
       }
     } catch (e) {
       errorSnackbar(title: "Image Upload Error", e: e);
@@ -356,7 +356,7 @@ class SignupController extends GetxController {
 
     try {
       // 1) Write Firestore-----------------------------------------------------
-      await userDocRef.set(signupmodel.copyWith(id: id).toJson());
+      await userDocRef.update(signupmodel.copyWith().toJson());
       firestoreWritten = true;
 
       // 2) Write Local Storage-------------------------------------------------

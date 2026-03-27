@@ -63,10 +63,10 @@ class _ScheduleAssessmentState extends State<ScheduleAssessment> {
                     // print(
                     //   "the selected value/////////////////////////////////////: $value",
                     // );
+                    title.value = value!;
                     await widget.schedulePageContoller.fetchAssessment(
-                      sortBy: value!,
+                      sortBy: value,
                     );
-                    title.value = value;
                   },
                   items: widget
                       .schedulePageContoller

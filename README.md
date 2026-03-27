@@ -1,68 +1,69 @@
-# Campus Management System (Academic Panel)
-🚧 Work in Progress
-
-A Flutter-based mobile application designed to centralize academic communication between students and faculty in a single real-time platform.
-
----
-
-## 📌 Project Status
-This project is **currently under active development**.  
-Core features and backend structure are being implemented incrementally.
-
-> ⚠️ Note: The UI shown in the presentation represents the **initial design concept and system planning**.  
-> The current implementation may differ slightly as the app evolves during development.
+# 🎓 Campus Management System (Academic Panel)
+A robust, real-time Flutter application designed to unify the academic experience. By consolidating fragmented university systems (SIMS, paper routines, emails) into a single mobile dashboard, this platform ensures students never miss a deadline, class, or payment.
 
 ---
 
 ## 🎯 Project Goal
-University systems are often fragmented (SIMS, paper routines, emails), causing delays and confusion.  
-This app aims to unify:
-- Academic schedules
-- Results & CGPA
-- Announcements & reminders
-- Tuition & payment information
-- Faculty & department data
+Traditional university systems are often disconnected. This app unifies:
+- **Academic Schedules:** Class, Exam, and Holiday tracking.
+- **Academic Performance:** Real-time Results, CGPA tracking, and Credit progress.
+- **Communication:** Departmental announcements and automated reminders.
+- **Finances:** Tuition fees, installment tracking, and payment history.
 
-into a **single real-time mobile dashboard**.
+---
+
+## ✨ Key Features
+
+### 🔐 1. Secure Authentication & Profile Management
+* **Firebase Auth:** Complete sign-up/sign-in flows with mandatory email verification.
+* **Hybrid Storage Architecture:** User profile pictures are uploaded to **Google Drive** via a custom **Google Apps Script API**. The script returns a direct link stored in Firestore, optimizing Firebase storage quotas while maintaining high availability.
+
+### 🏠 2. Intelligent Dashboard
+* **Daily Briefing:** Real-time view of the day's classes or upcoming holidays.
+* **Financial Insights:** Smart tracking of active installments. Displays a "Due Amount" alert or a "Paid vs. Due" progress graph for cleared accounts.
+* **Academic Tracker:** Live updates of current CGPA and course completion percentages.
+* **Priority Reminders:** Automated list of assignments, vivas, and quizzes—sorted by the closest deadline.
+
+### 📅 3. Interactive Academic Planner
+* **Smart Calendar:** Tap any date to instantly view the specific class routine or exam schedule for that day.
+* **Assessment Management:** Filter assessments by status (Complete/Incomplete). Includes room numbers, syllabi, and deep-links to Google Classroom materials.
+
+### 📊 4. Results & Analytics
+* **Progress Visualization:** Graphical tracking of semester-over-semester improvement.
+* **Credit Monitoring:** Visual breakdown of Completed vs. Enrolled vs. Remaining credits.
+
+### 💳 5. Smart Financial Manager
+* **Installment Engine:** Smartly tracks deadlines for specific installments and flags overdue payments to prevent registration delays.
+
+### 📢 6. Communication Hub
+* **Noticeboard:** Unified feed for Department and Course-specific announcements.
+* **WhatsApp Integration:** Direct-to-faculty messaging via WhatsApp API integration.
 
 ---
 
 ## 🛠 Tech Stack
-- **Flutter** – Cross-platform mobile development  
-- **Firebase Authentication** – Secure role-based login (Student / Faculty)  
-- **Firebase Realtime Database & Firestore** – Academic & financial data handling  
-- **GetX** – State management & navigation  
-- **Figma** – UI/UX design & prototyping
+- **Frontend:** Flutter (Dart)
+- **State Management:** GetX (Reactive approach)
+- **Backend:** Firebase (Auth, Firestore, Realtime Database)
+- **Middleware:** Google Apps Script (Drive API Bridge)
+- **Design:** Figma (Prototyping & UML)
 
 ---
 
 ## 📽 Design & System Overview
-📄 **Project Presentation (Concept & UI Preview)**  
-👉 [View Presentation](docs/Blue_and_Pink_Modern_Mobile_Apps_Presentation.pptx)
+📄 **[View Full Project Presentation](docs/Blue_and_Pink_Modern_Mobile_Apps_Presentation.pptx)**
 
-The presentation includes:
-- UI wireframes & design concepts
-- System features breakdown
-- UML class & use case diagrams
-- Firebase database structure
+The documentation includes:
+- **UML Diagrams:** Class and Use Case diagrams.
+- **Database Schema:** Detailed Firestore structure.
+- **UI Wireframes:** High-fidelity Figma concepts.
 
 ---
-
-## 🚀 Planned Features
-- Role-based authentication (Student / Faculty)
-- Academic dashboard with announcements & reminders
-- Class, exam, and assignment schedules
-- Results, CGPA calculation & academic progress tracking
-- Tuition fees, installments & payment history
-- Events, lost & found, and room availability
-
----
-
 ## 📌 Development Progress
 - ✅ UI prototyping (Figma)
 - ✅ Database design (UML + Firebase structure)
-- 🔄 Authentication & core modules (in progress)
-- ⏳ Dashboard & academic features (upcoming)
+- ✅ Authentication & core modules
+- ✅ Dashboard & academic features
 
 ---
 
