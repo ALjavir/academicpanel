@@ -12,6 +12,14 @@ Traditional university systems are often disconnected. This app unifies:
 
 ---
 
+## 📱 App Preview
+
+### 🎥 Live Demo
+<a href="https://youtu.be/KRyTtdjijj8"></a>
+
+---
+
+
 ## ✨ Key Features
 
 ### 🔐 1. Secure Authentication & Profile Management
