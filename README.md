@@ -16,7 +16,7 @@ Traditional university systems are often disconnected. This app unifies:
 
 ### 🎥 Live Demo
 <p align="center">
-  <a href="https://youtu.be/HTaZW5G1Fu4">
+  <a href="https://youtu.be/KRyTtdjijj8?si=VWkxnge3MQQ2xjcX">
     <img src="https://github.com/user-attachments/assets/97c2e51d-acae-4947-8cfe-8234c790e7ff" width="600">
   </a>
 </p>
