@@ -46,8 +46,8 @@ class UserModel {
   // Convert Firestore JSON → model
   factory UserModel.fromJson(Map<String, dynamic> data) => UserModel(
     uid: data['uid'] ?? '',
-    image: data['image'] ?? '',
-    //image: _convertToDirectLink(data['image'].toString()),
+   // image: data['image'] ?? '',
+    image: _convertToDirectLink(data['image'].toString()),
     current_course: data['current_course'] ?? {},
 
     email: data['email'] ?? '',
@@ -91,19 +91,19 @@ class UserModel {
     );
   }
 }
-  // static String _convertToDirectLink(String link) {
-  //   final regex = RegExp(r'd/([^/]+)/'); // Matches "d/<fileId>/"
-  //   final altRegex = RegExp(r'id=([^&]+)'); // Matches "id=<fileId>"
+  static String _convertToDirectLink(String link) {
+    final regex = RegExp(r'd/([^/]+)/'); // Matches "d/<fileId>/"
+    final altRegex = RegExp(r'id=([^&]+)'); // Matches "id=<fileId>"
 
-  //   if (regex.hasMatch(link)) {
-  //     final match = regex.firstMatch(link);
-  //     final fileId = match?.group(1);
-  //     return 'https://drive.google.com/uc?export=view&id=$fileId';
-  //   } else if (altRegex.hasMatch(link)) {
-  //     final match = altRegex.firstMatch(link);
-  //     final fileId = match?.group(1);
-  //     return 'https://drive.google.com/uc?export=view&id=$fileId';
-  //   } else {
-  //     return link;
-  //   }
-  // }
+    if (regex.hasMatch(link)) {
+      final match = regex.firstMatch(link);
+      final fileId = match?.group(1);
+      return 'https://drive.google.com/uc?export=view&id=$fileId';
+    } else if (altRegex.hasMatch(link)) {
+      final match = altRegex.firstMatch(link);
+      final fileId = match?.group(1);
+      return 'https://drive.google.com/uc?export=view&id=$fileId';
+    } else {
+      return link;
+    }
+  }
